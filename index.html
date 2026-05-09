@@ -212,12 +212,18 @@
             flex-shrink: 0;
         }
 
-        .obsidian-callout > p, .obsidian-callout > ul, .obsidian-callout > ol { 
+        .obsidian-callout.is-collapsed .callout-title {
+            padding-bottom: 0;
+        }
+
+        .obsidian-callout > p, .obsidian-callout > ul, .obsidian-callout > ol,
+        .callout-content > p, .callout-content > ul, .callout-content > ol { 
             padding: 0; 
             margin: 0; 
         }
 
-        .obsidian-callout > p + p {
+        .obsidian-callout > p + p,
+        .callout-content > p + p {
             margin-top: 0.75rem;
         }
 
@@ -888,7 +894,40 @@
                     const titleDiv = document.createElement('div');
                     titleDiv.className = 'callout-title';
                     titleDiv.innerHTML = getCalloutIcon(type) + `<span>${title}</span>`;
-                    bq.insertBefore(titleDiv, bq.firstChild);
+                    
+                    // Specific collapsible logic for success/check/done callouts
+                    if (['success', 'check', 'done'].includes(type)) {
+                        titleDiv.classList.add('cursor-pointer', 'select-none');
+                        
+                        const toggleArrow = document.createElement('span');
+                        toggleArrow.className = 'ml-auto transition-transform duration-200 transform';
+                        toggleArrow.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 1em; height: 1em;"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+                        titleDiv.appendChild(toggleArrow);
+
+                        const contentWrapper = document.createElement('div');
+                        contentWrapper.className = 'callout-content hidden mt-2'; // hidden by default
+                        
+                        while (bq.firstChild) {
+                            contentWrapper.appendChild(bq.firstChild);
+                        }
+                        
+                        bq.appendChild(titleDiv);
+                        bq.appendChild(contentWrapper);
+                        bq.classList.add('is-collapsed'); // helper class for css
+
+                        titleDiv.addEventListener('click', () => {
+                            contentWrapper.classList.toggle('hidden');
+                            bq.classList.toggle('is-collapsed');
+                            if (contentWrapper.classList.contains('hidden')) {
+                                toggleArrow.classList.remove('rotate-90'); // arrow pointing right
+                            } else {
+                                toggleArrow.classList.add('rotate-90'); // arrow pointing down
+                            }
+                        });
+                    } else {
+                        // Standard non-collapsible callouts
+                        bq.insertBefore(titleDiv, bq.firstChild);
+                    }
                 }
             });
         }
@@ -954,7 +993,7 @@
                         <em>To allow you to test the dropdown routing, a demo note has been loaded instead.</em> To view your actual files, please download this <code>index.html</code> file and run it locally.
                     \`;
                     
-                    rawMarkdown = \`#### $\\mathbf{Q:\\ \\ \\ }$$\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রার এবং $\\mathbf{1.0}\\mathbf{\\times}\\mathbf{1}\\mathbf{0}^{\\mathbf{5}}\\mathbf{Pa}$ চাপে $\\mathbf{C}\\mathbf{O}_{\\mathbf{2}}$ গ্যাসের ঘনত্ব $\\mathbf{1.98\\ }\\mathbf{kg}\\textbf{/}\\mathbf{m}^{\\mathbf{3}}$ হলে $\\mathbf{3}\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রায় একই চাপে উক্ত গ্যাসের $\\mathbf{C}_{\\mathbf{rms}}$ বেগ কত?\\n\\n> [!info] Introduction to \${chapter}\\n> This is a dynamically generated demo note for **\${subject}** -> **\${chapter}**.\\n\\n### 1.1 First Section of \${chapter.split(' ')[0]}\\nDynamic loading successful!\\n$$E = mc^2$$\\n\\n## 2. Examples\\nHere are some highlights about \${chapter}:\\n- ==Dynamic Subject Routing==\\n- ==Dynamic Asset Paths==\\n\\n> [!warning] Heads up!\\n> Remember to place your \\\`\${fileName}\\\` inside \\\`\${subject}/\${chapter}/\\\` folder.\`;
+                    rawMarkdown = \`#### $\\mathbf{Q:\\ \\ \\ }$$\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রার এবং $\\mathbf{1.0}\\mathbf{\\times}\\mathbf{1}\\mathbf{0}^{\\mathbf{5}}\\mathbf{Pa}$ চাপে $\\mathbf{C}\\mathbf{O}_{\\mathbf{2}}$ গ্যাসের ঘনত্ব $\\mathbf{1.98\\ }\\mathbf{kg}\\textbf{/}\\mathbf{m}^{\\mathbf{3}}$ হলে $\\mathbf{3}\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রায় একই চাপে উক্ত গ্যাসের $\\mathbf{C}_{\\mathbf{rms}}$ বেগ কত?\\n\\n> [!success] Proof\\n> We solved the equation successfully.\\n\\n> [!info] Introduction to \${chapter}\\n> This is a dynamically generated demo note for **\${subject}** -> **\${chapter}**.\\n\\n### 1.1 First Section of \${chapter.split(' ')[0]}\\nDynamic loading successful!\\n$$E = mc^2$$\\n\\n## 2. Examples\\nHere are some highlights about \${chapter}:\\n- ==Dynamic Subject Routing==\\n- ==Dynamic Asset Paths==\\n\\n> [!warning] Heads up!\\n> Remember to place your \\\`\${fileName}\\\` inside \\\`\${subject}/\${chapter}/\\\` folder.\`;
                     */
                 }
                 
@@ -967,6 +1006,14 @@
                 });
 
                 contentDiv.innerHTML = htmlContent;
+
+                // Wrap tables to make them responsive while maintaining native proportional column sizing
+                contentDiv.querySelectorAll('table').forEach(table => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'overflow-x-auto w-full my-6'; // Tailwind classes
+                    table.parentNode.insertBefore(wrapper, table);
+                    wrapper.appendChild(table);
+                });
 
                 buildTableOfContents();
                 enhanceContentHeadings();
