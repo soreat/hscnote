@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Note Viewer</title>
+
+    <!-- Tailwind CSS for modern, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Marked.js for parsing Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- KaTeX for rendering Math Equations -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: {
+                            bg: '#ffffff',
+                            text: '#2e3338',
+                            darkBg: '#0a0d13', /* Custom dark background */
+                            darkText: '#d1d5db', /* Neutral Gray-300 text */
+                            accent: '#7c3aed', // Purple accent
+                            darkAccent: '#a78bfa'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================================
+           Custom Scrollbar Styling
+           ========================================================== */
+        /* Main Webpage Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px; /* For horizontal scrollbars on tables */
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(148, 163, 184, 0.5); /* Slate-400 */
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(100, 116, 139, 0.8); /* Slate-500 */
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: rgba(75, 85, 99, 0.5); /* Neutral Gray-600 */
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(107, 114, 128, 0.8); /* Neutral Gray-500 */
+        }
+
+        /* Hide Sidebar Scrollbar strictly for the TOC */
+        #sidebar::-webkit-scrollbar {
+            display: none;
+            width: 0;
+        }
+        #sidebar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* ==========================================================
+           Markdown Core Styles
+           ========================================================== */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .markdown-body {
+            font-size: var(--note-font-size, 1.125rem); /* Dynamic Font Size */
+            line-height: 1.75;
+            color: #2e3338;
+            transition: font-size 0.2s ease;
+        }
+
+        .dark .markdown-body {
+            color: #cbd5e1;
+        }
+
+        .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+            font-weight: 700;
+            margin-top: 2em;
+            margin-bottom: 0.75em;
+            color: #111827;
+            scroll-margin-top: 6rem; /* Keeps heading below the sticky navigation bar */
+        }
+
+        .dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h4, .dark .markdown-body h5, .dark .markdown-body h6 {
+            color: #f8fafc;
+            border-bottom-color: #1f2937; /* Neutral gray border */
+        }
+
+        .markdown-body p { margin-bottom: 1.25em; }
+        
+        .markdown-body a {
+            color: #7c3aed;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .dark .markdown-body a { color: #a78bfa; }
+        .markdown-body a:hover { border-bottom-color: currentColor; }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1.25em;
+            padding-left: 1.5em;
+        }
+        
+        .markdown-body li { margin-bottom: 0.5em; }
+        .markdown-body ul { list-style-type: disc; }
+        .markdown-body ol { list-style-type: decimal; }
+
+        /* Standard Blockquote (if not a callout) */
+        .markdown-body blockquote:not(.obsidian-callout) {
+            border-left: 4px solid #7c3aed;
+            padding-left: 1rem;
+            color: #4b5563;
+            font-style: italic;
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5em 0;
+        }
+
+        .dark .markdown-body blockquote:not(.obsidian-callout) {
+            background: #111827; /* Gray-900 */
+            color: #9ca3af;
+            border-left-color: #a78bfa;
+        }
+
+        /* ==========================================================
+           Obsidian Native Callouts (Quotes) - Borderless Design
+           ========================================================== */
+        .callout-note, .callout-info { --callout-color: 8, 109, 221; }
+        .callout-danger, .callout-warning, .callout-error, .callout-bug { --callout-color: 233, 49, 71; }
+        .callout-success, .callout-check, .callout-done { --callout-color: 8, 185, 78; }
+        .callout-abstract, .callout-summary, .callout-tldr { --callout-color: 0, 176, 204; }
+
+        .obsidian-callout {
+            background-color: rgba(var(--callout-color), 0.1) !important;
+            border-radius: 0.25rem;
+            margin: 1.5em 0;
+            padding: 1rem;
+            border: none !important;
+            overflow: hidden;
+            font-size: 0.95em;
+            font-style: normal !important;
+            color: inherit !important;
+            box-shadow: none;
+        }
+        
+        .dark .obsidian-callout {
+            background-color: rgba(var(--callout-color), 0.15) !important;
+        }
+        
+        .callout-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: rgb(var(--callout-color));
+            background-color: transparent !important;
+            padding: 0 0 0.5rem 0;
+            margin: 0;
+            line-height: 1.2;
+        }
+        
+        .dark .callout-title {
+            color: rgb(var(--callout-color));
+            filter: brightness(1.2); 
+        }
+
+        .callout-title svg {
+            margin-right: 0.5rem;
+            width: 1.1em;
+            height: 1.1em;
+            stroke-width: 2px;
+            flex-shrink: 0;
+        }
+
+        .obsidian-callout > p, .obsidian-callout > ul, .obsidian-callout > ol { 
+            padding: 0; 
+            margin: 0; 
+        }
+
+        .obsidian-callout > p + p {
+            margin-top: 0.75rem;
+        }
+
+        /* ==========================================================
+           Other Markdown Elements
+           ========================================================== */
+        .markdown-body code {
+            background: #f1f5f9;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .dark .markdown-body code {
+            background: #111827; /* Gray-900 */
+            color: #e5e7eb;
+        }
+
+        .markdown-body pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1.5em 0;
+        }
+
+        .markdown-body pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        .markdown-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1.5em auto;
+            display: block;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table Resizing & Math Shrinking Magic */
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1em; 
+            table-layout: auto; /* Allows columns to shrink proportionally */
+            margin: 1.5em 0;
+            word-break: break-word; /* Prevents long regular words from locking the table */
+        }
+        
+        .markdown-body th, .markdown-body td {
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 1rem;
+            text-align: left;
+        }
+
+        .markdown-body td .katex {
+            /* DYNAMIC RESIZE: When the screen is small, this physically shrinks the math block's text size. 
+               This prevents large equations from locking the column width, allowing the table to squish! */
+            font-size: clamp(0.4em, 2.5vw, 1em); 
+        }
+
+        .markdown-body td .katex-display {
+            /* Fallback: if it STILL exceeds the boundaries after shrinking, let it scroll slightly inside the cell */
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 0.2em;
+        }
+        
+        .dark .markdown-body th, .dark .markdown-body td { border-color: #1f2937; }
+        .markdown-body th { background-color: #f3f4f6; font-weight: 600; }
+        .dark .markdown-body th { background-color: #111827; }
+
+        .obsidian-highlight {
+            background-color: #fef08a;
+            color: #854d0e;
+            padding: 0 0.2rem;
+            border-radius: 0.2rem;
+        }
+        
+        .dark .obsidian-highlight {
+            background-color: #854d0e;
+            color: #fef08a;
+        }
+
+        .obsidian-internal-link {
+            color: #7c3aed;
+            text-decoration: none;
+            opacity: 0.9;
+        }
+        .obsidian-internal-link::before { content: "📄 "; font-size: 0.9em; }
+
+        /* --- Nested ToC Tree Styles --- */
+        .toc-list { list-style: none !important; padding-left: 0 !important; margin: 0 !important; }
+        .toc-nested { padding-left: 1.25rem !important; margin-left: 0.5rem !important; border-left: 1px solid #e5e7eb; }
+        .dark .toc-nested { border-left-color: #1f2937; }
+        
+        .toc-item-container { display: flex; align-items: center; padding: 0.25rem 0; font-size: 0.95rem; }
+        .toc-link { color: #4b5563; transition: color 0.2s; text-decoration: none; flex-grow: 1; }
+        .dark .toc-link { color: #9ca3af; }
+        .toc-link:hover { color: #7c3aed; }
+        .dark .toc-link:hover { color: #a78bfa; }
+        
+        .toc-toggle {
+            font-size: 0.6rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 1.2rem; height: 1.2rem;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: transform 0.2s ease;
+        }
+        .toc-toggle:hover { color: #4b5563; }
+        .dark .toc-toggle:hover { color: #e5e7eb; }
+        .toc-spacer { width: 1.2rem; display: inline-block; }
+
+        /* --- Content Collapsible Styles --- */
+        .hidden-by-h1, .hidden-by-h2, .hidden-by-h3, .hidden-by-h4, .hidden-by-h5, .hidden-by-h6 {
+            display: none !important;
+        }
+        
+        html { scroll-behavior: smooth; }
+
+        /* Mobile Sidebar toggle */
+        @media (max-width: 768px) {
+            #sidebar { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
+            #sidebar.open { transform: translateX(0); }
+        }
+        
+        /* Select Dropdown Glass Styling */
+        select option {
+            background-color: white;
+            color: black;
+        }
+        .dark select option {
+            background-color: #0a0d13;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-obsidian-bg text-obsidian-text dark:bg-obsidian-darkBg dark:text-obsidian-darkText min-h-screen flex flex-col">
+
+    <header class="sticky top-0 z-40 w-full backdrop-blur-lg flex-none border-b border-gray-200/50 dark:border-gray-800/50 bg-white/60 dark:bg-obsidian-darkBg/60">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center flex-1 space-x-2 sm:space-x-4">
+                    <button id="menuBtn" class="md:hidden p-2 -ml-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-md">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
+                    <select id="subjectSelect" class="bg-white/30 dark:bg-white/10 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 text-obsidian-text dark:text-obsidian-darkText text-sm rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent cursor-pointer truncate max-w-[140px] sm:max-w-[200px] shadow-sm font-medium transition-all">
+                        </select>
+
+                    <select id="chapterSelect" class="bg-white/30 dark:bg-white/10 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 text-obsidian-text dark:text-obsidian-darkText text-sm rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent cursor-pointer flex-1 truncate max-w-[180px] sm:max-w-[350px] shadow-sm transition-all">
+                        </select>
+                </div>
+                
+                <div class="flex items-center space-x-2 sm:space-x-4 ml-2 sm:ml-4">
+                    <div class="flex items-center space-x-1 sm:space-x-2 text-gray-500 dark:text-gray-400" title="Adjust Font Size">
+                        <span class="text-xs font-bold">A</span>
+                        <input type="range" id="fontSizeSlider" min="14" max="24" step="1" value="18" class="w-16 sm:w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-obsidian-accent">
+                        <span class="text-lg font-bold">A</span>
+                    </div>
+
+                    <button id="themeToggleDesktop" class="hidden md:block p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-full bg-gray-100/50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors">
+                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 max-w-8xl mx-auto w-full">
+        
+        <aside id="sidebar" class="fixed inset-y-0 left-0 pt-16 md:pt-6 w-64 border-r border-gray-200/50 dark:border-gray-800/50 bg-white/60 dark:bg-obsidian-darkBg/60 backdrop-blur-xl z-30 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:block md:w-72 lg:w-80 shrink-0 overflow-y-auto transition-transform duration-300">
+            <div class="p-6">
+                <button id="themeToggleMobile" class="md:hidden flex items-center justify-between w-full p-2 mb-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-lg bg-gray-100/50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors border border-gray-200/50 dark:border-gray-700/50">
+                    <span class="text-sm font-semibold">Switch Theme</span>
+                    <div>
+                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </div>
+                </button>
+
+                <h2 id="sidebarChapterTitle" class="text-xl font-bold text-obsidian-text dark:text-obsidian-darkText mb-8 leading-snug"></h2>
+                
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 dark:text-gray-400">Table of Contents</h3>
+                <nav id="toc" class="space-y-1">
+                    </nav>
+            </div>
+        </aside>
+
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-20 hidden md:hidden"></div>
+
+        <main class="flex-1 min-w-0 focus:outline-none">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div id="errorBox" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+                    <span class="block sm:inline" id="errorMessage"></span>
+                </div>
+                
+                <article id="content" class="markdown-body">
+                    <div class="flex justify-center items-center py-20">
+                        <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-obsidian-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Loading Note...</span>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // =========================================================================
+        // ⚙️ CURRICULUM CONFIGURATION SECTION
+        // Edit this object to add/remove subjects and chapters.
+        // Commented out lines (//) will not appear in the dropdowns.
+        // =========================================================================
+        const CURRICULUM = {
+            "Chemistry-1st": [
+                // "C-1.01 Chapter 1",
+                "C-1.02 Qualitative Chemistry",
+                "C-1.03 Periodic Properties of Elements and Chemical Bonding",
+                "C-1.04 Chemical Changes",
+                "C-1.05 Vocational Chemistry",
+                // "C-1.06 Chapter 6",
+                // "C-1.07 Chapter 7",
+                // "C-1.08 Chapter 8",
+                // "C-1.09 Chapter 9",
+                // "C-1.10 Chapter 10",
+                // "C-1.11 Chapter 11",
+                // "C-1.12 Chapter 12"
+            ],
+            "Chemistry-2nd": [
+                "C-2.01 Environmental Chemistry",
+                "C-2.02 Organic Chemistry",
+                "C-2.03 Stoichiometric Chemistry",
+                "C-2.04 Electro Chemistry",
+                // "C-2.05 Chapter 5",
+                // "C-2.06 Chapter 6",
+                // "C-2.07 Chapter 7",
+                // "C-2.08 Chapter 8",
+                // "C-2.09 Chapter 9",
+                // "C-2.10 Chapter 10",
+                // "C-2.11 Chapter 11",
+                // "C-2.12 Chapter 12"
+            ],
+            "Math-1st": [
+                "M-1.01 Matrix",
+                // "M-1.02 Chapter 2",
+                "M-1.03 Straight Line",
+                "M-1.04 Circle",
+                // "M-1.05 Chapter 5",
+                // "M-1.06 Chapter 6",
+                "M-1.07 Trigonometry",
+                // "M-1.08 Chapter 8",
+                "M-1.09 Differential Calculus",
+                "M-1.10 Integral Calculus",
+                // "M-1.11 Chapter 11",
+                // "M-1.12 Chapter 12"
+            ],
+            "Math-2nd": [
+                // "M-2.01 Chapter 1",
+                // "M-2.02 Chapter 2",
+                "M-2.03 Complex Number",
+                "M-2.04 Polinomials and Polinomial Equation",
+                // "M-2.05 Chapter 5",
+                // "M-2.06 Chapter 6",
+                "M-2.07 Inverse Trigonometry",
+                // "M-2.08 Chapter 8",
+                // "M-2.09 Chapter 9",
+                // "M-2.10 Chapter 10",
+                // "M-2.11 Chapter 11",
+                // "M-2.12 Chapter 12"
+            ],
+            "Physics-1st": [
+                // "P-1.01 Chapter 1",
+                "P-1.02 Vector",
+                "P-1.03 Kinematics",
+                "P-1.04 Newtonian Mechanics",
+                "P-1.05 Work-Power-Energy",
+                "P-1.06 Gravitation and Gravity",
+                "P-1.07 Structural Properties of Matter",
+                "P-1.08 Periodic Motion",
+                // "P-1.09 Chapter 9",
+                "P-1.10 Ideal Gas",
+                // "P-1.11 Chapter 11",
+                // "P-1.12 Chapter 12"
+            ],
+            "Physics-2nd": [
+                "P-2.01 Thermodynamics",
+                "P-2.02 Static Electricity",
+                "P-2.03 Current Electricity",
+                "P-2.04 Magnetic Effect of Current",
+                // "P-2.05 Chapter 5",
+                "P-2.06 Geometrical Optics",
+                "P-2.07 Physical Optics",
+                "P-2.08 Modern Physics",
+                "P-2.09 Nuclear Model",
+                "P-2.10 Semiconductor",
+                // "P-2.11 Chapter 11",
+                // "P-2.12 Chapter 12"
+            ]
+        };
+
+        // UI State Variables
+        let currentAssetBase = "";
+        let mathBlocks = []; 
+
+        const subjectSelect = document.getElementById('subjectSelect');
+        const chapterSelect = document.getElementById('chapterSelect');
+        const themeToggleDesktopBtn = document.getElementById('themeToggleDesktop');
+        const themeToggleMobileBtn = document.getElementById('themeToggleMobile');
+        const htmlElement = document.documentElement;
+
+        const fontSizeSlider = document.getElementById('fontSizeSlider');
+        const contentBody = document.getElementById('content');
+
+        // --- Theme Initialization ---
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+            }
+        }
+
+        function toggleThemeAction() {
+            htmlElement.classList.toggle('dark');
+            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+        }
+
+        themeToggleDesktopBtn.addEventListener('click', toggleThemeAction);
+        themeToggleMobileBtn.addEventListener('click', toggleThemeAction);
+        initTheme();
+
+        // --- Font Size Initialization ---
+        function initFontSize() {
+            const savedSize = localStorage.getItem('noteFontSize') || '18';
+            fontSizeSlider.value = savedSize;
+            contentBody.style.setProperty('--note-font-size', `${savedSize}px`);
+        }
+
+        fontSizeSlider.addEventListener('input', (e) => {
+            const size = e.target.value;
+            contentBody.style.setProperty('--note-font-size', `${size}px`);
+            localStorage.setItem('noteFontSize', size);
+        });
+
+        initFontSize();
+
+        // --- Navigation Initialization ---
+        function initNavigation() {
+            // Populate Subjects
+            Object.keys(CURRICULUM).forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+
+            // Set default Subject (e.g. Physics-1st) if available, or just the first one
+            if(CURRICULUM["Physics-1st"]) {
+                subjectSelect.value = "Physics-1st";
+            }
+
+            // Populate Chapters based on Subject
+            updateChapterList();
+
+            // Default to "Ideal Gas" if available on load
+            const hasIdealGas = Array.from(chapterSelect.options).find(opt => opt.value.includes("Ideal Gas"));
+            if(hasIdealGas) chapterSelect.value = hasIdealGas.value;
+
+            // Event Listeners
+            subjectSelect.addEventListener('change', () => {
+                updateChapterList();
+                loadAndRenderMarkdown(); // Load first chapter of new subject
+            });
+
+            chapterSelect.addEventListener('change', () => {
+                loadAndRenderMarkdown();
+            });
+
+            // Initial Load
+            loadAndRenderMarkdown();
+        }
+
+        function updateChapterList() {
+            const subject = subjectSelect.value;
+            chapterSelect.innerHTML = ''; // clear existing
+            
+            const chapters = CURRICULUM[subject] || [];
+            if(chapters.length === 0) {
+                const option = document.createElement('option');
+                option.value = "";
+                option.textContent = "-- No Chapters Available --";
+                chapterSelect.appendChild(option);
+                return;
+            }
+
+            chapters.forEach(chapter => {
+                const option = document.createElement('option');
+                option.value = chapter;
+                option.textContent = chapter;
+                chapterSelect.appendChild(option);
+            });
+        }
+
+
+        // --- Sidebar Logic ---
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                sidebarOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; 
+            } else {
+                sidebarOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // --- Markdown Preprocessing ---
+        function preProcessObsidian(text) {
+            mathBlocks = []; // Reset math blocks
+            
+            // 1. Protect Block Math ($$ ... $$)
+            let processed = text.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
+                mathBlocks.push(match);
+                return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`;
+            });
+            
+            // 2. Protect Inline Math ($ ... $)
+            processed = processed.replace(/\$([^\$]+?)\$/g, (match) => {
+                mathBlocks.push(match);
+                return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`;
+            });
+
+            // 3. Process Obsidian Images
+            processed = processed.replace(/!\[\[([^\]]+)\]\]/g, (match, content) => {
+                const parts = content.split('|');
+                const rawFilename = parts[0].trim();
+                const width = parts.length > 1 ? `width="${parts[1].trim()}"` : '';
+                
+                if (rawFilename.startsWith('http') || rawFilename.startsWith('data:')) {
+                    return `<img src="${rawFilename}" ${width} alt="External Image">`;
+                }
+                
+                const pureFilename = rawFilename.split('/').pop().split('\\').pop();
+                const imgSrc = encodeURI(`${currentAssetBase}/${pureFilename}`);
+                
+                return `<img src="${imgSrc}" ${width} alt="${pureFilename}" onerror="this.outerHTML='<div class=\\'bg-red-50 text-red-600 border border-red-200 p-3 rounded text-sm my-2\\'><strong>⚠️ Image Not Found:</strong><br><code class=\\'break-all\\'>' + this.src + '</code><br>Check if image exists in folder.</div>'">`;
+            });
+
+            // 4. Standard Markdown Images
+            processed = processed.replace(/!\[(.*?)\]\((.*?)\)/g, (match, alt, href) => {
+                if (href.startsWith('http') || href.startsWith('data:')) return match;
+                
+                let widthAttr = '';
+                let cleanAlt = alt;
+                if (alt.includes('|')) {
+                    const altParts = alt.split('|');
+                    const potentialWidth = altParts[altParts.length - 1];
+                    if (!isNaN(potentialWidth)) {
+                        widthAttr = `width="${potentialWidth}"`;
+                        cleanAlt = altParts.slice(0, -1).join('|');
+                    }
+                }
+
+                const pureFilename = decodeURIComponent(href).split('/').pop().split('\\').pop();
+                const imgSrc = encodeURI(`${currentAssetBase}/${pureFilename}`); 
+                
+                return `<img src="${imgSrc}" alt="${cleanAlt}" ${widthAttr} onerror="this.outerHTML='<div class=\\'bg-red-50 text-red-600 border border-red-200 p-3 rounded text-sm my-2\\'><strong>⚠️ Image Not Found:</strong><br><code class=\\'break-all\\'>' + this.src + '</code><br>Check if image exists in folder.</div>'">`;
+            });
+
+            // 5. Highlights and Links
+            processed = processed.replace(/==([^=]+)==/g, '<span class="obsidian-highlight">$1</span>');
+
+            processed = processed.replace(/\[\[([^\]]+)\]\]/g, (match, content) => {
+                const parts = content.split('|');
+                const linkTarget = parts[0];
+                const displayText = parts.length > 1 ? parts[1] : parts[0];
+                return `<a href="#" class="obsidian-internal-link" title="${linkTarget}">${displayText}</a>`;
+            });
+
+            return processed;
+        }
+
+        // --- ToC Generation ---
+        function buildTableOfContents() {
+            const contentDiv = document.getElementById('content');
+            const tocContainer = document.getElementById('toc');
+            tocContainer.innerHTML = ''; 
+
+            const headings = Array.from(contentDiv.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+            
+            if (headings.length === 0) {
+                tocContainer.innerHTML = '<p class="text-sm text-gray-500 italic">No headings found.</p>';
+                return;
+            }
+
+            const rootList = document.createElement('ul');
+            rootList.className = 'toc-list';
+            tocContainer.appendChild(rootList);
+
+            const stack = [{ level: 0, element: rootList }];
+
+            headings.forEach((heading, index) => {
+                if (!heading.id) heading.id = 'heading-' + index;
+
+                const level = parseInt(heading.tagName.substring(1));
+                const text = heading.innerText;
+                
+                const li = document.createElement('li');
+                const itemContainer = document.createElement('div');
+                itemContainer.className = 'toc-item-container';
+                
+                const link = document.createElement('a');
+                link.href = '#' + heading.id;
+                link.textContent = text;
+                link.className = 'toc-link truncate';
+                
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
+                });
+
+                itemContainer.appendChild(link);
+                li.appendChild(itemContainer);
+
+                while (stack[stack.length - 1].level >= level) stack.pop();
+
+                const parent = stack[stack.length - 1];
+                let parentList = parent.element.querySelector(':scope > ul.toc-nested');
+
+                if (!parentList && parent.level > 0) {
+                    parentList = document.createElement('ul');
+                    parentList.className = 'toc-list toc-nested';
+                    parent.element.appendChild(parentList);
+                    
+                    const parentContainer = parent.element.querySelector('.toc-item-container');
+                    const toggleBtn = document.createElement('span');
+                    toggleBtn.className = 'toc-toggle transform rotate-90';
+                    toggleBtn.innerHTML = '▶';
+                    parentContainer.insertBefore(toggleBtn, parentContainer.firstChild);
+
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        parentList.classList.toggle('hidden');
+                        toggleBtn.style.transform = parentList.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
+                    });
+                }
+
+                const targetList = parent.level === 0 ? parent.element : parentList;
+                targetList.appendChild(li);
+                stack.push({ level: level, element: li });
+            });
+
+            document.querySelectorAll('.toc-item-container').forEach(container => {
+                if (!container.querySelector('.toc-toggle')) {
+                    const spacer = document.createElement('span');
+                    spacer.className = 'toc-spacer';
+                    container.insertBefore(spacer, container.firstChild);
+                }
+            });
+        }
+
+        function enhanceContentHeadings() {
+            const headings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h4, #content h5, #content h6');
+            headings.forEach(heading => {
+                const toggleBtn = document.createElement('span');
+                toggleBtn.className = 'heading-toggle cursor-pointer mr-2 select-none text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform duration-200 inline-block transform rotate-90 text-sm align-middle';
+                toggleBtn.innerHTML = '▶';
+                heading.prepend(toggleBtn);
+                heading.style.cursor = 'pointer';
+                heading.title = "Click to collapse/expand section";
+                
+                heading.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'A') return;
+                    
+                    const isCollapsed = heading.classList.toggle('collapsed');
+                    toggleBtn.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(90deg)';
+                    
+                    const level = parseInt(heading.tagName[1]);
+                    let el = heading.nextElementSibling;
+                    
+                    while (el) {
+                        if (el.tagName.match(/^H[1-6]$/)) {
+                            if (parseInt(el.tagName[1]) <= level) break;
+                        }
+                        isCollapsed ? el.classList.add(`hidden-by-h${level}`) : el.classList.remove(`hidden-by-h${level}`);
+                        el = el.nextElementSibling;
+                    }
+                });
+            });
+        }
+
+        // --- Callout Generation ---
+        function getCalloutIcon(type) {
+            const icons = {
+                note: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>`,
+                info: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
+                success: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+                warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`
+            };
+            
+            if (['error', 'bug', 'danger'].includes(type)) return icons.warning;
+            if (['check', 'done'].includes(type)) return icons.success;
+            if (['caution'].includes(type)) return icons.warning;
+            
+            return icons[type] || icons.note;
+        }
+
+        function renderCallouts() {
+            const blockquotes = document.querySelectorAll('#content blockquote');
+            blockquotes.forEach(bq => {
+                const firstP = bq.querySelector('p');
+                if (!firstP) return;
+                
+                const match = firstP.innerHTML.match(/^\s*\[!([a-zA-Z]+)\][+-]?(.*?)(?:<br\s*\/?>|\n|$)/i);
+                
+                if (match) {
+                    const type = match[1].toLowerCase();
+                    const title = match[2].trim() || type.charAt(0).toUpperCase() + type.slice(1);
+                    
+                    firstP.innerHTML = firstP.innerHTML.substring(match[0].length);
+                    if (firstP.innerHTML.trim() === '') firstP.style.display = 'none';
+                    
+                    bq.classList.add('obsidian-callout');
+                    bq.classList.add(`callout-${type}`);
+                    
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = 'callout-title';
+                    titleDiv.innerHTML = getCalloutIcon(type) + `<span>${title}</span>`;
+                    bq.insertBefore(titleDiv, bq.firstChild);
+                }
+            });
+        }
+
+        // --- Core Rendering Logic ---
+        async function loadAndRenderMarkdown() {
+            const contentDiv = document.getElementById('content');
+            const errorBox = document.getElementById('errorBox');
+            const sidebarChapterTitle = document.getElementById('sidebarChapterTitle');
+            
+            const subject = subjectSelect.value;
+            const chapter = chapterSelect.value;
+            
+            // If no chapter available, clear content
+            if(!chapter) {
+                contentDiv.innerHTML = `<p class="text-gray-500 italic">No chapters mapped for this subject yet.</p>`;
+                sidebarChapterTitle.textContent = "No Selection";
+                document.getElementById('toc').innerHTML = '';
+                return;
+            }
+
+            // Derive dynamic File Paths
+            // Spaces in the chapter string become underscores for the markdown file name.
+            const fileName = chapter.replace(/ /g, '_') + '.md';
+            const mdFilePath = `${subject}/${chapter}/${fileName}`;
+            currentAssetBase = `${subject}/${chapter}/assets/media`;
+
+            // Set the Sidebar Title to current Chapter Name
+            sidebarChapterTitle.textContent = chapter;
+            errorBox.classList.add('hidden');
+            
+            // Loading Spinner
+            contentDiv.innerHTML = `
+                <div class="flex justify-center items-center py-20">
+                    <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-obsidian-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Loading Note...</span>
+                </div>
+            `;
+
+            try {
+                let rawMarkdown = "";
+                
+                try {
+                    const response = await fetch(encodeURI(mdFilePath));
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    rawMarkdown = await response.text();
+                } catch (fetchErr) {
+                    console.warn("Fetch failed:", fetchErr);
+                    
+                    // --- ACTIVE: Simple Warning ---
+                    errorBox.classList.remove('hidden');
+                    document.getElementById('errorMessage').innerHTML = `<strong>Note not found</strong>`;
+                    rawMarkdown = ""; // Render nothing when note is not found
+
+                    /* // --- DEBUG MODE: Uncomment below to see detailed errors and demo content ---
+                    errorBox.classList.remove('hidden');
+                    document.getElementById('errorMessage').innerHTML = \`
+                        <strong class="font-bold">Cannot fetch your local note from the Web Preview!</strong><br>
+                        Could not load <code>\${mdFilePath}</code>.<br><br>
+                        <em>To allow you to test the dropdown routing, a demo note has been loaded instead.</em> To view your actual files, please download this <code>index.html</code> file and run it locally.
+                    \`;
+                    
+                    rawMarkdown = \`#### $\\mathbf{Q:\\ \\ \\ }$$\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রার এবং $\\mathbf{1.0}\\mathbf{\\times}\\mathbf{1}\\mathbf{0}^{\\mathbf{5}}\\mathbf{Pa}$ চাপে $\\mathbf{C}\\mathbf{O}_{\\mathbf{2}}$ গ্যাসের ঘনত্ব $\\mathbf{1.98\\ }\\mathbf{kg}\\textbf{/}\\mathbf{m}^{\\mathbf{3}}$ হলে $\\mathbf{3}\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রায় একই চাপে উক্ত গ্যাসের $\\mathbf{C}_{\\mathbf{rms}}$ বেগ কত?\\n\\n> [!info] Introduction to \${chapter}\\n> This is a dynamically generated demo note for **\${subject}** -> **\${chapter}**.\\n\\n### 1.1 First Section of \${chapter.split(' ')[0]}\\nDynamic loading successful!\\n$$E = mc^2$$\\n\\n## 2. Examples\\nHere are some highlights about \${chapter}:\\n- ==Dynamic Subject Routing==\\n- ==Dynamic Asset Paths==\\n\\n> [!warning] Heads up!\\n> Remember to place your \\\`\${fileName}\\\` inside \\\`\${subject}/\${chapter}/\\\` folder.\`;
+                    */
+                }
+                
+                const processedMarkdown = preProcessObsidian(rawMarkdown);
+                let htmlContent = marked.parse(processedMarkdown, { headerIds: true, gfm: true, breaks: true });
+                
+                // Restore protected math blocks
+                mathBlocks.forEach((block, i) => {
+                    htmlContent = htmlContent.split(`@@MATH_BLOCK_${i}@@`).join(block);
+                });
+
+                contentDiv.innerHTML = htmlContent;
+
+                buildTableOfContents();
+                enhanceContentHeadings();
+                renderCallouts();
+                
+                if (window.renderMathInElement) {
+                    const mathOptions = {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false},
+                            {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}
+                        ], 
+                        throwOnError: false,
+                        trust: true, // Allow trust for \htmlStyle to render custom Bengali fonts
+                        macros: {
+                            "\\style": "\\htmlStyle{#1}{#2}" // Translate Obsidian's \style into \htmlStyle
+                        }
+                    };
+                    renderMathInElement(contentDiv, mathOptions);
+                    renderMathInElement(document.getElementById('toc'), mathOptions); // Fix: Render math inside the Table of Contents
+                }
+                
+            } catch (error) {
+                console.error("Critical rendering error:", error);
+                errorBox.classList.remove('hidden');
+                document.getElementById('errorMessage').innerHTML = `<strong class="font-bold">Failed to render document!</strong> Check console for details.`;
+                contentDiv.innerHTML = `<p class="text-gray-500 italic">Could not render document.</p>`;
+                document.getElementById('toc').innerHTML = '';
+            }
+        }
+
+        // Initialize Navigation on page load
+        document.addEventListener('DOMContentLoaded', initNavigation);
+
+    </script>
+</body>
+</html>
