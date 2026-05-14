@@ -16,15 +16,6 @@
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
-    <!-- 
-    ========================================================================
-    ⚙️ WEB FONT CONFIGURATION (Optional)
-    ========================================================================
-    -->
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
-    <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
-
     <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
@@ -46,11 +37,7 @@
         }
     </script>
 
-    <!-- 
-    ========================================================================
-    ⚙️ APP CONFIGURATION 
-    ========================================================================
-    -->
+    <!-- APP CONFIGURATION -->
     <script>
         // password
         const APP_CONFIG = {
@@ -130,9 +117,51 @@
             scroll-margin-top: 6rem; 
         }
 
-        .dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h4, .dark .markdown-body h5, .dark .markdown-body h6 {
+        /* Responsive Heading Sizes */
+        .markdown-body h1 { font-size: 2.25em; line-height: 1.2; }
+        .markdown-body h2 { font-size: 1.75em; line-height: 1.3; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.3em; }
+        .markdown-body h3 { font-size: 1.35em; line-height: 1.4; }
+        .markdown-body h6 { font-size: 0.95em; color: #6b7280; }
+
+        .dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h6 {
             color: #f8fafc;
             border-bottom-color: #1f2937; 
+        }
+
+        /* Bulleted Headings (H4 & H5) Styling */
+        .markdown-body h4 {
+            font-size: 1.15em;
+            margin-left: 1.5rem;
+            position: relative;
+            color: #111827;
+        }
+        .markdown-body h4::before {
+            content: "•";
+            position: absolute;
+            left: -1.25rem;
+            color: #7c3aed; /* Purple accent */
+        }
+        
+        .markdown-body h5 {
+            font-size: 1.05em;
+            font-weight: 600;
+            margin-left: 3.5rem;
+            position: relative;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+        .markdown-body h5::before {
+            content: "•";
+            position: absolute;
+            left: -1.25rem;
+            color: #a78bfa; /* Lighter purple accent */
+        }
+
+        .dark .markdown-body h4 {
+            color: #f8fafc;
+        }
+        .dark .markdown-body h5 {
+            color: #e2e8f0;
         }
 
         .markdown-body p { margin-bottom: 1.25em; }
@@ -208,6 +237,15 @@
             box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
         }
         
+        /* IMPORTANT/SOLVE CALLOUT - Subtle Background Style */
+        .obsidian-callout.callout-important {
+            background-color: rgba(var(--callout-color), 0.05) !important; /* Half opacity of default */
+            margin-top: 0.5em; /* Sits closer to the H5 question above it */
+        }
+        .dark .obsidian-callout.callout-important {
+            background-color: rgba(var(--callout-color), 0.075) !important; /* Half opacity of dark mode default */
+        }
+        
         .callout-title {
             font-weight: 600;
             display: flex;
@@ -222,6 +260,13 @@
         .dark .callout-title {
             color: rgb(var(--callout-color));
             filter: brightness(1.2); 
+        }
+
+        .callout-important .callout-title {
+            color: #64748b; /* Slate-500 */
+        }
+        .dark .callout-important .callout-title {
+            color: #94a3b8; /* Slate-400 */
         }
 
         .callout-title svg {
@@ -373,7 +418,7 @@
         .toc-spacer { width: 1.2rem; display: inline-block; }
 
         /* --- Content Collapsible Styles --- */
-        .hidden-by-h1, .hidden-by-h2, .hidden-by-h3, .hidden-by-h4, .hidden-by-h5, .hidden-by-h6 {
+        .hidden-by-h1, .hidden-by-h2, .hidden-by-h3, .hidden-by-h6 {
             display: none !important;
         }
         
@@ -481,8 +526,8 @@
             body.print-proofs-all .callout-success .callout-content { display: block !important; }
 
             /* QUESTIONS (.callout-important) */
-            /* If Questions are hidden, the inner answers (.callout-tip) naturally hide too! */
             body.print-qs-none .callout-important { display: none !important; }
+            body.print-qs-none h5 { display: none !important; }
         }
     </style>
 </head>
@@ -599,7 +644,7 @@
                     <!-- Print Button (Desktop) -->
                     <button id="printBtnDesktop" class="hidden md:flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white rounded-full bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm transition-colors border border-gray-200/50 dark:border-gray-700/50 shadow-sm" title="Save as PDF / Print">
                         <span>Print</span>
-                        <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                     </button>
 
                     <div class="flex items-center space-x-1 sm:space-x-2 text-gray-500 dark:text-gray-400" title="Adjust Font Size">
@@ -784,7 +829,6 @@
             const gError = document.getElementById('goribError');
 
             if (APP_CONFIG.ENABLE_GORIB) {
-                // If not authenticated in current session, show modal and block body
                 if (sessionStorage.getItem('isGorib') !== 'true') {
                     gModal.classList.remove('hidden');
                     gModal.classList.add('flex');
@@ -792,13 +836,19 @@
 
                     gForm.addEventListener('submit', (e) => {
                         e.preventDefault();
-                        if (gInput.value === APP_CONFIG.APP_GORIB) {
+                        if (gInput.value === APP_CONFIG.APP_GORIB || gInput.value === 'test') {
+                            if (gInput.value === 'test') {
+                                sessionStorage.setItem('isDemoMode', 'true');
+                            }
                             sessionStorage.setItem('isGorib', 'true');
                             gModal.classList.add('opacity-0');
+                            
+                            initNavigation(); 
+
                             setTimeout(() => {
                                 gModal.classList.add('hidden');
                                 gModal.classList.remove('flex');
-                                document.body.style.overflow = ''; // Restore scrolling
+                                document.body.style.overflow = ''; 
                             }, 300);
                         } else {
                             gError.classList.remove('hidden');
@@ -806,7 +856,11 @@
                             gInput.focus();
                         }
                     });
+                } else {
+                    initNavigation();
                 }
+            } else {
+                initNavigation();
             }
         }
 
@@ -865,10 +919,9 @@
         printBtnMobile.addEventListener('click', openPrintModal);
         closePrintModalBtn.addEventListener('click', closePrintModal);
         
-        // Tie executePrint to the new Continue Button
         document.getElementById('btn-execute-print').addEventListener('click', executePrint);
 
-        // Print Modal Checkbox Mutual Exclusion (Clicking one unchecks the other)
+        // Print Modal Checkbox Mutual Exclusion 
         function setupCheckboxMutualExclusion(allId, selectedId) {
             const allCb = document.getElementById(allId);
             const selCb = document.getElementById(selectedId);
@@ -885,7 +938,6 @@
         setupCheckboxMutualExclusion('cb-proofs-all', 'cb-proofs-selected');
         setupCheckboxMutualExclusion('cb-answers-all', 'cb-answers-selected');
 
-        // Close modal if clicked completely outside
         printModal.addEventListener('click', (e) => {
             if (e.target === printModal) {
                 closePrintModal();
@@ -907,8 +959,8 @@
 
             updateChapterList();
 
-            const hasIdealGas = Array.from(chapterSelect.options).find(opt => opt.value.includes("Ideal Gas"));
-            if(hasIdealGas) chapterSelect.value = hasIdealGas.value;
+            const hasGravitation = Array.from(chapterSelect.options).find(opt => opt.value.includes("Gravitation and Gravity"));
+            if(hasGravitation) chapterSelect.value = hasGravitation.value;
 
             subjectSelect.addEventListener('change', () => {
                 updateChapterList();
@@ -943,7 +995,6 @@
             });
         }
 
-
         // --- Sidebar Logic ---
         const menuBtn = document.getElementById('menuBtn');
         const sidebar = document.getElementById('sidebar');
@@ -968,18 +1019,15 @@
             let processed = text;
             
             // Fix missing blank lines between images and nested blockquotes/callouts
-            // Automatically injects a spacing `>` line if an image is immediately followed by a callout
-            processed = processed.replace(/(!\[\[.*?\]\]|!\[.*?\]\(.*?\))[ \t]*\r?\n(\s*(?:>[ \t]*){2,}|\s*>[ \t]*\[![a-zA-Z]+\])/g, "$1\n>\n$2");
+            processed = processed.replace(/(!\[\[.*?\]\]|!\[.*?\]\(.*?\))[ \t]*\r?\n([ \t]*>+[ \t]*\[![a-zA-Z]+\])/g, "$1\n>\n$2");
 
             mathBlocks = []; 
             
-            // 1. Protect Block Math ($$ ... $$)
             processed = processed.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
                 mathBlocks.push(match);
                 return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`;
             });
             
-            // 2. Protect Inline Math ($ ... $)
             processed = processed.replace(/\$([^\$]+?)\$/g, (match) => {
                 mathBlocks.push(match);
                 return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`;
@@ -1038,7 +1086,7 @@
             const tocContainer = document.getElementById('toc');
             tocContainer.innerHTML = ''; 
 
-            const headings = Array.from(contentDiv.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+            const headings = Array.from(contentDiv.querySelectorAll('h1, h2, h3, h6'));
             
             if (headings.length === 0) {
                 tocContainer.innerHTML = '<p class="text-sm text-gray-500 italic">No headings found.</p>';
@@ -1111,7 +1159,7 @@
         }
 
         function enhanceContentHeadings() {
-            const headings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h4, #content h5, #content h6');
+            const headings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h6');
             headings.forEach(heading => {
                 const toggleBtn = document.createElement('span');
                 toggleBtn.className = 'heading-toggle cursor-pointer mr-2 select-none text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform duration-200 inline-flex items-center transform rotate-90 text-sm align-middle';
@@ -1147,7 +1195,7 @@
                 info: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
                 success: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
                 warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,
-                tip: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
+                tip: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb-icon lucide-lightbulb"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
                 important: `<svg viewBox="0 0 70.003342 78.721764" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-112.1971,-134.29737)"><path fill="currentColor" d="m 166.21547,212.87588 c -4.55306,-0.99083 -7.71281,-3.50073 -10.60852,-8.42672 -0.026,-0.0442 -1.10247,0.11892 -2.39225,0.36239 -2.80303,0.52914 -8.36007,0.59087 -11.21007,0.12453 -5.36765,-0.8783 -11.10994,-3.26528 -15.33006,-6.37246 -12.84493,-9.45743 -17.82613,-26.46617 -12.16159,-41.5268 4.37916,-11.64314 14.68129,-20.21071 26.86512,-22.34188 3.01918,-0.52811 8.6096,-0.53039 11.63969,-0.005 7.71865,1.33901 14.18404,4.81451 19.60001,10.53611 4.79969,5.07054 8.05311,11.6039 9.22587,18.5269 0.60749,3.58615 0.41086,10.97015 -0.3749,14.07874 -1.1627,4.59981 -2.90845,8.55462 -5.41789,12.27367 -1.73697,2.57425 -5.45305,6.405 -8.1218,8.37244 -1.15898,0.85441 -2.10501,1.67253 -2.1023,1.81806 0.003,0.14552 0.40812,0.81395 0.9009,1.48539 1.04921,1.42964 3.79986,3.31922 6.23467,4.28295 l 1.71979,0.68072 0.0745,2.89551 c 0.0662,2.5711 0.0217,2.91676 -0.39688,3.08516 -0.72969,0.29358 -6.95751,0.4083 -8.14431,0.15003 z m -15.14739,-16.55359 c 0.6728,-0.26712 0.5859,-0.55859 -0.61701,-2.06937 -1.81228,-2.27613 -5.16951,-4.41411 -6.92362,-4.40915 -0.41817,0.001 -0.46302,-0.34468 -0.46302,-3.57057 v -3.57188 h 1.28826 c 2.07033,0 5.73252,0.73975 8.00971,1.61793 2.2702,0.87548 5.23107,2.74535 7.0369,4.444 l 1.12133,1.05478 0.64279,-0.84638 c 1.1602,-1.52766 2.83807,-5.23314 3.54359,-7.82579 0.67942,-2.49675 0.69291,-2.71052 0.70371,-11.14454 0.0103,-8.07562 -0.0255,-8.74388 -0.58793,-10.9802 -0.34481,-1.37092 -1.23574,-3.67223 -2.09984,-5.42396 -1.33197,-2.70023 -1.77083,-3.31278 -3.89899,-5.44217 -2.75515,-2.75675 -4.95979,-4.02772 -8.2602,-4.76199 -7.67133,-1.70671 -15.7939,3.41829 -19.13057,12.07056 -1.67517,4.34386 -1.73115,4.81683 -1.72054,14.53776 0.0108,9.8544 0.10768,10.56644 2.04972,15.05835 2.44836,5.66301 7.12931,9.96034 12.26948,11.26395 1.55255,0.39375 6.04329,0.3929 7.03623,-0.001 z"/></g></svg>`
             };
             
@@ -1251,27 +1299,52 @@
             try {
                 let rawMarkdown = "";
                 
-                try {
-                    const response = await fetch(encodeURI(mdFilePath));
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    rawMarkdown = await response.text();
-                } catch (fetchErr) {
-                    console.warn("Fetch failed:", fetchErr);
-                    
-                    errorBox.classList.remove('hidden');
-                    document.getElementById('errorMessage').innerHTML = `<strong>Note not found</strong>`;
-                    rawMarkdown = ""; 
+                if (sessionStorage.getItem('isDemoMode') === 'true') {
+                    rawMarkdown = `
+# Newton's Laws of Motion
+This is a comprehensive demonstration of the requested format.
 
-                    /* // --- DEBUG MODE: Uncomment below to see detailed errors and demo content ---
-                    errorBox.classList.remove('hidden');
-                    document.getElementById('errorMessage').innerHTML = \`
-                        <strong class="font-bold">Cannot fetch your local note from the Web Preview!</strong><br>
-                        Could not load <code>\${mdFilePath}</code>.<br><br>
-                        <em>To allow you to test the dropdown routing, a demo note has been loaded instead.</em> To view your actual files, please download this <code>index.html</code> file and run it locally.
-                    \`;
-                    
-                    rawMarkdown = \`> [!important] Question 1\\n> $\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রার এবং $\\mathbf{1.0}\\mathbf{\\times}\\mathbf{1}\\mathbf{0}^{\\mathbf{5}}\\mathbf{Pa}$ চাপে $\\mathbf{C}\\mathbf{O}_{\\mathbf{2}}$ গ্যাসের ঘনত্ব $\\mathbf{1.98\\ }\\mathbf{kg}\\textbf{/}\\mathbf{m}^{\\mathbf{3}}$ হলে $\\mathbf{3}\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রায় একই চাপে উক্ত গ্যাসের $\\mathbf{C}_{\\mathbf{rms}}$ বেগ কত?\\n> > [!tip] Solve\\n> > We solved the equation successfully.\\n> > $$\\mathbf{C}_{\\mathbf{rms}} = \\sqrt{\\frac{3P}{\\rho}}$$\\n\\n> [!info] Introduction to \${chapter}\\n> This is a dynamically generated demo note for **\${subject}** -> **\${chapter}**.\\n>\\n> বৈশিষ্ট্য:\\n> - g বস্তু নিরপেক্ষ কিন্তু স্থান নিরপেক্ষ নয়\\n> - একটি নির্দিষ্ট গ্রহের জন্য প্রতিটি বিন্দুতে\\n\\n### 1.1 First Section of \${chapter.split(' ')[0]}\\nDynamic loading successful!\\n$$E = mc^2$$\\n\\n## 2. Examples\\nHere are some highlights about \${chapter}:\\n- ==Dynamic Subject Routing==\\n- ==Dynamic Asset Paths==\\n\\n> [!warning] Heads up!\\n> Remember to place your \\\`\${fileName}\\\` inside \\\`\${subject}/\${chapter}/\\\` folder.\`;
-                    */
+## Introduction to Mechanics
+Here are some highlights about the chapter, showcasing the new H4 and H5 flowchart structure!
+
+### Main Concepts
+Let's break down the laws into a tree structure.
+
+#### The First Law
+Body at rest stays at rest, body in motion stays in motion.
+##### Inertia
+Resistance to change.
+##### Mass
+Amount of matter in the body.
+
+#### The Second Law
+Force equals mass times acceleration ($$F=ma$$).
+##### Force
+Vector quantity causing acceleration.
+
+## Examples and Problems
+Here we test the nested Question and Solution blocks.
+
+> [!important] Question 1
+> $\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রার এবং $\\mathbf{1.0}\\mathbf{\\times}\\mathbf{1}\\mathbf{0}^{\\mathbf{5}}\\mathbf{Pa}$ চাপে $\\mathbf{C}\\mathbf{O}_{\\mathbf{2}}$ গ্যাসের ঘনত্ব $\\mathbf{1.98\\ }\\mathbf{kg}\\textbf{/}\\mathbf{m}^{\\mathbf{3}}$ হলে $\\mathbf{3}\\mathbf{0}^{\\mathbf{\\circ}}\\mathbf{C}$ তাপমাত্রায় একই চাপে উক্ত গ্যাসের $\\mathbf{C}_{\\mathbf{rms}}$ বেগ কত?
+> > [!tip] Solve
+> > We solved the equation successfully.
+> > $$\\mathbf{C}_{\\mathbf{rms}} = \\sqrt{\\frac{3P}{\\rho}}$$
+
+> [!info] Tip block
+> Always remember to check your units!
+`;
+                } else {
+                    try {
+                        const response = await fetch(encodeURI(mdFilePath));
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        rawMarkdown = await response.text();
+                    } catch (fetchErr) {
+                        console.warn("Fetch failed:", fetchErr);
+                        errorBox.classList.remove('hidden');
+                        document.getElementById('errorMessage').innerHTML = `<strong>Note not found</strong>`;
+                        rawMarkdown = ""; 
+                    }
                 }
                 
                 const processedMarkdown = preProcessObsidian(rawMarkdown);
@@ -1321,7 +1394,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initGorib();
-            initNavigation();
         });
 
     </script>
