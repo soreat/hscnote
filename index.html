@@ -24,696 +24,437 @@
                 extend: {
                     colors: {
                         obsidian: {
-                            bg: '#ffffff',
-                            text: '#2e3338',
-                            darkBg: '#0a0d13', /* Custom dark background */
-                            darkText: '#d1d5db', /* Neutral Gray-300 text */
-                            accent: '#7c3aed', // Purple accent
-                            darkAccent: '#a78bfa'
+                            bg: '#f8fafc', // Slate 50 - softer than pure white
+                            surface: '#ffffff',
+                            text: '#334155', // Slate 700
+                            darkBg: '#0f1117', // Rich deep tech dark
+                            darkSurface: '#181b21',
+                            darkText: '#cbd5e1', // Slate 300
+                            accent: '#6366f1', // Indigo 500 - Professional modern accent
+                            darkAccent: '#818cf8', // Indigo 400
+                            border: '#e2e8f0',
+                            darkBorder: '#272b36'
                         }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(99, 102, 241, 0.3)',
                     }
                 }
             }
         }
     </script>
 
-    <!-- APP CONFIGURATION -->
+    <!-- 
+    ========================================================================
+    ⚙️ APP CONFIGURATION & THEME TWEAKS
+    ========================================================================
+    -->
     <script>
-        // password
         const APP_CONFIG = {
-            // Set to false to disable
-            ENABLE_GORIB: true, 
-            
-            // Set your desired key here
-            APP_GORIB: "physicsisbest" 
+            ENABLE_GORIB: true,         // Set to false to disable password
+            APP_GORIB: "physicsisbest", // Your access key
+            DEFAULT_WIDTH: 0,           // Page wideness on load. (0 = Narrow, 1 = Full Width)
+            DEFAULT_FONT_SIZE: 18       // Default reading font size in pixels
         };
     </script>
 
     <style>
         /* ==========================================================
-           ⚙️ LOCAL FONT CONFIGURATION
+           🎨 THEME & CALLOUT CUSTOMIZATION
            ========================================================== */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
         :root {
-            --custom-main-font: 'Hind Siliguri', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --custom-main-font: 'Inter', 'Hind Siliguri', sans-serif;
+            --callout-bg-start: 0.05;  
+            --callout-bg-end: 0.01;    
+            --callout-border-opacity: 0.2; 
+            --color-note: 59, 130, 246;       
+            --color-danger: 239, 68, 68;      
+            --color-success: 34, 197, 94;     
+            --color-abstract: 6, 182, 212;    
+            --color-tip: 16, 185, 129;        
+            --color-important: 139, 92, 246;  
         }
 
         /* ==========================================================
-           Custom Scrollbar Styling
+           Custom Scrollbar Styling - Sleek & Modern
            ========================================================== */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px; 
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: rgba(148, 163, 184, 0.5); 
-            border-radius: 5px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(100, 116, 139, 0.8); 
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background-color: rgba(75, 85, 99, 0.5); 
-        }
-        .dark ::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(107, 114, 128, 0.8); 
-        }
-
-        #sidebar::-webkit-scrollbar {
-            display: none;
-            width: 0;
-        }
-        #sidebar {
-            -ms-overflow-style: none;  
-            scrollbar-width: none;  
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(148, 163, 184, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: rgba(100, 116, 139, 0.6); }
+        .dark ::-webkit-scrollbar-thumb { background-color: rgba(75, 85, 99, 0.4); }
+        .dark ::-webkit-scrollbar-thumb:hover { background-color: rgba(107, 114, 128, 0.7); }
+        #sidebar::-webkit-scrollbar { display: none; width: 0; }
+        #sidebar { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* ==========================================================
-           Markdown Core Styles
+           Markdown Core Styles - Premium Typography
            ========================================================== */
-        body {
-            font-family: var(--custom-main-font); 
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .markdown-body {
-            font-size: var(--note-font-size, 1.125rem); 
-            line-height: 1.75;
-            color: #2e3338;
-            transition: font-size 0.2s ease;
-        }
+        body { font-family: var(--custom-main-font); transition: background-color 0.4s ease, color 0.4s ease; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .markdown-body { font-size: var(--note-font-size, 1.125rem); line-height: 1.8; color: #334155; transition: font-size 0.2s ease; letter-spacing: -0.01em; }
+        .dark .markdown-body { color: #cbd5e1; }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 { font-weight: 700; margin-top: 2.2em; margin-bottom: 0.8em; color: #0f172a; scroll-margin-top: 6rem; letter-spacing: -0.02em; }
+        .markdown-body h1 { font-size: 2.5em; line-height: 1.2; font-weight: 800; }
+        .markdown-body h2 { font-size: 1.85em; line-height: 1.3; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.4em; }
+        .markdown-body h3 { font-size: 1.4em; line-height: 1.4; }
+        .markdown-body h6 { font-size: 0.95em; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h6 { color: #f8fafc; border-bottom-color: #1e293b; }
 
-        .dark .markdown-body {
-            color: #cbd5e1;
-        }
+        .markdown-body h4 { font-size: 1.15em; margin-left: 1.5em; position: relative; color: #1e293b; }
+        .markdown-body h4::before { content: "•"; position: absolute; left: -1.25em; color: #6366f1; font-size: 1.2em; line-height: 1; top: 0.1em; }
+        .markdown-body h5 { font-size: 1.05em; font-weight: 600; margin-left: 3.5em; position: relative; color: #475569; margin-bottom: 0.5em; }
+        .markdown-body h5::before { content: "•"; position: absolute; left: -1.25em; color: #818cf8; font-size: 1.2em; line-height: 1; top: 0.1em; }
+        .dark .markdown-body h4 { color: #f1f5f9; }
+        .dark .markdown-body h5 { color: #cbd5e1; }
 
-        .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
-            font-weight: 700;
-            margin-top: 2em;
-            margin-bottom: 0.75em;
-            color: #111827;
-            scroll-margin-top: 6rem; 
-        }
-
-        /* Responsive Heading Sizes */
-        .markdown-body h1 { font-size: 2.25em; line-height: 1.2; }
-        .markdown-body h2 { font-size: 1.75em; line-height: 1.3; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.3em; }
-        .markdown-body h3 { font-size: 1.35em; line-height: 1.4; }
-        .markdown-body h6 { font-size: 0.95em; color: #6b7280; }
-
-        .dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h6 {
-            color: #f8fafc;
-            border-bottom-color: #1f2937; 
-        }
-
-        /* Bulleted Headings (H4 & H5) Styling */
-        .markdown-body h4 {
-            font-size: 1.15em;
-            margin-left: 1.5rem;
-            position: relative;
-            color: #111827;
-        }
-        .markdown-body h4::before {
-            content: "•";
-            position: absolute;
-            left: -1.25rem;
-            color: #7c3aed; /* Purple accent */
-        }
-        
-        .markdown-body h5 {
-            font-size: 1.05em;
-            font-weight: 600;
-            margin-left: 3.5rem;
-            position: relative;
-            color: #334155;
-            margin-bottom: 0.5rem;
-        }
-        .markdown-body h5::before {
-            content: "•";
-            position: absolute;
-            left: -1.25rem;
-            color: #a78bfa; /* Lighter purple accent */
-        }
-
-        .dark .markdown-body h4 {
-            color: #f8fafc;
-        }
-        .dark .markdown-body h5 {
-            color: #e2e8f0;
-        }
-
-        .markdown-body p { margin-bottom: 1.25em; }
-        
-        .markdown-body a {
-            color: #7c3aed;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-        
-        .dark .markdown-body a { color: #a78bfa; }
+        .markdown-body p { margin-bottom: 1.4em; }
+        .markdown-body a { color: #6366f1; text-decoration: none; border-bottom: 1px solid rgba(99, 102, 241, 0.3); transition: all 0.2s ease; }
+        .dark .markdown-body a { color: #818cf8; border-bottom-color: rgba(129, 140, 248, 0.3); }
         .markdown-body a:hover { border-bottom-color: currentColor; }
-
-        .markdown-body ul, .markdown-body ol {
-            margin-bottom: 1.25em;
-            padding-left: 1.5em;
-        }
-        
-        .markdown-body li { margin-bottom: 0.5em; }
+        .markdown-body ul, .markdown-body ol { margin-bottom: 1.4em; padding-left: 1.5em; }
+        .markdown-body li { margin-bottom: 0.6em; }
         .markdown-body ul { list-style-type: disc; }
         .markdown-body ol { list-style-type: decimal; }
 
-        /* Standard Blockquote */
-        .markdown-body blockquote:not(.obsidian-callout) {
-            border-left: 4px solid #7c3aed;
-            padding-left: 1rem;
-            color: #4b5563;
-            font-style: italic;
-            background: #f3f4f6;
-            padding: 1rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 1.5em 0;
-        }
+        .markdown-body blockquote:not(.obsidian-callout) { border-left: 3px solid #6366f1; color: #475569; font-style: italic; background: #f1f5f9; padding: 1.2em 1.5em; border-radius: 0.5em; margin: 1.8em 0; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02); }
+        .dark .markdown-body blockquote:not(.obsidian-callout) { background: #181b21; color: #94a3b8; border-left-color: #818cf8; }
 
-        .dark .markdown-body blockquote:not(.obsidian-callout) {
-            background: #111827; 
-            color: #9ca3af;
-            border-left-color: #a78bfa;
-        }
+        .callout-note, .callout-info { --callout-color: var(--color-note); } 
+        .callout-danger, .callout-warning, .callout-error, .callout-bug { --callout-color: var(--color-danger); } 
+        .callout-success, .callout-check, .callout-done { --callout-color: var(--color-success); } 
+        .callout-abstract, .callout-summary, .callout-tldr { --callout-color: var(--color-abstract); } 
+        .callout-tip { --callout-color: var(--color-tip); } 
+        .callout-important { --callout-color: var(--color-important); } 
 
-        /* ==========================================================
-           Obsidian Native Callouts (Quotes)
-           ========================================================== */
-        .callout-note, .callout-info { --callout-color: 8, 109, 221; }
-        .callout-danger, .callout-warning, .callout-error, .callout-bug { --callout-color: 233, 49, 71; }
-        .callout-success, .callout-check, .callout-done { --callout-color: 8, 185, 78; }
-        .callout-abstract, .callout-summary, .callout-tldr { --callout-color: 0, 176, 204; }
-        .callout-tip { --callout-color: 0, 184, 163; }
-        .callout-important { --callout-color: 147, 51, 234; } 
+        .obsidian-callout { border-radius: 0.75em; margin: 1.8em 0; padding: 1.25em; border: 1px solid rgba(var(--callout-color), var(--callout-border-opacity)) !important; background: linear-gradient(to right, rgba(var(--callout-color), var(--callout-bg-start)), rgba(var(--callout-color), var(--callout-bg-end))) !important; overflow: hidden; font-size: 0.95em; font-style: normal !important; color: inherit !important; box-shadow: 0 1px 3px rgba(0,0,0,0.02); transition: all 0.2s ease; }
+        .dark .obsidian-callout { border-color: rgba(var(--callout-color), calc(var(--callout-border-opacity) * 1.5)) !important; background: linear-gradient(to right, rgba(var(--callout-color), calc(var(--callout-bg-start) * 1.6)), rgba(var(--callout-color), calc(var(--callout-bg-end) * 2))) !important; }
 
-        .obsidian-callout {
-            background-color: rgba(var(--callout-color), 0.1) !important;
-            border-radius: 0.25rem;
-            margin: 1.5em 0;
-            padding: 1rem;
-            border: none !important;
-            overflow: hidden;
-            font-size: 0.95em;
-            font-style: normal !important;
-            color: inherit !important;
-            box-shadow: none;
-        }
+        .obsidian-callout .obsidian-callout { margin-top: 1.25em !important; margin-bottom: 0 !important; }
+        .obsidian-callout.callout-important { background: rgba(var(--callout-color), 0.03) !important; border: 1px solid rgba(var(--callout-color), 0.1) !important; margin-top: 0.75em; }
+        .dark .obsidian-callout.callout-important { background: rgba(var(--callout-color), 0.05) !important; }
         
-        .dark .obsidian-callout {
-            background-color: rgba(var(--callout-color), 0.15) !important;
-        }
+        .callout-title { font-weight: 600; display: flex; align-items: flex-start; color: rgb(var(--callout-color)); background-color: transparent !important; padding: 0 0 0.5em 0; margin: 0; line-height: 1.4; }
+        .dark .callout-title { filter: brightness(1.1); }
+        .callout-important > .callout-title { color: #64748b; }
+        .dark .callout-important > .callout-title { color: #94a3b8; }
+        .callout-title svg { margin-right: 0.6em; margin-top: 0.1em; width: 1.2em; height: 1.2em; stroke-width: 2px; flex-shrink: 0; }
+        .obsidian-callout.is-collapsed > .callout-title { padding-bottom: 0; }
 
-        /* Nested Callouts Styling (Answer inside Question) */
-        .obsidian-callout .obsidian-callout {
-            margin-top: 1rem !important;
-            margin-bottom: 0 !important;
-            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-        }
+        .obsidian-callout > p, .callout-content > p { padding: 0; margin: 0; }
+        .obsidian-callout > ul, .obsidian-callout > ol, .callout-content > ul, .callout-content > ol { padding: 0 0 0 1.5em; margin: 0; }
+        .obsidian-callout > p + p, .callout-content > p + p, .obsidian-callout > * + ul, .callout-content > * + ul, .obsidian-callout > * + ol, .callout-content > * + ol { margin-top: 0.75em; }
+
+        .markdown-body code { background: #f1f5f9; padding: 0.2em 0.4em; border-radius: 0.375em; font-size: 0.85em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #db2777; }
+        .dark .markdown-body code { background: #1e293b; color: #f472b6; }
+        .markdown-body pre { background: #0f172a; color: #f8fafc; padding: 1.25em; border-radius: 0.75em; overflow-x: auto; margin: 1.8em 0; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.2); border: 1px solid #1e293b; }
+        .markdown-body pre code { background: transparent; padding: 0; color: inherit; }
+
+        .markdown-body img { max-width: 100%; height: auto; border-radius: 0.75em; margin: 2em auto; display: block; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
+        .dark .markdown-body img { border-color: #334155; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+
+        .markdown-body table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.95em; margin: 0; border: none; }
+        .markdown-body th, .markdown-body td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 0.75em 1em; text-align: left; }
+        .markdown-body th:last-child, .markdown-body td:last-child { border-right: none; }
+        .markdown-body tr:last-child td { border-bottom: none; }
+        .markdown-body th { background-color: #eef2ff; font-weight: 600; color: #4338ca; border-bottom: 2px solid #c7d2fe; }
+        .dark .markdown-body table { border-color: #334155; }
+        .dark .markdown-body th, .dark .markdown-body td { border-bottom-color: #272b36; border-right-color: #272b36; }
+        .dark .markdown-body th { background-color: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-bottom: 2px solid rgba(99, 102, 241, 0.3); }
+
+        .markdown-body td .katex { font-size: clamp(0.4em, 2.5vw, 1em); }
+        .markdown-body td .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding-bottom: 0.2em; }
         
-        /* IMPORTANT/SOLVE CALLOUT - Subtle Background Style */
-        .obsidian-callout.callout-important {
-            background-color: rgba(var(--callout-color), 0.05) !important; /* Half opacity of default */
-            margin-top: 0.5em; /* Sits closer to the H5 question above it */
-        }
-        .dark .obsidian-callout.callout-important {
-            background-color: rgba(var(--callout-color), 0.075) !important; /* Half opacity of dark mode default */
-        }
-        
-        .callout-title {
-            font-weight: 600;
-            display: flex;
-            align-items: flex-start; /* Aligns content to top instead of vertical middle */
-            color: rgb(var(--callout-color));
-            background-color: transparent !important;
-            padding: 0 0 0.5rem 0;
-            margin: 0;
-            line-height: 1.4;
-        }
-        
-        .dark .callout-title {
-            color: rgb(var(--callout-color));
-            filter: brightness(1.2); 
-        }
+        .obsidian-highlight { background-color: #fef08a; color: #854d0e; padding: 0 0.2rem; border-radius: 0.25rem; }
+        .dark .obsidian-highlight { background-color: rgba(133, 77, 14, 0.5); color: #fef08a; }
+        .obsidian-internal-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+        .obsidian-internal-link::before { content: "📄 "; font-size: 0.9em; opacity: 0.7; }
 
-        .callout-important .callout-title {
-            color: #64748b; /* Slate-500 */
-        }
-        .dark .callout-important .callout-title {
-            color: #94a3b8; /* Slate-400 */
-        }
-
-        .callout-title svg {
-            margin-right: 0.5rem;
-            margin-top: 0.1em; /* Tiny adjustment to align perfectly with the text baseline */
-            width: 1.1em;
-            height: 1.1em;
-            stroke-width: 2px;
-            flex-shrink: 0;
-        }
-
-        .obsidian-callout.is-collapsed .callout-title {
-            padding-bottom: 0;
-        }
-
-        /* Fix for list padding inside callouts */
-        .obsidian-callout > p,
-        .callout-content > p { 
-            padding: 0; 
-            margin: 0; 
-        }
-
-        .obsidian-callout > ul, .obsidian-callout > ol,
-        .callout-content > ul, .callout-content > ol { 
-            padding: 0 0 0 1.5em; /* Restored left padding for bullets */
-            margin: 0; 
-        }
-
-        .obsidian-callout > p + p,
-        .callout-content > p + p,
-        .obsidian-callout > * + ul,
-        .callout-content > * + ul,
-        .obsidian-callout > * + ol,
-        .callout-content > * + ol {
-            margin-top: 0.75rem;
-        }
-
-        /* ==========================================================
-           Other Markdown Elements
-           ========================================================== */
-        .markdown-body code {
-            background: #f1f5f9;
-            padding: 0.2em 0.4em;
-            border-radius: 0.25rem;
-            font-size: 0.9em;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-        }
-
-        .dark .markdown-body code {
-            background: #111827; 
-            color: #e5e7eb;
-        }
-
-        .markdown-body pre {
-            background: #1e293b;
-            color: #f8fafc;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            margin: 1.5em 0;
-        }
-
-        .markdown-body pre code {
-            background: transparent;
-            padding: 0;
-            color: inherit;
-        }
-
-        .markdown-body img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
-            margin: 1.5em auto;
-            display: block;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Table Resizing & Math Shrinking */
-        .markdown-body table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 1em; 
-            table-layout: auto; 
-            margin: 1.5em 0;
-            word-break: break-word; 
-        }
-        
-        .markdown-body th, .markdown-body td {
-            border: 1px solid #d1d5db;
-            padding: 0.5rem 1rem;
-            text-align: left;
-        }
-
-        .markdown-body td .katex {
-            font-size: clamp(0.4em, 2.5vw, 1em); 
-        }
-
-        .markdown-body td .katex-display {
-            max-width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding-bottom: 0.2em;
-        }
-        
-        .dark .markdown-body th, .dark .markdown-body td { border-color: #1f2937; }
-        .markdown-body th { background-color: #f3f4f6; font-weight: 600; }
-        .dark .markdown-body th { background-color: #111827; }
-
-        .obsidian-highlight {
-            background-color: #fef08a;
-            color: #854d0e;
-            padding: 0 0.2rem;
-            border-radius: 0.2rem;
-        }
-        
-        .dark .obsidian-highlight {
-            background-color: #854d0e;
-            color: #fef08a;
-        }
-
-        .obsidian-internal-link {
-            color: #7c3aed;
-            text-decoration: none;
-            opacity: 0.9;
-        }
-        .obsidian-internal-link::before { content: "📄 "; font-size: 0.9em; }
-
-        /* --- Nested ToC Tree Styles --- */
         .toc-list { list-style: none !important; padding-left: 0 !important; margin: 0 !important; }
-        .toc-nested { padding-left: 1.25rem !important; margin-left: 0.5rem !important; border-left: 1px solid #e5e7eb; }
-        .dark .toc-nested { border-left-color: #1f2937; }
-        
-        .toc-item-container { display: flex; align-items: center; padding: 0.25rem 0; font-size: 0.95rem; }
-        .toc-link { color: #4b5563; transition: color 0.2s; text-decoration: none; flex-grow: 1; }
-        .dark .toc-link { color: #9ca3af; }
-        .toc-link:hover { color: #7c3aed; }
-        .dark .toc-link:hover { color: #a78bfa; }
-        
-        .toc-toggle {
-            font-size: 0.6rem;
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 1.2rem; height: 1.2rem;
-            cursor: pointer;
-            color: #9ca3af;
-            transition: transform 0.2s ease;
-        }
-        .toc-toggle:hover { color: #4b5563; }
-        .dark .toc-toggle:hover { color: #e5e7eb; }
+        .toc-nested { padding-left: 1.25rem !important; margin-left: 0.5rem !important; border-left: 1px solid #cbd5e1; margin-top: 0.2rem; }
+        .dark .toc-nested { border-left-color: #334155; }
+        .toc-item-container { display: flex; align-items: center; padding: 0.35rem 0; font-size: 0.9rem; }
+        .toc-link { color: #64748b; transition: all 0.2s; text-decoration: none; flex-grow: 1; font-weight: 500; }
+        .dark .toc-link { color: #94a3b8; }
+        .toc-link:hover { color: #6366f1; transform: translateX(2px); }
+        .dark .toc-link:hover { color: #818cf8; transform: translateX(2px); }
+        .toc-toggle { font-size: 0.6rem; display: inline-flex; align-items: center; justify-content: center; width: 1.2rem; height: 1.2rem; cursor: pointer; color: #94a3b8; transition: all 0.2s ease; border-radius: 0.2rem; }
+        .toc-toggle:hover { color: #334155; background: #f1f5f9; }
+        .dark .toc-toggle:hover { color: #f8fafc; background: #334155; }
         .toc-spacer { width: 1.2rem; display: inline-block; }
 
-        /* --- Content Collapsible Styles --- */
-        .hidden-by-h1, .hidden-by-h2, .hidden-by-h3, .hidden-by-h6 {
-            display: none !important;
-        }
-        
+        .hidden-by-h1, .hidden-by-h2, .hidden-by-h3, .hidden-by-h6 { display: none !important; }
         html { scroll-behavior: smooth; }
 
-        /* Mobile Sidebar toggle */
-        @media (max-width: 768px) {
-            #sidebar { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
-            #sidebar.open { transform: translateX(0); }
-        }
-        
-        /* Select Dropdown Glass Styling */
-        select option {
-            background-color: white;
-            color: black;
-        }
-        .dark select option {
-            background-color: #0a0d13;
-            color: white;
-        }
+        .custom-select-wrapper { position: relative; display: inline-block; }
+        .custom-select-wrapper select { appearance: none; -webkit-appearance: none; padding-right: 1.75rem; background-color: rgba(255, 255, 255, 0.5); }
+        @media (min-width: 640px) { .custom-select-wrapper select { padding-right: 2.5rem; } }
+        .dark .custom-select-wrapper select { background-color: rgba(30, 41, 59, 0.5); }
+        .custom-select-wrapper::after { content: ""; position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 0.8rem; height: 0.8rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; pointer-events: none; }
+        @media (min-width: 640px) { .custom-select-wrapper::after { right: 0.75rem; } }
+
+        @media (max-width: 768px) { #sidebar { transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); } #sidebar.open { transform: translateX(0); } }
+        @media (min-width: 769px) { #sidebar { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; } #sidebar.desktop-closed { width: 0; opacity: 0; padding: 0; border: none; overflow: hidden; } }
 
         /* ==========================================================
            🖨️ PDF / PRINT STYLES
            ========================================================== */
         @media print {
-            @page {
-                size: A4;
-                margin: 20mm;
-            }
-
-            /* Hide entirely UI elements (Navbar, Sidebar, Sliders, Overlays, Modals) */
-            header, aside, #sidebarOverlay, #errorBox, #printModal, #goribModal {
-                display: none !important;
-            }
-
-            /* Expand layout to full page */
-            main {
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
+            @page { size: A4; margin: 20mm; }
+            header, aside, #sidebarOverlay, #errorBox, #printModal, #goribModal, #lightbox, #backToTopBtn, #landingPage { display: none !important; }
+            main { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
             .flex-1 { display: block !important; }
             .max-w-4xl { max-width: 100% !important; }
-            
-            /* Enforce White Theme & Standard Document Layout */
-            body, .markdown-body {
-                background: white !important;
-                color: black !important;
-                font-size: 12pt !important; /* Standard print font size */
-                line-height: 1.4 !important; /* Tighter line height for print */
-            }
-
-            /* Drastically reduce vertical margins to avoid large gaps in print */
-            .markdown-body p, 
-            .markdown-body ul, 
-            .markdown-body ol, 
-            .markdown-body blockquote, 
-            .obsidian-callout, 
-            .markdown-body pre, 
-            .markdown-body table,
-            .overflow-x-auto {
-                margin-top: 0.5em !important;
-                margin-bottom: 0.5em !important;
-            }
-
-            .markdown-body h1, .markdown-body h2, .markdown-body h3, 
-            .markdown-body h4, .markdown-body h5, .markdown-body h6 {
-                color: black !important;
-                margin-top: 1em !important;
-                margin-bottom: 0.5em !important;
-                page-break-after: avoid;
-            }
-
-            /* Allow tables, blockquotes, and callouts to naturally split across pages */
-            .obsidian-callout, table, blockquote, tbody {
-                page-break-inside: auto !important;
-                break-inside: auto !important;
-            }
-
-            tr, img, pre {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-
-            /* Clean up interactive elements that look weird on paper */
-            .heading-toggle, .toc-toggle, .callout-toggle-arrow {
-                display: none !important;
-            }
-
-            /* -------------------------------------------------------------
-               🖨️ PRINT MODES LOGIC
-               ------------------------------------------------------------- */
-            
-            /* PROOFS / ANSWERS (.callout-tip) */
+            body, .markdown-body { background: white !important; color: black !important; font-size: 11pt !important; line-height: 1.4 !important; }
+            .markdown-body p, .markdown-body ul, .markdown-body ol, .markdown-body blockquote, .obsidian-callout, .markdown-body pre, .markdown-body table, .overflow-x-auto { margin-top: 0.5em !important; margin-bottom: 0.5em !important; }
+            .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 { color: black !important; margin-top: 1em !important; margin-bottom: 0.5em !important; page-break-after: avoid; }
+            .obsidian-callout { padding: 0.8em !important; border-radius: 0.4em !important; }
+            .markdown-body th, .markdown-body td { padding: 0.5em 0.8em !important; }
+            .markdown-body pre { padding: 0.8em !important; }
+            .obsidian-callout, table, blockquote, tbody { page-break-inside: auto !important; break-inside: auto !important; }
+            tr, img, pre { page-break-inside: avoid !important; break-inside: avoid !important; }
+            .heading-toggle, .toc-toggle, .callout-toggle-arrow { display: none !important; }
             body.print-answers-none .callout-tip { display: none !important; }
             body.print-answers-selected .callout-tip.is-collapsed { display: none !important; }
             body.print-answers-all .callout-tip { display: block !important; }
             body.print-answers-all .callout-tip .callout-content { display: block !important; }
-
             body.print-proofs-none .callout-success { display: none !important; }
             body.print-proofs-selected .callout-success.is-collapsed { display: none !important; }
             body.print-proofs-all .callout-success { display: block !important; }
             body.print-proofs-all .callout-success .callout-content { display: block !important; }
-
-            /* QUESTIONS (.callout-important) */
             body.print-qs-none .callout-important { display: none !important; }
             body.print-qs-none h5 { display: none !important; }
         }
     </style>
 </head>
-<body class="bg-obsidian-bg text-obsidian-text dark:bg-obsidian-darkBg dark:text-obsidian-darkText min-h-screen flex flex-col">
+<body class="bg-obsidian-bg text-obsidian-text dark:bg-obsidian-darkBg dark:text-obsidian-darkText min-h-screen flex flex-col selection:bg-obsidian-accent selection:text-white">
 
-    <!-- Protection Overlay -->
-    <div id="goribModal" class="fixed inset-0 bg-obsidian-bg/80 dark:bg-obsidian-darkBg/90 backdrop-blur-xl z-[100] hidden flex-col items-center justify-center transition-opacity duration-300">
-        <div class="bg-white dark:bg-[#111827] p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 w-11/12 max-w-sm text-center">
-            <div class="w-16 h-16 mx-auto bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mb-4">
+    <!-- Premium Landing Page Portal -->
+    <div id="landingPage" class="fixed inset-0 z-[60] bg-slate-50/95 dark:bg-obsidian-darkBg/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 transition-all duration-500">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-indigo-500/20 dark:bg-indigo-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-500/20 dark:bg-purple-500/10 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="relative w-full max-w-md bg-white dark:bg-obsidian-darkSurface border border-slate-200 dark:border-obsidian-darkBorder p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] z-10 flex flex-col items-center text-center transform transition-transform">
+            <div class="w-16 h-16 bg-indigo-50 dark:bg-indigo-500/10 text-obsidian-accent rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-indigo-100 dark:border-indigo-500/20">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            </div>
+            <h1 class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2 tracking-tight">Study Library</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mb-8">Select your curriculum material to begin.</p>
+            
+            <div class="w-full space-y-5 text-left mb-8">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 pl-1">Subject</label>
+                    <div class="custom-select-wrapper w-full">
+                        <select id="landingSubjectSelect" class="w-full border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200 text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800"></select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 pl-1">Chapter</label>
+                    <div class="custom-select-wrapper w-full">
+                        <select id="landingChapterSelect" class="w-full border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200 text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 truncate"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex flex-col space-y-3">
+                <button id="startReadingBtn" class="w-full py-3.5 bg-obsidian-accent hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform active:scale-[0.98]">Open Document</button>
+                <button id="resumeReadingBtn" class="hidden w-full py-3.5 bg-white dark:bg-obsidian-darkSurface hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold rounded-xl transition-all shadow-sm transform active:scale-[0.98] border border-slate-200 dark:border-slate-700 truncate px-4">Resume Last Read</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 bg-slate-900/95 z-[200] hidden flex-col items-center justify-center p-4 md:p-10 transition-opacity duration-300 opacity-0 cursor-zoom-out">
+        <button id="lightboxClose" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 p-2 rounded-full backdrop-blur-md transition-colors z-10" title="Close">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <img id="lightboxImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl transform scale-95 transition-transform duration-300" alt="Expanded Image">
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="fixed bottom-8 right-8 bg-obsidian-accent text-white p-3.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-50 hover:bg-indigo-600 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-obsidian-accent dark:focus:ring-offset-obsidian-darkBg" title="Back to top">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path></svg>
+    </button>
+
+    <!-- Protection Overlay (Gorib) -->
+    <div id="goribModal" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-md z-[100] hidden flex-col items-center justify-center transition-opacity duration-300">
+        <div class="bg-white dark:bg-obsidian-darkSurface p-8 rounded-2xl shadow-soft border border-slate-200 dark:border-obsidian-darkBorder w-11/12 max-w-md text-center transform transition-all">
+            <div class="w-16 h-16 mx-auto bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-indigo-100 dark:border-indigo-500/20">
                 <svg class="w-8 h-8 text-obsidian-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Protected Note</h2>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mb-6">Please enter the access key to view this document.</p>
-            <form id="goribForm" class="space-y-4">
+            <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 tracking-tight">Protected Document</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mb-8">Authentication required to view this curriculum material.</p>
+            <form id="goribForm" class="space-y-5">
                 <div>
-                    <input type="password" id="goribInput" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-obsidian-accent transition-all" placeholder="Enter key" required>
-                    <p id="goribError" class="text-red-500 text-xs mt-2 hidden">Incorrect key. Please try again.</p>
+                    <input type="password" id="goribInput" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-obsidian-accent focus:border-transparent transition-all shadow-sm placeholder-slate-400" placeholder="Enter access key" required>
+                    <p id="goribError" class="text-red-500 text-xs mt-2 hidden text-left pl-1">Incorrect key. Please try again.</p>
                 </div>
-                <button type="submit" class="w-full py-3 bg-obsidian-accent hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors shadow-md">Unlock</button>
+                <button type="submit" class="w-full py-3.5 bg-obsidian-accent hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform active:scale-[0.98]">Unlock Document</button>
             </form>
         </div>
     </div>
 
     <!-- Print Options Modal -->
-    <div id="printModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center transition-opacity">
-        <div class="bg-white dark:bg-obsidian-darkBg border border-gray-200 dark:border-gray-800 rounded-xl shadow-2xl w-11/12 max-w-md overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                    Print Document
+    <div id="printModal" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center transition-opacity">
+        <div class="bg-white dark:bg-obsidian-darkSurface border border-slate-200 dark:border-obsidian-darkBorder rounded-2xl shadow-xl w-11/12 max-w-md overflow-hidden transform transition-all">
+            <div class="px-6 py-5 border-b border-slate-100 dark:border-obsidian-darkBorder flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center tracking-tight">
+                    <svg class="w-5 h-5 mr-2 text-obsidian-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    Print Settings
                 </h3>
-                <button id="closePrintModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
+                <button id="closePrintModal" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             
             <div class="p-6">
-                <div class="space-y-4">
-                    
-                    <!-- Questions Row -->
-                    <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
-                        <span class="font-semibold text-gray-800 dark:text-gray-200">Questions</span>
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800/50">
+                        <span class="font-medium text-slate-700 dark:text-slate-300">Questions</span>
                         <div class="flex space-x-6">
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="cb-qs-all" checked class="w-4 h-4 rounded text-obsidian-accent focus:ring-obsidian-accent border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <span class="text-sm dark:text-gray-300">All</span>
+                            <label class="flex items-center space-x-2 cursor-pointer group">
+                                <input type="checkbox" id="cb-qs-all" checked class="w-4.5 h-4.5 rounded border-slate-300 text-obsidian-accent focus:ring-obsidian-accent dark:border-slate-600 dark:bg-slate-700 transition-colors">
+                                <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">All</span>
                             </label>
-                            <label class="flex items-center space-x-2 cursor-not-allowed opacity-50" title="Questions cannot be selectively collapsed">
-                                <input type="checkbox" disabled class="w-4 h-4 rounded border-gray-300 bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Selected</span>
+                            <label class="flex items-center space-x-2 cursor-not-allowed opacity-40" title="Questions cannot be selectively collapsed">
+                                <input type="checkbox" disabled class="w-4.5 h-4.5 rounded border-slate-300 bg-slate-100 dark:bg-slate-800 dark:border-slate-700">
+                                <span class="text-sm text-slate-500">Selected</span>
                             </label>
                         </div>
                     </div>
-
-                    <!-- Answers Row -->
-                    <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
-                        <span class="font-semibold text-gray-800 dark:text-gray-200">Answers</span>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800/50">
+                        <span class="font-medium text-slate-700 dark:text-slate-300">Answers</span>
                         <div class="flex space-x-6">
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="cb-answers-all" checked class="w-4 h-4 rounded text-obsidian-accent focus:ring-obsidian-accent border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <span class="text-sm dark:text-gray-300">All</span>
+                            <label class="flex items-center space-x-2 cursor-pointer group">
+                                <input type="checkbox" id="cb-answers-all" checked class="w-4.5 h-4.5 rounded border-slate-300 text-obsidian-accent focus:ring-obsidian-accent dark:border-slate-600 dark:bg-slate-700 transition-colors">
+                                <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">All</span>
                             </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="cb-answers-selected" class="w-4 h-4 rounded text-obsidian-accent focus:ring-obsidian-accent border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <span class="text-sm dark:text-gray-300">Selected</span>
+                            <label class="flex items-center space-x-2 cursor-pointer group">
+                                <input type="checkbox" id="cb-answers-selected" class="w-4.5 h-4.5 rounded border-slate-300 text-obsidian-accent focus:ring-obsidian-accent dark:border-slate-600 dark:bg-slate-700 transition-colors">
+                                <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Selected</span>
                             </label>
                         </div>
                     </div>
-
-                    <!-- Proofs Row -->
                     <div class="flex items-center justify-between pb-2">
-                        <span class="font-semibold text-gray-800 dark:text-gray-200">Proofs</span>
+                        <span class="font-medium text-slate-700 dark:text-slate-300">Proofs</span>
                         <div class="flex space-x-6">
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="cb-proofs-all" checked class="w-4 h-4 rounded text-obsidian-accent focus:ring-obsidian-accent border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <span class="text-sm dark:text-gray-300">All</span>
+                            <label class="flex items-center space-x-2 cursor-pointer group">
+                                <input type="checkbox" id="cb-proofs-all" checked class="w-4.5 h-4.5 rounded border-slate-300 text-obsidian-accent focus:ring-obsidian-accent dark:border-slate-600 dark:bg-slate-700 transition-colors">
+                                <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">All</span>
                             </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="cb-proofs-selected" class="w-4 h-4 rounded text-obsidian-accent focus:ring-obsidian-accent border-gray-300 dark:border-gray-600 dark:bg-gray-700">
-                                <span class="text-sm dark:text-gray-300">Selected</span>
+                            <label class="flex items-center space-x-2 cursor-pointer group">
+                                <input type="checkbox" id="cb-proofs-selected" class="w-4.5 h-4.5 rounded border-slate-300 text-obsidian-accent focus:ring-obsidian-accent dark:border-slate-600 dark:bg-slate-700 transition-colors">
+                                <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Selected</span>
                             </label>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="mt-8 flex justify-end">
-                    <button id="btn-execute-print" class="px-5 py-2.5 bg-obsidian-accent hover:bg-[#6d28d9] text-white text-sm font-semibold rounded-lg shadow-md transition-colors w-full sm:w-auto">
-                        Continue to Print
+                    <button id="btn-execute-print" class="px-6 py-2.5 bg-obsidian-accent hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-md transition-all w-full sm:w-auto transform active:scale-95">
+                        Generate PDF
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <header class="sticky top-0 z-40 w-full backdrop-blur-lg flex-none border-b border-gray-200/50 dark:border-gray-800/50 bg-white/60 dark:bg-obsidian-darkBg/60">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Main App Navigation -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-xl flex-none border-b border-slate-200/60 dark:border-obsidian-darkBorder bg-white/70 dark:bg-obsidian-darkBg/80 shadow-sm">
+        <div class="max-w-8xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center flex-1 space-x-2 sm:space-x-4">
-                    <button id="menuBtn" class="md:hidden p-2 -ml-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-md">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
+                
+                <!-- Left Nav Elements -->
+                <div class="flex items-center flex-1 space-x-1 sm:space-x-2 min-w-0">
+                    <button id="menuBtn" class="p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0" title="Toggle Sidebar">
+                        <svg class="h-5 w-5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                     
-                    <select id="subjectSelect" class="bg-white/30 dark:bg-white/10 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 text-obsidian-text dark:text-obsidian-darkText text-sm rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent cursor-pointer truncate max-w-[140px] sm:max-w-[200px] shadow-sm font-medium transition-all">
-                        </select>
-
-                    <select id="chapterSelect" class="bg-white/30 dark:bg-white/10 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 text-obsidian-text dark:text-obsidian-darkText text-sm rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent cursor-pointer flex-1 truncate max-w-[180px] sm:max-w-[350px] shadow-sm transition-all">
-                        </select>
-                </div>
-                
-                <div class="flex items-center space-x-2 sm:space-x-4 ml-2 sm:ml-4">
-                    <!-- Print Button (Desktop) -->
-                    <button id="printBtnDesktop" class="hidden md:flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white rounded-full bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm transition-colors border border-gray-200/50 dark:border-gray-700/50 shadow-sm" title="Save as PDF / Print">
-                        <span>Print</span>
-                        <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <button id="homeBtn" class="p-1.5 sm:p-2 mr-1 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0" title="Back to Library">
+                        <svg class="h-5 w-5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     </button>
 
-                    <div class="flex items-center space-x-1 sm:space-x-2 text-gray-500 dark:text-gray-400" title="Adjust Font Size">
-                        <span class="text-xs font-bold">A</span>
-                        <input type="range" id="fontSizeSlider" min="14" max="24" step="1" value="18" class="w-16 sm:w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-obsidian-accent">
-                        <span class="text-lg font-bold">A</span>
+                    <div class="custom-select-wrapper w-24 sm:w-auto shrink-0">
+                        <select id="subjectSelect" class="w-full border border-slate-200 dark:border-slate-700/50 text-slate-700 dark:text-slate-200 text-xs sm:text-sm rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all hover:bg-slate-50 dark:hover:bg-slate-800 truncate pr-6 sm:pr-8"></select>
                     </div>
 
-                    <button id="themeToggleDesktop" class="hidden md:block p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-full bg-gray-100/50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors">
-                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                        </svg>
+                    <div class="custom-select-wrapper flex-1 min-w-0 max-w-[140px] sm:max-w-[350px]">
+                        <select id="chapterSelect" class="w-full border border-slate-200 dark:border-slate-700/50 text-slate-700 dark:text-slate-200 text-xs sm:text-sm rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all hover:bg-slate-50 dark:hover:bg-slate-800 truncate pr-6 sm:pr-8"></select>
+                    </div>
+                </div>
+                
+                <!-- Right Nav Elements -->
+                <div class="flex items-center space-x-2 sm:space-x-5 ml-1 sm:ml-4 shrink-0">
+                    <button id="printBtnDesktop" class="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white rounded-xl bg-white/50 hover:bg-slate-50 dark:bg-slate-800/50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-sm transition-all" title="Save as PDF / Print">
+                        <svg class="w-4.5 h-4.5 mr-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"></path></svg>
+                        <span>Export</span>
+                    </button>
+
+                    <div class="hidden sm:flex items-center space-x-2 text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/50 px-3 py-1.5 rounded-xl border border-slate-200/50 dark:border-slate-700/50" id="widthSliderWrapper" title="Width: 0">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 14h6v6m10-10h-6V4m0 10l7 7M10 10L3 3"></path></svg>
+                        <input type="range" id="widthSlider" min="0" max="1" step="0.05" value="0" class="w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-obsidian-accent">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                    </div>
+
+                    <div class="flex items-center space-x-1 sm:space-x-2 text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-slate-200/50 dark:border-slate-700/50" id="fontSizeSliderWrapper" title="Adjust Font Size">
+                        <span class="text-[10px] sm:text-xs font-bold">A</span>
+                        <input type="range" id="fontSizeSlider" min="14" max="24" step="1" value="18" class="w-12 sm:w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-obsidian-accent">
+                        <span class="text-sm sm:text-lg font-bold">A</span>
+                    </div>
+
+                    <button id="themeToggleDesktop" class="hidden md:flex p-2.5 text-slate-500 hover:text-obsidian-accent dark:text-slate-400 dark:hover:text-obsidian-darkAccent rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all shadow-sm">
+                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="flex flex-1 max-w-8xl mx-auto w-full">
-        
-        <aside id="sidebar" class="fixed inset-y-0 left-0 pt-16 md:pt-6 w-64 border-r border-gray-200/50 dark:border-gray-800/50 bg-[#f9f5ff]/70 dark:bg-[#110c1b]/80 backdrop-blur-xl z-30 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:block md:w-72 lg:w-80 shrink-0 overflow-y-auto overflow-x-hidden transition-transform duration-300">
+    <div class="flex flex-1 max-w-8xl mx-auto w-full relative">
+        <aside id="sidebar" class="fixed inset-y-0 left-0 pt-16 md:pt-6 w-72 border-r border-slate-200 dark:border-obsidian-darkBorder bg-slate-50/80 dark:bg-[#11131a]/90 backdrop-blur-2xl z-30 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:block shrink-0 overflow-y-auto overflow-x-hidden shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-none">
             <div class="p-6">
-                <button id="themeToggleMobile" class="md:hidden flex items-center justify-between w-full p-2 mb-3 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors border border-gray-200/50 dark:border-gray-700/50">
-                    <span class="text-sm font-semibold">Switch Theme</span>
-                    <div>
-                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                        </svg>
-                    </div>
-                </button>
+                <!-- Mobile Actions -->
+                <div class="md:hidden space-y-3 mb-8">
+                    <button id="themeToggleMobile" class="flex items-center justify-between w-full p-3 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 transition-all">
+                        <span class="text-sm font-medium">Switch Theme</span>
+                        <div>
+                            <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        </div>
+                    </button>
+                    <button id="printBtnMobile" class="flex items-center justify-between w-full p-3 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 transition-all">
+                        <span class="text-sm font-medium">Export Document</span>
+                        <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"></path></svg>
+                    </button>
+                </div>
 
-                <!-- Print Button (Mobile) -->
-                <button id="printBtnMobile" class="md:hidden flex items-center justify-between w-full p-2 mb-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors border border-gray-200/50 dark:border-gray-700/50">
-                    <span class="text-sm font-semibold">Print Document</span>
-                    <div>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                    </div>
-                </button>
-
-                <h2 id="sidebarChapterTitle" class="text-xl font-bold text-obsidian-text dark:text-obsidian-darkText mb-8 leading-snug"></h2>
+                <h2 id="sidebarChapterTitle" class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-snug"></h2>
                 
-                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 dark:text-gray-400">Table of Contents</h3>
-                <nav id="toc" class="space-y-1">
-                    </nav>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Contents</h3>
+                </div>
+                
+                <div id="tocWrapper"><nav id="toc" class="space-y-1"></nav></div>
             </div>
         </aside>
 
-        <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-20 hidden md:hidden"></div>
+        <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-20 hidden md:hidden"></div>
 
-        <main class="flex-1 min-w-0 focus:outline-none">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                <div id="errorBox" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
-                    <span class="block sm:inline" id="errorMessage"></span>
+        <main class="flex-1 min-w-0 focus:outline-none transition-all duration-300 ease-in-out">
+            <div id="noteContainer" class="w-full mx-auto px-6 sm:px-10 py-12 lg:py-16 transition-all duration-300 ease-in-out" style="max-width: 48rem;">
+                <div id="errorBox" class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-5 py-4 rounded-xl relative mb-8 shadow-sm" role="alert">
+                    <span class="block sm:inline text-sm font-medium" id="errorMessage"></span>
                 </div>
                 
                 <article id="content" class="markdown-body">
-                    <div class="flex justify-center items-center py-20">
-                        <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-obsidian-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span>Loading Note...</span>
-                    </div>
+                    <!-- Note content dynamically loaded here -->
                 </article>
             </div>
         </main>
@@ -777,6 +518,15 @@
 
         const subjectSelect = document.getElementById('subjectSelect');
         const chapterSelect = document.getElementById('chapterSelect');
+        
+        // Landing Page Selectors
+        const landingPage = document.getElementById('landingPage');
+        const landingSubjectSelect = document.getElementById('landingSubjectSelect');
+        const landingChapterSelect = document.getElementById('landingChapterSelect');
+        const startReadingBtn = document.getElementById('startReadingBtn');
+        const resumeReadingBtn = document.getElementById('resumeReadingBtn');
+        const homeBtn = document.getElementById('homeBtn');
+
         const themeToggleDesktopBtn = document.getElementById('themeToggleDesktop');
         const themeToggleMobileBtn = document.getElementById('themeToggleMobile');
         const printBtnDesktop = document.getElementById('printBtnDesktop');
@@ -786,6 +536,10 @@
         
         const htmlElement = document.documentElement;
         const fontSizeSlider = document.getElementById('fontSizeSlider');
+        const fontSizeSliderWrapper = document.getElementById('fontSizeSliderWrapper');
+        const widthSlider = document.getElementById('widthSlider');
+        const widthSliderWrapper = document.getElementById('widthSliderWrapper');
+        const noteContainer = document.getElementById('noteContainer');
         const contentBody = document.getElementById('content');
 
         // --- Theme Initialization ---
@@ -796,30 +550,45 @@
                 htmlElement.classList.remove('dark');
             }
         }
-
         function toggleThemeAction() {
             htmlElement.classList.toggle('dark');
             localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
         }
-
         themeToggleDesktopBtn.addEventListener('click', toggleThemeAction);
         themeToggleMobileBtn.addEventListener('click', toggleThemeAction);
         initTheme();
 
-        // --- Font Size Initialization ---
+        // --- Font Size & Width Initialization ---
         function initFontSize() {
-            const savedSize = localStorage.getItem('noteFontSize') || '18';
+            const savedSize = localStorage.getItem('noteFontSize') || APP_CONFIG.DEFAULT_FONT_SIZE;
             fontSizeSlider.value = savedSize;
             contentBody.style.setProperty('--note-font-size', `${savedSize}px`);
+            if (fontSizeSliderWrapper) { fontSizeSliderWrapper.title = `Font Size: ${savedSize}px`; }
         }
-
         fontSizeSlider.addEventListener('input', (e) => {
             const size = e.target.value;
             contentBody.style.setProperty('--note-font-size', `${size}px`);
             localStorage.setItem('noteFontSize', size);
+            if (fontSizeSliderWrapper) { fontSizeSliderWrapper.title = `Font Size: ${size}px`; }
         });
-
         initFontSize();
+
+        function initWidth() {
+            const savedWidth = localStorage.getItem('noteWidth') || APP_CONFIG.DEFAULT_WIDTH;
+            if (widthSlider) { widthSlider.value = savedWidth; updateWidth(savedWidth); }
+        }
+        function updateWidth(val) {
+            if (noteContainer) { noteContainer.style.maxWidth = `calc(48rem + ${val} * (100% - 48rem))`; }
+            if (widthSliderWrapper) { widthSliderWrapper.title = `Width Expansion: ${val}`; }
+        }
+        if (widthSlider) {
+            widthSlider.addEventListener('input', (e) => {
+                const val = e.target.value;
+                updateWidth(val);
+                localStorage.setItem('noteWidth', val);
+            });
+        }
+        initWidth();
 
         // --- Gorib Initialization ---
         function initGorib() {
@@ -836,15 +605,10 @@
 
                     gForm.addEventListener('submit', (e) => {
                         e.preventDefault();
-                        if (gInput.value === APP_CONFIG.APP_GORIB || gInput.value === 'test') {
-                            if (gInput.value === 'test') {
-                                sessionStorage.setItem('isDemoMode', 'true');
-                            }
+                        if (gInput.value === APP_CONFIG.APP_GORIB) {
                             sessionStorage.setItem('isGorib', 'true');
                             gModal.classList.add('opacity-0');
-                            
                             initNavigation(); 
-
                             setTimeout(() => {
                                 gModal.classList.add('hidden');
                                 gModal.classList.remove('flex');
@@ -865,133 +629,159 @@
         }
 
         // --- Print/PDF Functionality via Modal ---
-        function openPrintModal() {
-            if (sidebar.classList.contains('open')) {
-                toggleSidebar();
-            }
-            printModal.classList.remove('hidden');
-        }
-
-        function closePrintModal() {
-            printModal.classList.add('hidden');
-        }
-
+        function openPrintModal() { if (sidebar.classList.contains('open')) toggleSidebar(); printModal.classList.remove('hidden'); }
+        function closePrintModal() { printModal.classList.add('hidden'); }
         function executePrint() {
             closePrintModal();
-            
             const wasDark = htmlElement.classList.contains('dark');
-            if (wasDark) {
-                htmlElement.classList.remove('dark');
-            }
+            if (wasDark) htmlElement.classList.remove('dark');
 
             let classesToAdd = [];
-            
-            // Collect Print CSS Logic depending on checkboxes
             if (document.getElementById('cb-proofs-all').checked) classesToAdd.push('print-proofs-all');
             else if (document.getElementById('cb-proofs-selected').checked) classesToAdd.push('print-proofs-selected');
             else classesToAdd.push('print-proofs-none');
-
             if (document.getElementById('cb-answers-all').checked) classesToAdd.push('print-answers-all');
             else if (document.getElementById('cb-answers-selected').checked) classesToAdd.push('print-answers-selected');
             else classesToAdd.push('print-answers-none');
-
             if (document.getElementById('cb-qs-all').checked) classesToAdd.push('print-qs-all');
             else classesToAdd.push('print-qs-none');
-
-            if(classesToAdd.length > 0) {
-                document.body.classList.add(...classesToAdd);
-            }
+            if(classesToAdd.length > 0) document.body.classList.add(...classesToAdd);
 
             setTimeout(() => {
                 window.print();
-                
-                // Cleanup after printing
-                if(classesToAdd.length > 0) {
-                    document.body.classList.remove(...classesToAdd);
-                }
-                if (wasDark) {
-                    htmlElement.classList.add('dark');
-                }
+                if(classesToAdd.length > 0) document.body.classList.remove(...classesToAdd);
+                if (wasDark) htmlElement.classList.add('dark');
             }, 100);
         }
 
         printBtnDesktop.addEventListener('click', openPrintModal);
         printBtnMobile.addEventListener('click', openPrintModal);
         closePrintModalBtn.addEventListener('click', closePrintModal);
-        
         document.getElementById('btn-execute-print').addEventListener('click', executePrint);
 
-        // Print Modal Checkbox Mutual Exclusion 
         function setupCheckboxMutualExclusion(allId, selectedId) {
             const allCb = document.getElementById(allId);
             const selCb = document.getElementById(selectedId);
             if (!allCb || !selCb) return;
-
-            allCb.addEventListener('change', () => {
-                if (allCb.checked) selCb.checked = false;
-            });
-            selCb.addEventListener('change', () => {
-                if (selCb.checked) allCb.checked = false;
-            });
+            allCb.addEventListener('change', () => { if (allCb.checked) selCb.checked = false; });
+            selCb.addEventListener('change', () => { if (selCb.checked) allCb.checked = false; });
         }
-
         setupCheckboxMutualExclusion('cb-proofs-all', 'cb-proofs-selected');
         setupCheckboxMutualExclusion('cb-answers-all', 'cb-answers-selected');
+        printModal.addEventListener('click', (e) => { if (e.target === printModal) closePrintModal(); });
 
-        printModal.addEventListener('click', (e) => {
-            if (e.target === printModal) {
-                closePrintModal();
-            }
-        });
-
-        // --- Navigation Initialization ---
-        function initNavigation() {
-            Object.keys(CURRICULUM).forEach(subject => {
+        // --- Navigation Initialization & Landing Page Logic ---
+        function populateDropdown(selectElement, items, selectedItem) {
+            selectElement.innerHTML = '';
+            if (!items || items.length === 0) {
                 const option = document.createElement('option');
-                option.value = subject;
-                option.textContent = subject;
-                subjectSelect.appendChild(option);
+                option.value = "";
+                option.textContent = "-- No Options --";
+                selectElement.appendChild(option);
+                return;
+            }
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                selectElement.appendChild(option);
             });
+            if (selectedItem && items.includes(selectedItem)) {
+                selectElement.value = selectedItem;
+            } else {
+                selectElement.selectedIndex = 0;
+            }
+        }
 
-            if(CURRICULUM["Physics-1st"]) {
-                subjectSelect.value = "Physics-1st";
+        function updateChapterLists(subject, landingOnly = false, selectedChapter = null) {
+            const chapters = CURRICULUM[subject] || [];
+            if (landingOnly) {
+                populateDropdown(landingChapterSelect, chapters, selectedChapter);
+            } else {
+                populateDropdown(chapterSelect, chapters, selectedChapter);
+                populateDropdown(landingChapterSelect, chapters, selectedChapter);
+            }
+        }
+
+        function closeLandingPage() {
+            landingPage.classList.add('opacity-0');
+            setTimeout(() => { landingPage.classList.add('hidden'); }, 500);
+        }
+
+        function openLandingPage() {
+            landingPage.classList.remove('hidden');
+            setTimeout(() => { landingPage.classList.remove('opacity-0'); }, 10);
+        }
+
+        function initNavigation() {
+            const subjects = Object.keys(CURRICULUM);
+            const savedSubject = localStorage.getItem('lastSubject');
+            const defaultSubject = savedSubject && subjects.includes(savedSubject) ? savedSubject : (subjects.includes("Physics-1st") ? "Physics-1st" : subjects[0]);
+            
+            populateDropdown(subjectSelect, subjects, defaultSubject);
+            populateDropdown(landingSubjectSelect, subjects, defaultSubject);
+            
+            // Rebuild the chapter lists. If we have a saved chapter, pass it in so it doesn't default to index 0!
+            const savedChapter = localStorage.getItem('lastChapter');
+            let initialChapterToSelect = null;
+
+            if (savedChapter && CURRICULUM[defaultSubject] && CURRICULUM[defaultSubject].includes(savedChapter)) {
+                initialChapterToSelect = savedChapter;
+                resumeReadingBtn.textContent = `Resume: ${savedChapter.split(' ').slice(1).join(' ')}`;
+                resumeReadingBtn.classList.remove('hidden');
+            } else {
+                const hasGravitation = CURRICULUM[defaultSubject]?.find(opt => opt.includes("Gravitation and Gravity"));
+                if(hasGravitation) {
+                    initialChapterToSelect = hasGravitation;
+                }
             }
 
-            updateChapterList();
+            updateChapterLists(defaultSubject, false, initialChapterToSelect);
 
-            const hasGravitation = Array.from(chapterSelect.options).find(opt => opt.value.includes("Gravitation and Gravity"));
-            if(hasGravitation) chapterSelect.value = hasGravitation.value;
+            // Sync interactions
+            landingSubjectSelect.addEventListener('change', () => {
+                updateChapterLists(landingSubjectSelect.value, true);
+            });
 
             subjectSelect.addEventListener('change', () => {
-                updateChapterList();
-                loadAndRenderMarkdown(); 
-            });
-
-            chapterSelect.addEventListener('change', () => {
+                localStorage.setItem('lastSubject', subjectSelect.value);
+                updateChapterLists(subjectSelect.value, false);
                 loadAndRenderMarkdown();
             });
 
-            loadAndRenderMarkdown();
-        }
+            chapterSelect.addEventListener('change', () => {
+                localStorage.setItem('lastChapter', chapterSelect.value);
+                loadAndRenderMarkdown();
+            });
 
-        function updateChapterList() {
-            const subject = subjectSelect.value;
-            chapterSelect.innerHTML = ''; 
-            
-            const chapters = CURRICULUM[subject] || [];
-            if(chapters.length === 0) {
-                const option = document.createElement('option');
-                option.value = "";
-                option.textContent = "-- No Chapters Available --";
-                chapterSelect.appendChild(option);
-                return;
-            }
+            startReadingBtn.addEventListener('click', () => {
+                // Save the chosen selections BEFORE rebuilding the lists
+                const chosenSubject = landingSubjectSelect.value;
+                const chosenChapter = landingChapterSelect.value;
 
-            chapters.forEach(chapter => {
-                const option = document.createElement('option');
-                option.value = chapter;
-                option.textContent = chapter;
-                chapterSelect.appendChild(option);
+                subjectSelect.value = chosenSubject;
+                localStorage.setItem('lastSubject', chosenSubject);
+                
+                // Rebuild but actively pass the chosen chapter so it doesn't wipe our choice
+                updateChapterLists(chosenSubject, false, chosenChapter);
+                
+                localStorage.setItem('lastChapter', chosenChapter);
+                
+                closeLandingPage();
+                loadAndRenderMarkdown();
+            });
+
+            resumeReadingBtn.addEventListener('click', () => {
+                closeLandingPage();
+                loadAndRenderMarkdown();
+            });
+
+            homeBtn.addEventListener('click', () => {
+                openLandingPage();
+                if (chapterSelect.value) {
+                    resumeReadingBtn.textContent = `Resume: ${chapterSelect.value.split(' ').slice(1).join(' ')}`;
+                    resumeReadingBtn.classList.remove('hidden');
+                }
             });
         }
 
@@ -1001,82 +791,60 @@
         const sidebarOverlay = document.getElementById('sidebarOverlay');
 
         function toggleSidebar() {
-            sidebar.classList.toggle('open');
-            if (sidebar.classList.contains('open')) {
-                sidebarOverlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('open');
+                if (sidebar.classList.contains('open')) {
+                    sidebarOverlay.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; 
+                } else {
+                    sidebarOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
             } else {
-                sidebarOverlay.classList.add('hidden');
-                document.body.style.overflow = '';
+                sidebar.classList.toggle('desktop-closed');
             }
         }
-
         menuBtn.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', toggleSidebar);
 
         // --- Markdown Preprocessing ---
         function preProcessObsidian(text) {
             let processed = text;
-            
-            // Fix missing blank lines between images and nested blockquotes/callouts
             processed = processed.replace(/(!\[\[.*?\]\]|!\[.*?\]\(.*?\))[ \t]*\r?\n([ \t]*>+[ \t]*\[![a-zA-Z]+\])/g, "$1\n>\n$2");
-
             mathBlocks = []; 
+            processed = processed.replace(/\$\$([\s\S]*?)\$\$/g, (match) => { mathBlocks.push(match); return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`; });
+            processed = processed.replace(/\$([^\$]+?)\$/g, (match) => { mathBlocks.push(match); return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`; });
             
-            processed = processed.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
-                mathBlocks.push(match);
-                return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`;
-            });
-            
-            processed = processed.replace(/\$([^\$]+?)\$/g, (match) => {
-                mathBlocks.push(match);
-                return `@@MATH_BLOCK_${mathBlocks.length - 1}@@`;
-            });
+            const handleImage = (rawFilename, widthStr) => {
+                if (rawFilename.startsWith('http') || rawFilename.startsWith('data:')) return `<img src="${rawFilename}" ${widthStr} alt="External Image">`;
+                const pureFilename = rawFilename.split('/').pop().split('\\').pop();
+                const imgSrc = encodeURI(`${currentAssetBase}/${pureFilename}`);
+                return `<img src="${imgSrc}" ${widthStr} alt="${pureFilename}" onerror="this.outerHTML='<div class=\\'bg-red-50 text-red-600 border border-red-200 p-3 rounded text-sm my-2\\'><strong>⚠️ Image Not Found:</strong><br><code class=\\'break-all\\'>' + this.src + '</code><br>Check if image exists in folder.</div>'">`;
+            };
 
             processed = processed.replace(/!\[\[([^\]]+)\]\]/g, (match, content) => {
                 const parts = content.split('|');
-                const rawFilename = parts[0].trim();
-                const width = parts.length > 1 ? `width="${parts[1].trim()}"` : '';
-                
-                if (rawFilename.startsWith('http') || rawFilename.startsWith('data:')) {
-                    return `<img src="${rawFilename}" ${width} alt="External Image">`;
-                }
-                
-                const pureFilename = rawFilename.split('/').pop().split('\\').pop();
-                const imgSrc = encodeURI(`${currentAssetBase}/${pureFilename}`);
-                
-                return `<img src="${imgSrc}" ${width} alt="${pureFilename}" onerror="this.outerHTML='<div class=\\'bg-red-50 text-red-600 border border-red-200 p-3 rounded text-sm my-2\\'><strong>⚠️ Image Not Found:</strong><br><code class=\\'break-all\\'>' + this.src + '</code><br>Check if image exists in folder.</div>'">`;
+                return handleImage(parts[0].trim(), parts.length > 1 ? `width="${parts[1].trim()}"` : '');
             });
 
             processed = processed.replace(/!\[(.*?)\]\((.*?)\)/g, (match, alt, href) => {
                 if (href.startsWith('http') || href.startsWith('data:')) return match;
-                
-                let widthAttr = '';
-                let cleanAlt = alt;
+                let widthAttr = ''; let cleanAlt = alt;
                 if (alt.includes('|')) {
                     const altParts = alt.split('|');
                     const potentialWidth = altParts[altParts.length - 1];
-                    if (!isNaN(potentialWidth)) {
-                        widthAttr = `width="${potentialWidth}"`;
-                        cleanAlt = altParts.slice(0, -1).join('|');
-                    }
+                    if (!isNaN(potentialWidth)) { widthAttr = `width="${potentialWidth}"`; cleanAlt = altParts.slice(0, -1).join('|'); }
                 }
-
                 const pureFilename = decodeURIComponent(href).split('/').pop().split('\\').pop();
                 const imgSrc = encodeURI(`${currentAssetBase}/${pureFilename}`); 
-                
                 return `<img src="${imgSrc}" alt="${cleanAlt}" ${widthAttr} onerror="this.outerHTML='<div class=\\'bg-red-50 text-red-600 border border-red-200 p-3 rounded text-sm my-2\\'><strong>⚠️ Image Not Found:</strong><br><code class=\\'break-all\\'>' + this.src + '</code><br>Check if image exists in folder.</div>'">`;
             });
 
             processed = processed.replace(/==([^=]+)==/g, '<span class="obsidian-highlight">$1</span>');
-
             processed = processed.replace(/\[\[([^\]]+)\]\]/g, (match, content) => {
                 const parts = content.split('|');
-                const linkTarget = parts[0];
-                const displayText = parts.length > 1 ? parts[1] : parts[0];
-                return `<a href="#" class="obsidian-internal-link" title="${linkTarget}">${displayText}</a>`;
+                return `<a href="#" class="obsidian-internal-link" title="${parts[0]}">${parts.length > 1 ? parts[1] : parts[0]}</a>`;
             });
-
             return processed;
         }
 
@@ -1087,23 +855,19 @@
             tocContainer.innerHTML = ''; 
 
             const headings = Array.from(contentDiv.querySelectorAll('h1, h2, h3, h6'));
-            
             if (headings.length === 0) {
-                tocContainer.innerHTML = '<p class="text-sm text-gray-500 italic">No headings found.</p>';
+                tocContainer.innerHTML = '<p class="text-sm text-slate-500 italic px-2">No headings found.</p>';
                 return;
             }
 
             const rootList = document.createElement('ul');
             rootList.className = 'toc-list';
             tocContainer.appendChild(rootList);
-
             const stack = [{ level: 0, element: rootList }];
 
             headings.forEach((heading, index) => {
                 if (!heading.id) heading.id = 'heading-' + index;
-
                 const level = parseInt(heading.tagName.substring(1));
-                const text = heading.innerText;
                 
                 const li = document.createElement('li');
                 const itemContainer = document.createElement('div');
@@ -1111,12 +875,9 @@
                 
                 const link = document.createElement('a');
                 link.href = '#' + heading.id;
-                link.textContent = text;
+                link.textContent = heading.innerText;
                 link.className = 'toc-link truncate';
-                
-                link.addEventListener('click', () => {
-                    if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
-                });
+                link.addEventListener('click', () => { if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar(); });
 
                 itemContainer.appendChild(link);
                 li.appendChild(itemContainer);
@@ -1133,7 +894,7 @@
                     
                     const parentContainer = parent.element.querySelector('.toc-item-container');
                     const toggleBtn = document.createElement('span');
-                    toggleBtn.className = 'toc-toggle transform rotate-90 flex items-center justify-center transition-transform duration-200';
+                    toggleBtn.className = 'toc-toggle transform rotate-90 flex items-center justify-center';
                     toggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 0.8em; height: 0.8em;"><polyline points="9 18 15 12 9 6"></polyline></svg>';
                     parentContainer.insertBefore(toggleBtn, parentContainer.firstChild);
 
@@ -1144,8 +905,7 @@
                     });
                 }
 
-                const targetList = parent.level === 0 ? parent.element : parentList;
-                targetList.appendChild(li);
+                (parent.level === 0 ? parent.element : parentList).appendChild(li);
                 stack.push({ level: level, element: li });
             });
 
@@ -1162,7 +922,7 @@
             const headings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h6');
             headings.forEach(heading => {
                 const toggleBtn = document.createElement('span');
-                toggleBtn.className = 'heading-toggle cursor-pointer mr-2 select-none text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-transform duration-200 inline-flex items-center transform rotate-90 text-sm align-middle';
+                toggleBtn.className = 'heading-toggle cursor-pointer mr-2 select-none text-slate-300 hover:text-obsidian-accent dark:text-slate-600 dark:hover:text-obsidian-darkAccent transition-all duration-200 inline-flex items-center transform rotate-90 text-sm align-middle';
                 toggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 1em; height: 1em;"><polyline points="9 18 15 12 9 6"></polyline></svg>';
                 heading.prepend(toggleBtn);
                 heading.style.cursor = 'pointer';
@@ -1170,7 +930,6 @@
                 
                 heading.addEventListener('click', (e) => {
                     if (e.target.tagName === 'A') return;
-                    
                     const isCollapsed = heading.classList.toggle('collapsed');
                     toggleBtn.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(90deg)';
                     
@@ -1178,9 +937,7 @@
                     let el = heading.nextElementSibling;
                     
                     while (el) {
-                        if (el.tagName.match(/^H[1-6]$/)) {
-                            if (parseInt(el.tagName[1]) <= level) break;
-                        }
+                        if (el.tagName.match(/^H[1-6]$/)) { if (parseInt(el.tagName[1]) <= level) break; }
                         isCollapsed ? el.classList.add(`hidden-by-h${level}`) : el.classList.remove(`hidden-by-h${level}`);
                         el = el.nextElementSibling;
                     }
@@ -1198,11 +955,6 @@
                 tip: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb-icon lucide-lightbulb"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
                 important: `<svg viewBox="0 0 70.003342 78.721764" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-112.1971,-134.29737)"><path fill="currentColor" d="m 166.21547,212.87588 c -4.55306,-0.99083 -7.71281,-3.50073 -10.60852,-8.42672 -0.026,-0.0442 -1.10247,0.11892 -2.39225,0.36239 -2.80303,0.52914 -8.36007,0.59087 -11.21007,0.12453 -5.36765,-0.8783 -11.10994,-3.26528 -15.33006,-6.37246 -12.84493,-9.45743 -17.82613,-26.46617 -12.16159,-41.5268 4.37916,-11.64314 14.68129,-20.21071 26.86512,-22.34188 3.01918,-0.52811 8.6096,-0.53039 11.63969,-0.005 7.71865,1.33901 14.18404,4.81451 19.60001,10.53611 4.79969,5.07054 8.05311,11.6039 9.22587,18.5269 0.60749,3.58615 0.41086,10.97015 -0.3749,14.07874 -1.1627,4.59981 -2.90845,8.55462 -5.41789,12.27367 -1.73697,2.57425 -5.45305,6.405 -8.1218,8.37244 -1.15898,0.85441 -2.10501,1.67253 -2.1023,1.81806 0.003,0.14552 0.40812,0.81395 0.9009,1.48539 1.04921,1.42964 3.79986,3.31922 6.23467,4.28295 l 1.71979,0.68072 0.0745,2.89551 c 0.0662,2.5711 0.0217,2.91676 -0.39688,3.08516 -0.72969,0.29358 -6.95751,0.4083 -8.14431,0.15003 z m -15.14739,-16.55359 c 0.6728,-0.26712 0.5859,-0.55859 -0.61701,-2.06937 -1.81228,-2.27613 -5.16951,-4.41411 -6.92362,-4.40915 -0.41817,0.001 -0.46302,-0.34468 -0.46302,-3.57057 v -3.57188 h 1.28826 c 2.07033,0 5.73252,0.73975 8.00971,1.61793 2.2702,0.87548 5.23107,2.74535 7.0369,4.444 l 1.12133,1.05478 0.64279,-0.84638 c 1.1602,-1.52766 2.83807,-5.23314 3.54359,-7.82579 0.67942,-2.49675 0.69291,-2.71052 0.70371,-11.14454 0.0103,-8.07562 -0.0255,-8.74388 -0.58793,-10.9802 -0.34481,-1.37092 -1.23574,-3.67223 -2.09984,-5.42396 -1.33197,-2.70023 -1.77083,-3.31278 -3.89899,-5.44217 -2.75515,-2.75675 -4.95979,-4.02772 -8.2602,-4.76199 -7.67133,-1.70671 -15.7939,3.41829 -19.13057,12.07056 -1.67517,4.34386 -1.73115,4.81683 -1.72054,14.53776 0.0108,9.8544 0.10768,10.56644 2.04972,15.05835 2.44836,5.66301 7.12931,9.96034 12.26948,11.26395 1.55255,0.39375 6.04329,0.3929 7.03623,-0.001 z"/></g></svg>`
             };
-            
-            if (['error', 'bug', 'danger'].includes(type)) return icons.warning;
-            if (['check', 'done'].includes(type)) return icons.success;
-            if (['caution'].includes(type)) return icons.warning;
-            
             return icons[type] || icons.note;
         }
 
@@ -1213,7 +965,6 @@
                 if (!firstP) return;
                 
                 const match = firstP.innerHTML.match(/^\s*\[!([a-zA-Z]+)\][+-]?(.*?)(?:<br\s*\/?>|\n|$)/i);
-                
                 if (match) {
                     const type = match[1].toLowerCase();
                     const title = match[2].trim() || type.charAt(0).toUpperCase() + type.slice(1);
@@ -1221,8 +972,7 @@
                     firstP.innerHTML = firstP.innerHTML.substring(match[0].length);
                     if (firstP.innerHTML.trim() === '') firstP.style.display = 'none';
                     
-                    bq.classList.add('obsidian-callout');
-                    bq.classList.add(`callout-${type}`);
+                    bq.classList.add('obsidian-callout', `callout-${type}`);
                     
                     const titleDiv = document.createElement('div');
                     titleDiv.className = 'callout-title';
@@ -1230,18 +980,14 @@
                     
                     if (['tip'].includes(type)) {
                         titleDiv.classList.add('cursor-pointer', 'select-none');
-                        
                         const toggleArrow = document.createElement('span');
-                        toggleArrow.className = 'callout-toggle-arrow ml-auto transition-transform duration-200 transform';
-                        toggleArrow.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 1em; height: 1em;"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+                        toggleArrow.className = 'callout-toggle-arrow ml-auto transition-transform duration-200 transform text-slate-400';
+                        toggleArrow.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 1.2em; height: 1.2em;"><polyline points="9 18 15 12 9 6"></polyline></svg>';
                         titleDiv.appendChild(toggleArrow);
 
                         const contentWrapper = document.createElement('div');
-                        contentWrapper.className = 'callout-content hidden mt-2'; 
-                        
-                        while (bq.firstChild) {
-                            contentWrapper.appendChild(bq.firstChild);
-                        }
+                        contentWrapper.className = 'callout-content hidden mt-3'; 
+                        while (bq.firstChild) { contentWrapper.appendChild(bq.firstChild); }
                         
                         bq.appendChild(titleDiv);
                         bq.appendChild(contentWrapper);
@@ -1273,7 +1019,7 @@
             const chapter = chapterSelect.value;
             
             if(!chapter) {
-                contentDiv.innerHTML = `<p class="text-gray-500 italic">No chapters mapped for this subject yet.</p>`;
+                contentDiv.innerHTML = `<p class="text-slate-500 italic">No chapters mapped for this subject yet.</p>`;
                 sidebarChapterTitle.textContent = "No Selection";
                 document.getElementById('toc').innerHTML = '';
                 return;
@@ -1287,22 +1033,29 @@
             errorBox.classList.add('hidden');
             
             contentDiv.innerHTML = `
-                <div class="flex justify-center items-center py-20">
-                    <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-obsidian-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <div class="flex flex-col justify-center items-center py-32 opacity-50">
+                    <svg class="animate-spin mb-4 h-10 w-10 text-obsidian-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>Loading Note...</span>
+                    <span class="text-sm font-medium tracking-wide">Preparing Note...</span>
                 </div>
             `;
 
             try {
                 let rawMarkdown = "";
-                
-                if (sessionStorage.getItem('isDemoMode') === 'true') {
+                try {
+                    const response = await fetch(encodeURI(mdFilePath));
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    rawMarkdown = await response.text();
+                } catch (fetchErr) {
+                    console.warn("Fetch failed:", fetchErr);
+                    errorBox.classList.remove('hidden');
+                    document.getElementById('errorMessage').innerHTML = `<strong>Note not found.</strong> Loading demo text instead...`;
+                    
                     rawMarkdown = `
 # Newton's Laws of Motion
-This is a comprehensive demonstration of the requested format.
+This is a comprehensive demonstration of the requested format loaded because the actual file could not be found.
 
 ## Introduction to Mechanics
 Here are some highlights about the chapter, showcasing the new H4 and H5 flowchart structure!
@@ -1333,18 +1086,14 @@ Here we test the nested Question and Solution blocks.
 
 > [!info] Tip block
 > Always remember to check your units!
+
+## Complex Tables
+| Concept | Definition | Formula |
+| :--- | :--- | :--- |
+| **Velocity** | Rate of change of position | $v = \\frac{ds}{dt}$ |
+| **Acceleration** | Rate of change of velocity | $a = \\frac{dv}{dt}$ |
+| **Momentum** | Mass in motion | $p = mv$ |
 `;
-                } else {
-                    try {
-                        const response = await fetch(encodeURI(mdFilePath));
-                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                        rawMarkdown = await response.text();
-                    } catch (fetchErr) {
-                        console.warn("Fetch failed:", fetchErr);
-                        errorBox.classList.remove('hidden');
-                        document.getElementById('errorMessage').innerHTML = `<strong>Note not found</strong>`;
-                        rawMarkdown = ""; 
-                    }
                 }
                 
                 const processedMarkdown = preProcessObsidian(rawMarkdown);
@@ -1358,7 +1107,7 @@ Here we test the nested Question and Solution blocks.
 
                 contentDiv.querySelectorAll('table').forEach(table => {
                     const wrapper = document.createElement('div');
-                    wrapper.className = 'overflow-x-auto w-full my-6'; 
+                    wrapper.className = 'overflow-x-auto w-full my-[1.8em] rounded-xl shadow-soft border border-slate-200 dark:border-obsidian-darkBorder bg-white dark:bg-obsidian-darkSurface'; 
                     table.parentNode.insertBefore(wrapper, table);
                     wrapper.appendChild(table);
                 });
@@ -1383,17 +1132,65 @@ Here we test the nested Question and Solution blocks.
                     renderMathInElement(document.getElementById('toc'), mathOptions); 
                 }
                 
+                // Initialize Image Lightbox functionality
+                contentDiv.querySelectorAll('img').forEach(img => {
+                    img.classList.add('cursor-zoom-in', 'hover:opacity-90', 'transition-opacity', 'duration-200');
+                    img.title = "Click to expand";
+                    img.addEventListener('click', () => {
+                        const lightbox = document.getElementById('lightbox');
+                        const lightboxImg = document.getElementById('lightboxImg');
+                        lightboxImg.src = img.src;
+                        lightbox.classList.remove('hidden');
+                        setTimeout(() => {
+                            lightbox.classList.remove('opacity-0');
+                            lightboxImg.classList.remove('scale-95');
+                            lightboxImg.classList.add('scale-100');
+                        }, 10);
+                    });
+                });
+
             } catch (error) {
                 console.error("Critical rendering error:", error);
                 errorBox.classList.remove('hidden');
-                document.getElementById('errorMessage').innerHTML = `<strong class="font-bold">Failed to render document!</strong> Check console for details.`;
-                contentDiv.innerHTML = `<p class="text-gray-500 italic">Could not render document.</p>`;
+                document.getElementById('errorMessage').innerHTML = `Failed to render document! Check console for details.`;
+                contentDiv.innerHTML = `<p class="text-slate-500 italic">Could not render document.</p>`;
                 document.getElementById('toc').innerHTML = '';
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             initGorib();
+
+            // --- Back to Top Logic ---
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) {
+                    backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+                    backToTopBtn.classList.add('opacity-100', 'pointer-events-auto');
+                } else {
+                    backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+                    backToTopBtn.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // --- Lightbox Close Logic ---
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            
+            const closeLightbox = () => {
+                lightbox.classList.add('opacity-0');
+                lightboxImg.classList.remove('scale-100');
+                lightboxImg.classList.add('scale-95');
+                setTimeout(() => lightbox.classList.add('hidden'), 300);
+            };
+
+            lightbox.addEventListener('click', (e) => {
+                if (e.target !== lightboxImg) closeLightbox();
+            });
         });
 
     </script>
