@@ -24,24 +24,20 @@
                 extend: {
                     colors: {
                         obsidian: {
-                            bg: '#f8fafc', // Slate 50 - softer than pure white
+                            bg: '#f8fafc',
                             surface: '#ffffff',
-                            text: '#334155', // Slate 700
-                            darkBg: '#0f1117', // Rich deep tech dark
+                            text: '#334155',
+                            darkBg: '#0f1117',
                             darkSurface: '#181b21',
-                            darkText: '#cbd5e1', // Slate 300
-                            accent: '#6366f1', // Indigo 500 - Professional modern accent
-                            darkAccent: '#818cf8', // Indigo 400
+                            darkText: '#cbd5e1',
+                            accent: '#6366f1',
+                            darkAccent: '#818cf8',
                             border: '#e2e8f0',
                             darkBorder: '#272b36'
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-                        'glow': '0 0 15px rgba(99, 102, 241, 0.3)',
                     }
                 }
             }
@@ -57,7 +53,7 @@
         const APP_CONFIG = {
             ENABLE_GORIB: true,         // Set to false to disable password
             APP_GORIB: "physicsisbest", // Your access key
-            DEFAULT_WIDTH: 0,           // Page wideness on load. (0 = Narrow, 1 = Full Width)
+            DEFAULT_WIDTH: 0.5,           // Page wideness on load. (0 = Narrow, 1 = Full Width)
             DEFAULT_FONT_SIZE: 18       // Default reading font size in pixels
         };
     </script>
@@ -82,7 +78,79 @@
         }
 
         /* ==========================================================
-           Custom Scrollbar Styling - Sleek & Modern
+           🧊 iOS LIQUID GLASSMORPHISM ENGINE
+           ========================================================== */
+        
+        /* Standard Glass (Navbar, Sidebar, Modals, Dropdown Lists) */
+        .ios-glass {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            border-right-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+        .dark .ios-glass {
+            background: rgba(24, 27, 33, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+            border-right-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* Heavy Glass (Main Note Content, Landing Page Card) */
+        .ios-glass-heavy {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        .dark .ios-glass-heavy {
+            background: rgba(20, 23, 29, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Glass Interactive Buttons & Inputs (Dropdown Triggers, Sliders, Icon Buttons) */
+        .ios-glass-button {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ios-glass-button:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+        .dark .ios-glass-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .dark .ios-glass-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form Overrides to integrate with borders */
+        .glass-header { border-left: none; border-right: none; border-top: none; border-radius: 0; }
+        .glass-sidebar { border-top: none; border-bottom: none; border-left: none; border-radius: 0; }
+
+        /* ==========================================================
+           Custom Dropdown List Scrollbar
+           ========================================================== */
+        .custom-select-list::-webkit-scrollbar { width: 6px; }
+        .custom-select-list::-webkit-scrollbar-track { background: transparent; }
+        .custom-select-list::-webkit-scrollbar-thumb { background-color: rgba(148, 163, 184, 0.4); border-radius: 10px; }
+        .dark .custom-select-list::-webkit-scrollbar-thumb { background-color: rgba(75, 85, 99, 0.6); }
+
+        /* ==========================================================
+           Custom Scrollbar Styling - Main Page
            ========================================================== */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -100,11 +168,11 @@
         .markdown-body { font-size: var(--note-font-size, 1.125rem); line-height: 1.8; color: #334155; transition: font-size 0.2s ease; letter-spacing: -0.01em; }
         .dark .markdown-body { color: #cbd5e1; }
         .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 { font-weight: 700; margin-top: 2.2em; margin-bottom: 0.8em; color: #0f172a; scroll-margin-top: 6rem; letter-spacing: -0.02em; }
-        .markdown-body h1 { font-size: 2.5em; line-height: 1.2; font-weight: 800; }
-        .markdown-body h2 { font-size: 1.85em; line-height: 1.3; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.4em; }
+        .markdown-body h1 { font-size: 2.5em; line-height: 1.2; font-weight: 800; text-align: center; }
+        .markdown-body h2 { font-size: 1.85em; line-height: 1.3; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.4em; }
         .markdown-body h3 { font-size: 1.4em; line-height: 1.4; }
         .markdown-body h6 { font-size: 0.95em; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-        .dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h6 { color: #f8fafc; border-bottom-color: #1e293b; }
+        .dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h6 { color: #f8fafc; border-bottom-color: rgba(255,255,255,0.1); }
 
         .markdown-body h4 { font-size: 1.15em; margin-left: 1.5em; position: relative; color: #1e293b; }
         .markdown-body h4::before { content: "•"; position: absolute; left: -1.25em; color: #6366f1; font-size: 1.2em; line-height: 1; top: 0.1em; }
@@ -122,8 +190,8 @@
         .markdown-body ul { list-style-type: disc; }
         .markdown-body ol { list-style-type: decimal; }
 
-        .markdown-body blockquote:not(.obsidian-callout) { border-left: 3px solid #6366f1; color: #475569; font-style: italic; background: #f1f5f9; padding: 1.2em 1.5em; border-radius: 0.5em; margin: 1.8em 0; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02); }
-        .dark .markdown-body blockquote:not(.obsidian-callout) { background: #181b21; color: #94a3b8; border-left-color: #818cf8; }
+        .markdown-body blockquote:not(.obsidian-callout) { border-left: 3px solid #6366f1; color: #475569; font-style: italic; background: rgba(0,0,0,0.03); padding: 1.2em 1.5em; border-radius: 0.5em; margin: 1.8em 0; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02); border: 1px solid rgba(255,255,255,0.5);}
+        .dark .markdown-body blockquote:not(.obsidian-callout) { background: rgba(0,0,0,0.2); color: #94a3b8; border-left-color: #818cf8; border: 1px solid rgba(255,255,255,0.05); }
 
         .callout-note, .callout-info { --callout-color: var(--color-note); } 
         .callout-danger, .callout-warning, .callout-error, .callout-bug { --callout-color: var(--color-danger); } 
@@ -146,57 +214,56 @@
         .callout-title svg { margin-right: 0.6em; margin-top: 0.1em; width: 1.2em; height: 1.2em; stroke-width: 2px; flex-shrink: 0; }
         .obsidian-callout.is-collapsed > .callout-title { padding-bottom: 0; }
 
+        /* Expand click area for collapsibles */
+        .obsidian-callout.is-collapsible { padding: 0; }
+        .obsidian-callout.is-collapsible > .callout-title { padding: 1.25em 1.25em 0.5em 1.25em; width: 100%; box-sizing: border-box; }
+        .obsidian-callout.is-collapsible.is-collapsed > .callout-title { padding-bottom: 1.25em; }
+        .obsidian-callout.is-collapsible > .callout-content { padding: 0 1.25em 1.25em 1.25em; }
+
         .obsidian-callout > p, .callout-content > p { padding: 0; margin: 0; }
         .obsidian-callout > ul, .obsidian-callout > ol, .callout-content > ul, .callout-content > ol { padding: 0 0 0 1.5em; margin: 0; }
         .obsidian-callout > p + p, .callout-content > p + p, .obsidian-callout > * + ul, .callout-content > * + ul, .obsidian-callout > * + ol, .callout-content > * + ol { margin-top: 0.75em; }
 
-        .markdown-body code { background: #f1f5f9; padding: 0.2em 0.4em; border-radius: 0.375em; font-size: 0.85em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #db2777; }
-        .dark .markdown-body code { background: #1e293b; color: #f472b6; }
-        .markdown-body pre { background: #0f172a; color: #f8fafc; padding: 1.25em; border-radius: 0.75em; overflow-x: auto; margin: 1.8em 0; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.2); border: 1px solid #1e293b; }
-        .markdown-body pre code { background: transparent; padding: 0; color: inherit; }
+        .markdown-body code { background: rgba(0,0,0,0.05); padding: 0.2em 0.4em; border-radius: 0.375em; font-size: 0.85em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #db2777; border: 1px solid rgba(0,0,0,0.05);}
+        .dark .markdown-body code { background: rgba(255,255,255,0.05); color: #f472b6; border-color: rgba(255,255,255,0.1); }
+        .markdown-body pre { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); color: #f8fafc; padding: 1.25em; border-radius: 0.75em; overflow-x: auto; margin: 1.8em 0; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+        .markdown-body pre code { background: transparent; padding: 0; color: inherit; border: none; }
 
-        .markdown-body img { max-width: 100%; height: auto; border-radius: 0.75em; margin: 2em auto; display: block; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
-        .dark .markdown-body img { border-color: #334155; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+        .markdown-body img { max-width: 100%; height: auto; border-radius: 0.75em; margin: 2em auto; display: block; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border: 1px solid rgba(255,255,255,0.4); }
+        .dark .markdown-body img { border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
 
         .markdown-body table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.95em; margin: 0; border: none; }
-        .markdown-body th, .markdown-body td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 0.75em 1em; text-align: left; }
+        .markdown-body th, .markdown-body td { border-bottom: 1px solid rgba(0,0,0,0.1); border-right: 1px solid rgba(0,0,0,0.1); padding: 0.75em 1em; text-align: left; }
         .markdown-body th:last-child, .markdown-body td:last-child { border-right: none; }
         .markdown-body tr:last-child td { border-bottom: none; }
-        .markdown-body th { background-color: #eef2ff; font-weight: 600; color: #4338ca; border-bottom: 2px solid #c7d2fe; }
+        .markdown-body th { background-color: rgba(99, 102, 241, 0.08); font-weight: 600; color: #4338ca; border-bottom: 2px solid rgba(99, 102, 241, 0.2); }
         .dark .markdown-body table { border-color: #334155; }
-        .dark .markdown-body th, .dark .markdown-body td { border-bottom-color: #272b36; border-right-color: #272b36; }
+        .dark .markdown-body th, .dark .markdown-body td { border-bottom-color: rgba(255,255,255,0.05); border-right-color: rgba(255,255,255,0.05); }
         .dark .markdown-body th { background-color: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-bottom: 2px solid rgba(99, 102, 241, 0.3); }
 
         .markdown-body td .katex { font-size: clamp(0.4em, 2.5vw, 1em); }
         .markdown-body td .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding-bottom: 0.2em; }
         
-        .obsidian-highlight { background-color: #fef08a; color: #854d0e; padding: 0 0.2rem; border-radius: 0.25rem; }
+        .obsidian-highlight { background-color: rgba(254, 240, 138, 0.7); color: #854d0e; padding: 0 0.2rem; border-radius: 0.25rem; }
         .dark .obsidian-highlight { background-color: rgba(133, 77, 14, 0.5); color: #fef08a; }
         .obsidian-internal-link { color: #6366f1; text-decoration: none; font-weight: 500; }
         .obsidian-internal-link::before { content: "📄 "; font-size: 0.9em; opacity: 0.7; }
 
         .toc-list { list-style: none !important; padding-left: 0 !important; margin: 0 !important; }
-        .toc-nested { padding-left: 1.25rem !important; margin-left: 0.5rem !important; border-left: 1px solid #cbd5e1; margin-top: 0.2rem; }
-        .dark .toc-nested { border-left-color: #334155; }
+        .toc-nested { padding-left: 1.25rem !important; margin-left: 0.5rem !important; border-left: 1px solid rgba(0,0,0,0.1); margin-top: 0.2rem; }
+        .dark .toc-nested { border-left-color: rgba(255,255,255,0.1); }
         .toc-item-container { display: flex; align-items: center; padding: 0.35rem 0; font-size: 0.9rem; }
         .toc-link { color: #64748b; transition: all 0.2s; text-decoration: none; flex-grow: 1; font-weight: 500; }
         .dark .toc-link { color: #94a3b8; }
         .toc-link:hover { color: #6366f1; transform: translateX(2px); }
         .dark .toc-link:hover { color: #818cf8; transform: translateX(2px); }
         .toc-toggle { font-size: 0.6rem; display: inline-flex; align-items: center; justify-content: center; width: 1.2rem; height: 1.2rem; cursor: pointer; color: #94a3b8; transition: all 0.2s ease; border-radius: 0.2rem; }
-        .toc-toggle:hover { color: #334155; background: #f1f5f9; }
-        .dark .toc-toggle:hover { color: #f8fafc; background: #334155; }
+        .toc-toggle:hover { color: #334155; background: rgba(0,0,0,0.05); }
+        .dark .toc-toggle:hover { color: #f8fafc; background: rgba(255,255,255,0.1); }
         .toc-spacer { width: 1.2rem; display: inline-block; }
 
         .hidden-by-h1, .hidden-by-h2, .hidden-by-h3, .hidden-by-h6 { display: none !important; }
         html { scroll-behavior: smooth; }
-
-        .custom-select-wrapper { position: relative; display: inline-block; }
-        .custom-select-wrapper select { appearance: none; -webkit-appearance: none; padding-right: 1.75rem; background-color: rgba(255, 255, 255, 0.5); }
-        @media (min-width: 640px) { .custom-select-wrapper select { padding-right: 2.5rem; } }
-        .dark .custom-select-wrapper select { background-color: rgba(30, 41, 59, 0.5); }
-        .custom-select-wrapper::after { content: ""; position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 0.8rem; height: 0.8rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; pointer-events: none; }
-        @media (min-width: 640px) { .custom-select-wrapper::after { right: 0.75rem; } }
 
         @media (max-width: 768px) { #sidebar { transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); } #sidebar.open { transform: translateX(0); } }
         @media (min-width: 769px) { #sidebar { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; } #sidebar.desktop-closed { width: 0; opacity: 0; padding: 0; border: none; overflow: hidden; } }
@@ -207,15 +274,28 @@
         @media print {
             @page { size: A4; margin: 20mm; }
             header, aside, #sidebarOverlay, #errorBox, #printModal, #goribModal, #lightbox, #backToTopBtn, #landingPage { display: none !important; }
-            main { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            /* Strip Glass Panels on Print */
+            .ios-glass, .ios-glass-heavy, .ios-glass-button { background: white !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;}
+            #ambient-bg { display: none !important; }
+            
+            /* Remove padding from main layout containers */
+            main, #noteContainer, #content { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
             .flex-1 { display: block !important; }
-            .max-w-4xl { max-width: 100% !important; }
-            body, .markdown-body { background: white !important; color: black !important; font-size: 11pt !important; line-height: 1.4 !important; }
+            
+            body, .markdown-body { background: white !important; color: black !important; font-size: 11pt !important; line-height: 1.4 !important; margin: 0 !important; padding: 0 !important; }
+            
+            /* Strip default top margin from the very first element to sit flush with print margin */
+            .markdown-body > *:first-child, .markdown-body h1:first-of-type { margin-top: 0 !important; padding-top: 0 !important; }
+
             .markdown-body p, .markdown-body ul, .markdown-body ol, .markdown-body blockquote, .obsidian-callout, .markdown-body pre, .markdown-body table, .overflow-x-auto { margin-top: 0.5em !important; margin-bottom: 0.5em !important; }
             .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 { color: black !important; margin-top: 1em !important; margin-bottom: 0.5em !important; page-break-after: avoid; }
             .obsidian-callout { padding: 0.8em !important; border-radius: 0.4em !important; }
+            .obsidian-callout.is-collapsible { padding: 0 !important; }
+            .obsidian-callout.is-collapsible > .callout-title { padding: 0.8em 0.8em 0.4em 0.8em !important; }
+            .obsidian-callout.is-collapsible.is-collapsed > .callout-title { padding-bottom: 0.8em !important; }
+            .obsidian-callout.is-collapsible > .callout-content { padding: 0 0.8em 0.8em 0.8em !important; }
             .markdown-body th, .markdown-body td { padding: 0.5em 0.8em !important; }
-            .markdown-body pre { padding: 0.8em !important; }
+            .markdown-body pre { padding: 0.8em !important; border: 1px solid #ccc !important; color: black !important; }
             .obsidian-callout, table, blockquote, tbody { page-break-inside: auto !important; break-inside: auto !important; }
             tr, img, pre { page-break-inside: avoid !important; break-inside: avoid !important; }
             .heading-toggle, .toc-toggle, .callout-toggle-arrow { display: none !important; }
@@ -232,91 +312,100 @@
         }
     </style>
 </head>
-<body class="bg-obsidian-bg text-obsidian-text dark:bg-obsidian-darkBg dark:text-obsidian-darkText min-h-screen flex flex-col selection:bg-obsidian-accent selection:text-white">
+<body class="bg-[#f0f2f5] dark:bg-[#0b0c10] text-slate-800 dark:text-slate-200 min-h-screen flex flex-col selection:bg-obsidian-accent selection:text-white relative z-0">
+
+    <!-- Global Ambient Background Effect (Persistent) -->
+    <div id="ambient-bg" class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/40 dark:bg-blue-600/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen transition-all duration-700"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-purple-400/40 dark:bg-purple-600/20 blur-[140px] mix-blend-multiply dark:mix-blend-screen transition-all duration-700"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-[70%] h-[70%] rounded-full bg-cyan-400/40 dark:bg-cyan-600/20 blur-[140px] mix-blend-multiply dark:mix-blend-screen transition-all duration-700"></div>
+    </div>
 
     <!-- Premium Landing Page Portal -->
-    <div id="landingPage" class="fixed inset-0 z-[60] bg-slate-50/95 dark:bg-obsidian-darkBg/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 transition-all duration-500">
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-indigo-500/20 dark:bg-indigo-500/10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-500/20 dark:bg-purple-500/10 rounded-full blur-3xl"></div>
-        </div>
+    <div id="landingPage" class="fixed inset-0 z-[60] ios-glass flex flex-col items-center justify-center p-4 transition-all duration-500 rounded-none border-none">
         
-        <div class="relative w-full max-w-md bg-white dark:bg-obsidian-darkSurface border border-slate-200 dark:border-obsidian-darkBorder p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] z-10 flex flex-col items-center text-center transform transition-transform">
-            <div class="w-16 h-16 bg-indigo-50 dark:bg-indigo-500/10 text-obsidian-accent rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-indigo-100 dark:border-indigo-500/20">
+        <div class="ios-glass-heavy relative w-full max-w-md p-8 md:p-10 rounded-[2.5rem] z-10 flex flex-col items-center text-center transform transition-transform">
+            <div class="w-16 h-16 bg-white/60 dark:bg-indigo-500/20 text-obsidian-accent rounded-[1.25rem] flex items-center justify-center mb-6 shadow-sm border border-white/50 dark:border-indigo-500/30 backdrop-blur-md">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </div>
             <h1 class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2 tracking-tight">Study Library</h1>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mb-8">Select your curriculum material to begin.</p>
+            <p class="text-slate-600 dark:text-slate-300 text-sm mb-8">Select your curriculum material to begin.</p>
             
             <div class="w-full space-y-5 text-left mb-8">
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 pl-1">Subject</label>
-                    <div class="custom-select-wrapper w-full">
-                        <select id="landingSubjectSelect" class="w-full border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200 text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800"></select>
+                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2 pl-1">Subject</label>
+                    <div id="landingSubjectContainer" class="custom-select-container relative w-full" data-value="">
+                        <button type="button" data-list="landingSubjectList" class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-sm rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center">
+                            <span class="custom-select-text truncate"></span>
+                            <svg class="w-4 h-4 opacity-70 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 pl-1">Chapter</label>
-                    <div class="custom-select-wrapper w-full">
-                        <select id="landingChapterSelect" class="w-full border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-200 text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 truncate"></select>
+                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2 pl-1">Chapter</label>
+                    <div id="landingChapterContainer" class="custom-select-container relative w-full" data-value="">
+                        <button type="button" data-list="landingChapterList" class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-sm rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center">
+                            <span class="custom-select-text truncate"></span>
+                            <svg class="w-4 h-4 opacity-70 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="w-full flex flex-col space-y-3">
-                <button id="startReadingBtn" class="w-full py-3.5 bg-obsidian-accent hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform active:scale-[0.98]">Open Document</button>
-                <button id="resumeReadingBtn" class="hidden w-full py-3.5 bg-white dark:bg-obsidian-darkSurface hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold rounded-xl transition-all shadow-sm transform active:scale-[0.98] border border-slate-200 dark:border-slate-700 truncate px-4">Resume Last Read</button>
+                <button id="startReadingBtn" class="w-full py-3.5 bg-obsidian-accent/90 backdrop-blur-md hover:bg-obsidian-accent text-white font-semibold rounded-2xl transition-all shadow-[0_4px_15px_rgba(99,102,241,0.4)] transform active:scale-[0.98] border border-white/20">Open Document</button>
+                <button id="resumeReadingBtn" class="hidden w-full py-3.5 ios-glass-button text-slate-700 dark:text-slate-200 font-semibold rounded-2xl truncate px-4">Resume Last Read</button>
             </div>
         </div>
     </div>
 
     <!-- Image Lightbox Modal -->
-    <div id="lightbox" class="fixed inset-0 bg-slate-900/95 z-[200] hidden flex-col items-center justify-center p-4 md:p-10 transition-opacity duration-300 opacity-0 cursor-zoom-out">
-        <button id="lightboxClose" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 p-2 rounded-full backdrop-blur-md transition-colors z-10" title="Close">
+    <div id="lightbox" class="fixed inset-0 ios-glass z-[200] hidden flex-col items-center justify-center p-4 md:p-10 transition-opacity duration-300 opacity-0 cursor-zoom-out border-none rounded-none">
+        <button id="lightboxClose" class="absolute top-6 right-6 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ios-glass-button p-2.5 rounded-full z-10" title="Close">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-        <img id="lightboxImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl transform scale-95 transition-transform duration-300" alt="Expanded Image">
+        <img id="lightboxImg" src="" class="max-w-full max-h-full object-contain rounded-2xl shadow-2xl transform scale-95 transition-transform duration-300 border border-white/20" alt="Expanded Image">
     </div>
 
     <!-- Back to Top Button -->
-    <button id="backToTopBtn" class="fixed bottom-8 right-8 bg-obsidian-accent text-white p-3.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-50 hover:bg-indigo-600 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-obsidian-accent dark:focus:ring-offset-obsidian-darkBg" title="Back to top">
+    <button id="backToTopBtn" class="fixed bottom-8 right-8 bg-obsidian-accent/90 backdrop-blur-md text-white p-3.5 rounded-full shadow-[0_4px_15px_rgba(99,102,241,0.4)] opacity-0 pointer-events-none transition-all duration-300 z-50 hover:bg-obsidian-accent hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-obsidian-accent border border-white/20" title="Back to top">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path></svg>
     </button>
 
     <!-- Protection Overlay (Gorib) -->
-    <div id="goribModal" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-md z-[100] hidden flex-col items-center justify-center transition-opacity duration-300">
-        <div class="bg-white dark:bg-obsidian-darkSurface p-8 rounded-2xl shadow-soft border border-slate-200 dark:border-obsidian-darkBorder w-11/12 max-w-md text-center transform transition-all">
-            <div class="w-16 h-16 mx-auto bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-indigo-100 dark:border-indigo-500/20">
+    <div id="goribModal" class="fixed inset-0 z-[100] ios-glass hidden flex-col items-center justify-center transition-opacity duration-300 border-none rounded-none">
+        <div class="ios-glass-heavy relative p-8 md:p-10 rounded-[2.5rem] w-11/12 max-w-md text-center transform transition-all z-10">
+            <div class="w-16 h-16 mx-auto bg-white/60 dark:bg-indigo-500/20 rounded-[1.25rem] flex items-center justify-center mb-6 shadow-sm border border-white/50 dark:border-indigo-500/30 backdrop-blur-md">
                 <svg class="w-8 h-8 text-obsidian-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
             <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 tracking-tight">Protected Document</h2>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mb-8">Authentication required to view this curriculum material.</p>
+            <p class="text-slate-600 dark:text-slate-300 text-sm mb-8">Authentication required to view this material.</p>
             <form id="goribForm" class="space-y-5">
                 <div>
-                    <input type="password" id="goribInput" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-obsidian-accent focus:border-transparent transition-all shadow-sm placeholder-slate-400" placeholder="Enter access key" required>
-                    <p id="goribError" class="text-red-500 text-xs mt-2 hidden text-left pl-1">Incorrect key. Please try again.</p>
+                    <input type="password" id="goribInput" class="w-full px-5 py-3.5 rounded-2xl ios-glass-button text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-obsidian-accent focus:border-transparent transition-all placeholder-slate-500 dark:placeholder-slate-400" placeholder="Enter access key" required>
+                    <p id="goribError" class="text-red-600 dark:text-red-400 text-xs mt-2 hidden text-left pl-2 font-medium">Incorrect key. Please try again.</p>
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-obsidian-accent hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg transform active:scale-[0.98]">Unlock Document</button>
+                <button type="submit" class="w-full py-3.5 bg-obsidian-accent/90 backdrop-blur-md hover:bg-obsidian-accent text-white font-semibold rounded-2xl transition-all shadow-[0_4px_15px_rgba(99,102,241,0.4)] border border-white/20 transform active:scale-[0.98]">Unlock Document</button>
             </form>
         </div>
     </div>
 
     <!-- Print Options Modal -->
-    <div id="printModal" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center transition-opacity">
-        <div class="bg-white dark:bg-obsidian-darkSurface border border-slate-200 dark:border-obsidian-darkBorder rounded-2xl shadow-xl w-11/12 max-w-md overflow-hidden transform transition-all">
-            <div class="px-6 py-5 border-b border-slate-100 dark:border-obsidian-darkBorder flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+    <div id="printModal" class="fixed inset-0 z-50 ios-glass hidden flex items-center justify-center transition-opacity border-none rounded-none">
+        <div class="ios-glass-heavy relative w-11/12 max-w-md overflow-hidden rounded-[2rem] z-10 transform transition-all">
+            <div class="px-6 py-5 border-b border-white/20 dark:border-white/10 flex justify-between items-center bg-black/5 dark:bg-white/5">
                 <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center tracking-tight">
                     <svg class="w-5 h-5 mr-2 text-obsidian-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                     Print Settings
                 </h3>
-                <button id="closePrintModal" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                <button id="closePrintModal" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors p-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/10">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             
             <div class="p-6">
                 <div class="space-y-5">
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800/50">
+                    <div class="flex items-center justify-between pb-4 border-b border-black/5 dark:border-white/5">
                         <span class="font-medium text-slate-700 dark:text-slate-300">Questions</span>
                         <div class="flex space-x-6">
                             <label class="flex items-center space-x-2 cursor-pointer group">
@@ -329,7 +418,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800/50">
+                    <div class="flex items-center justify-between pb-4 border-b border-black/5 dark:border-white/5">
                         <span class="font-medium text-slate-700 dark:text-slate-300">Answers</span>
                         <div class="flex space-x-6">
                             <label class="flex items-center space-x-2 cursor-pointer group">
@@ -357,7 +446,7 @@
                     </div>
                 </div>
                 <div class="mt-8 flex justify-end">
-                    <button id="btn-execute-print" class="px-6 py-2.5 bg-obsidian-accent hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-md transition-all w-full sm:w-auto transform active:scale-95">
+                    <button id="btn-execute-print" class="px-6 py-2.5 bg-obsidian-accent/90 backdrop-blur-md hover:bg-obsidian-accent text-white text-sm font-semibold rounded-xl shadow-[0_4px_15px_rgba(99,102,241,0.4)] border border-white/20 transition-all w-full sm:w-auto transform active:scale-95">
                         Generate PDF
                     </button>
                 </div>
@@ -366,49 +455,57 @@
     </div>
 
     <!-- Main App Navigation -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-xl flex-none border-b border-slate-200/60 dark:border-obsidian-darkBorder bg-white/70 dark:bg-obsidian-darkBg/80 shadow-sm">
+    <header class="ios-glass glass-header sticky top-0 z-40 w-full flex-none transition-colors duration-300">
         <div class="max-w-8xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 
                 <!-- Left Nav Elements -->
                 <div class="flex items-center flex-1 space-x-1 sm:space-x-2 min-w-0">
-                    <button id="menuBtn" class="p-1.5 sm:p-2 -ml-1 sm:-ml-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0" title="Toggle Sidebar">
+                    <button id="menuBtn" class="p-1.5 sm:p-2.5 -ml-1 sm:-ml-2 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl shrink-0" title="Toggle Sidebar">
                         <svg class="h-5 w-5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                     
-                    <button id="homeBtn" class="p-1.5 sm:p-2 mr-1 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0" title="Back to Library">
+                    <button id="homeBtn" class="p-1.5 sm:p-2.5 mr-1 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl shrink-0" title="Back to Library">
                         <svg class="h-5 w-5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     </button>
 
-                    <div class="custom-select-wrapper w-24 sm:w-auto shrink-0">
-                        <select id="subjectSelect" class="w-full border border-slate-200 dark:border-slate-700/50 text-slate-700 dark:text-slate-200 text-xs sm:text-sm rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all hover:bg-slate-50 dark:hover:bg-slate-800 truncate pr-6 sm:pr-8"></select>
+                    <!-- Nav Subject Dropdown -->
+                    <div id="navSubjectContainer" class="custom-select-container relative w-24 sm:w-auto shrink-0" data-value="">
+                        <button type="button" data-list="navSubjectList" class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-xs sm:text-sm rounded-lg sm:rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center">
+                            <span class="custom-select-text truncate"></span>
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-1 opacity-70 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
                     </div>
 
-                    <div class="custom-select-wrapper flex-1 min-w-0 max-w-[140px] sm:max-w-[350px]">
-                        <select id="chapterSelect" class="w-full border border-slate-200 dark:border-slate-700/50 text-slate-700 dark:text-slate-200 text-xs sm:text-sm rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 cursor-pointer shadow-sm font-medium transition-all hover:bg-slate-50 dark:hover:bg-slate-800 truncate pr-6 sm:pr-8"></select>
+                    <!-- Nav Chapter Dropdown -->
+                    <div id="navChapterContainer" class="custom-select-container relative flex-1 min-w-0 max-w-[150px] sm:max-w-[350px]" data-value="">
+                        <button type="button" data-list="navChapterList" class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-xs sm:text-sm rounded-lg sm:rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center">
+                            <span class="custom-select-text truncate"></span>
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-1 opacity-70 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
                     </div>
                 </div>
                 
                 <!-- Right Nav Elements -->
-                <div class="flex items-center space-x-2 sm:space-x-5 ml-1 sm:ml-4 shrink-0">
-                    <button id="printBtnDesktop" class="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white rounded-xl bg-white/50 hover:bg-slate-50 dark:bg-slate-800/50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-sm transition-all" title="Save as PDF / Print">
-                        <svg class="w-4.5 h-4.5 mr-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"></path></svg>
+                <div class="flex items-center space-x-2 sm:space-x-4 ml-1 sm:ml-4 shrink-0">
+                    <button id="printBtnDesktop" class="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl" title="Save as PDF / Print">
+                        <svg class="w-4 h-4 mr-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"></path></svg>
                         <span>Export</span>
                     </button>
 
-                    <div class="hidden sm:flex items-center space-x-2 text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/50 px-3 py-1.5 rounded-xl border border-slate-200/50 dark:border-slate-700/50" id="widthSliderWrapper" title="Width: 0">
+                    <div class="hidden sm:flex items-center space-x-2 text-slate-600 dark:text-slate-300 ios-glass-button px-3 py-1.5 rounded-xl" id="widthSliderWrapper" title="Width: 0">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 14h6v6m10-10h-6V4m0 10l7 7M10 10L3 3"></path></svg>
-                        <input type="range" id="widthSlider" min="0" max="1" step="0.05" value="0" class="w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-obsidian-accent">
+                        <input type="range" id="widthSlider" min="0" max="1" step="0.05" value="0" class="w-20 h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                     </div>
 
-                    <div class="flex items-center space-x-1 sm:space-x-2 text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-slate-200/50 dark:border-slate-700/50" id="fontSizeSliderWrapper" title="Adjust Font Size">
+                    <div class="flex items-center space-x-1 sm:space-x-2 text-slate-600 dark:text-slate-300 ios-glass-button px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl" id="fontSizeSliderWrapper" title="Adjust Font Size">
                         <span class="text-[10px] sm:text-xs font-bold">A</span>
-                        <input type="range" id="fontSizeSlider" min="14" max="24" step="1" value="18" class="w-12 sm:w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-obsidian-accent">
+                        <input type="range" id="fontSizeSlider" min="8" max="24" step="1" value="18" class="w-12 sm:w-20 h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent">
                         <span class="text-sm sm:text-lg font-bold">A</span>
                     </div>
 
-                    <button id="themeToggleDesktop" class="hidden md:flex p-2.5 text-slate-500 hover:text-obsidian-accent dark:text-slate-400 dark:hover:text-obsidian-darkAccent rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all shadow-sm">
+                    <button id="themeToggleDesktop" class="hidden md:flex p-2.5 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl" title="Toggle Theme">
                         <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     </button>
@@ -417,19 +514,19 @@
         </div>
     </header>
 
-    <div class="flex flex-1 max-w-8xl mx-auto w-full relative">
-        <aside id="sidebar" class="fixed inset-y-0 left-0 pt-16 md:pt-6 w-72 border-r border-slate-200 dark:border-obsidian-darkBorder bg-slate-50/80 dark:bg-[#11131a]/90 backdrop-blur-2xl z-30 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:block shrink-0 overflow-y-auto overflow-x-hidden shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-none">
+    <div class="flex flex-1 max-w-8xl mx-auto w-full relative z-10">
+        <aside id="sidebar" class="ios-glass glass-sidebar fixed inset-y-0 left-0 pt-16 md:pt-6 w-72 z-30 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:block shrink-0 overflow-y-auto overflow-x-hidden">
             <div class="p-6">
                 <!-- Mobile Actions -->
                 <div class="md:hidden space-y-3 mb-8">
-                    <button id="themeToggleMobile" class="flex items-center justify-between w-full p-3 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 transition-all">
+                    <button id="themeToggleMobile" class="flex items-center justify-between w-full p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl">
                         <span class="text-sm font-medium">Switch Theme</span>
                         <div>
                             <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                             <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                         </div>
                     </button>
-                    <button id="printBtnMobile" class="flex items-center justify-between w-full p-3 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 transition-all">
+                    <button id="printBtnMobile" class="flex items-center justify-between w-full p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl">
                         <span class="text-sm font-medium">Export Document</span>
                         <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"></path></svg>
                     </button>
@@ -438,7 +535,7 @@
                 <h2 id="sidebarChapterTitle" class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-snug"></h2>
                 
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Contents</h3>
+                    <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Contents</h3>
                 </div>
                 
                 <div id="tocWrapper"><nav id="toc" class="space-y-1"></nav></div>
@@ -447,18 +544,25 @@
 
         <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-20 hidden md:hidden"></div>
 
-        <main class="flex-1 min-w-0 focus:outline-none transition-all duration-300 ease-in-out">
-            <div id="noteContainer" class="w-full mx-auto px-6 sm:px-10 py-12 lg:py-16 transition-all duration-300 ease-in-out" style="max-width: 48rem;">
+        <main class="flex-1 min-w-0 focus:outline-none transition-all duration-300 ease-in-out relative z-10">
+            <div id="noteContainer" class="w-full mx-auto px-4 sm:px-6 py-8 lg:py-12 transition-all duration-300 ease-in-out" style="max-width: 48rem;">
                 <div id="errorBox" class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-5 py-4 rounded-xl relative mb-8 shadow-sm" role="alert">
                     <span class="block sm:inline text-sm font-medium" id="errorMessage"></span>
                 </div>
                 
-                <article id="content" class="markdown-body">
+                <!-- Main Glass Panel Wrapper for the Note -->
+                <article id="content" class="markdown-body ios-glass-heavy p-6 sm:p-10 lg:p-12 rounded-[2.5rem]">
                     <!-- Note content dynamically loaded here -->
                 </article>
             </div>
         </main>
     </div>
+
+    <!-- Global Glass Dropdown Portals (Placed outside any stacking contexts for flawless blur) -->
+    <ul id="landingSubjectList" class="custom-select-list fixed z-[300] hidden max-h-60 overflow-y-auto rounded-2xl ios-glass py-1 shadow-2xl"></ul>
+    <ul id="landingChapterList" class="custom-select-list fixed z-[300] hidden max-h-60 overflow-y-auto rounded-2xl ios-glass py-1 shadow-2xl"></ul>
+    <ul id="navSubjectList" class="custom-select-list fixed z-[300] min-w-[150px] sm:min-w-[200px] hidden max-h-60 overflow-y-auto rounded-xl ios-glass py-1 shadow-2xl"></ul>
+    <ul id="navChapterList" class="custom-select-list fixed z-[300] min-w-[220px] sm:min-w-[320px] hidden max-h-60 overflow-y-auto rounded-xl ios-glass py-1 shadow-2xl"></ul>
 
     <script>
         // =========================================================================
@@ -516,13 +620,8 @@
         let currentAssetBase = "";
         let mathBlocks = []; 
 
-        const subjectSelect = document.getElementById('subjectSelect');
-        const chapterSelect = document.getElementById('chapterSelect');
-        
         // Landing Page Selectors
         const landingPage = document.getElementById('landingPage');
-        const landingSubjectSelect = document.getElementById('landingSubjectSelect');
-        const landingChapterSelect = document.getElementById('landingChapterSelect');
         const startReadingBtn = document.getElementById('startReadingBtn');
         const resumeReadingBtn = document.getElementById('resumeReadingBtn');
         const homeBtn = document.getElementById('homeBtn');
@@ -670,36 +769,128 @@
         setupCheckboxMutualExclusion('cb-answers-all', 'cb-answers-selected');
         printModal.addEventListener('click', (e) => { if (e.target === printModal) closePrintModal(); });
 
-        // --- Navigation Initialization & Landing Page Logic ---
-        function populateDropdown(selectElement, items, selectedItem) {
-            selectElement.innerHTML = '';
-            if (!items || items.length === 0) {
-                const option = document.createElement('option');
-                option.value = "";
-                option.textContent = "-- No Options --";
-                selectElement.appendChild(option);
+        // --- Custom Global Dropdown Portal Engine ---
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.custom-select-btn');
+            if (btn) {
+                const listId = btn.dataset.list;
+                const list = document.getElementById(listId);
+                const svg = btn.querySelector('svg');
+                const isHidden = list.classList.contains('hidden');
+
+                // Close all others
+                document.querySelectorAll('.custom-select-list').forEach(l => l.classList.add('hidden'));
+                document.querySelectorAll('.custom-select-btn svg').forEach(s => s.classList.remove('rotate-180'));
+
+                if (isHidden) {
+                    list.classList.remove('hidden');
+                    const rect = btn.getBoundingClientRect();
+                    
+                    list.style.top = `${rect.bottom + 8}px`;
+                    
+                    if (btn.closest('#landingPage')) {
+                        list.style.width = `${rect.width}px`;
+                    } else {
+                        list.style.width = 'auto';
+                    }
+
+                    if (rect.left + list.offsetWidth > window.innerWidth) {
+                        list.style.right = `${window.innerWidth - rect.right}px`;
+                        list.style.left = 'auto';
+                    } else {
+                        list.style.left = `${rect.left}px`;
+                        list.style.right = 'auto';
+                    }
+
+                    svg.classList.add('rotate-180');
+                    
+                    const selectedLi = Array.from(list.children).find(li => li.dataset.selected === 'true');
+                    if (selectedLi) selectedLi.scrollIntoView({ block: 'nearest' });
+                }
                 return;
             }
-            items.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item;
-                option.textContent = item;
-                selectElement.appendChild(option);
-            });
-            if (selectedItem && items.includes(selectedItem)) {
-                selectElement.value = selectedItem;
-            } else {
-                selectElement.selectedIndex = 0;
+
+            // Close all if clicking outside
+            if (!e.target.closest('.custom-select-list')) {
+                document.querySelectorAll('.custom-select-list').forEach(list => list.classList.add('hidden'));
+                document.querySelectorAll('.custom-select-btn svg').forEach(s => s.classList.remove('rotate-180'));
             }
+        });
+
+        // Hide dropdowns on scroll or resize to keep them attached properly
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.custom-select-list').forEach(list => list.classList.add('hidden'));
+            document.querySelectorAll('.custom-select-btn svg').forEach(s => s.classList.remove('rotate-180'));
+        }, { passive: true });
+        
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.custom-select-list').forEach(list => list.classList.add('hidden'));
+            document.querySelectorAll('.custom-select-btn svg').forEach(s => s.classList.remove('rotate-180'));
+        });
+
+        function populateCustomDropdown(containerId, listId, items, selectedItem, onChange) {
+            const container = document.getElementById(containerId);
+            const text = container.querySelector('.custom-select-text');
+            const list = document.getElementById(listId);
+
+            list.innerHTML = '';
+            
+            let currentValue = selectedItem || (items && items.length > 0 ? items[0] : "");
+            container.dataset.value = currentValue;
+            text.textContent = currentValue || "-- No Options --";
+            text.title = currentValue || "-- No Options --";
+
+            if (!items || items.length === 0) {
+                const li = document.createElement('li');
+                li.className = "px-4 py-2.5 mx-1 my-0.5 rounded-lg text-sm text-slate-500 italic";
+                li.textContent = "-- No Options --";
+                list.appendChild(li);
+                return;
+            }
+
+            items.forEach(item => {
+                const li = document.createElement('li');
+                const isSelected = item === currentValue;
+                li.dataset.selected = isSelected;
+                
+                // Clean glassy dropdown items WITHOUT internal backdrop-blur that breaks the engine
+                li.className = `px-4 py-2.5 mx-1 my-0.5 rounded-lg text-sm cursor-pointer transition-colors ${isSelected ? 'bg-black/5 dark:bg-white/10 text-obsidian-accent font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-black/5 dark:hover:bg-white/10'}`;
+                li.textContent = item;
+                
+                li.addEventListener('click', () => {
+                    if (container.dataset.value !== item) {
+                        container.dataset.value = item;
+                        text.textContent = item;
+                        text.title = item;
+                        
+                        Array.from(list.children).forEach(child => {
+                            const childSelected = child.textContent === item;
+                            child.dataset.selected = childSelected;
+                            child.className = `px-4 py-2.5 mx-1 my-0.5 rounded-lg text-sm cursor-pointer transition-colors ${childSelected ? 'bg-black/5 dark:bg-white/10 text-obsidian-accent font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-black/5 dark:hover:bg-white/10'}`;
+                        });
+
+                        if (onChange) onChange(item);
+                        
+                        // Close menu after selection
+                        list.classList.add('hidden');
+                        container.querySelector('svg').classList.remove('rotate-180');
+                    }
+                });
+                list.appendChild(li);
+            });
         }
 
+        // --- Navigation Initialization & Landing Page Logic ---
         function updateChapterLists(subject, landingOnly = false, selectedChapter = null) {
             const chapters = CURRICULUM[subject] || [];
             if (landingOnly) {
-                populateDropdown(landingChapterSelect, chapters, selectedChapter);
+                populateCustomDropdown('landingChapterContainer', 'landingChapterList', chapters, selectedChapter, null);
             } else {
-                populateDropdown(chapterSelect, chapters, selectedChapter);
-                populateDropdown(landingChapterSelect, chapters, selectedChapter);
+                populateCustomDropdown('navChapterContainer', 'navChapterList', chapters, selectedChapter, (val) => {
+                    localStorage.setItem('lastChapter', val);
+                    loadAndRenderMarkdown();
+                });
+                populateCustomDropdown('landingChapterContainer', 'landingChapterList', chapters, selectedChapter, null);
             }
         }
 
@@ -718,10 +909,17 @@
             const savedSubject = localStorage.getItem('lastSubject');
             const defaultSubject = savedSubject && subjects.includes(savedSubject) ? savedSubject : (subjects.includes("Physics-1st") ? "Physics-1st" : subjects[0]);
             
-            populateDropdown(subjectSelect, subjects, defaultSubject);
-            populateDropdown(landingSubjectSelect, subjects, defaultSubject);
+            // Initial render of subject dropdowns
+            populateCustomDropdown('navSubjectContainer', 'navSubjectList', subjects, defaultSubject, (val) => {
+                localStorage.setItem('lastSubject', val);
+                updateChapterLists(val, false);
+                loadAndRenderMarkdown();
+            });
+
+            populateCustomDropdown('landingSubjectContainer', 'landingSubjectList', subjects, defaultSubject, (val) => {
+                updateChapterLists(val, true);
+            });
             
-            // Rebuild the chapter lists. If we have a saved chapter, pass it in so it doesn't default to index 0!
             const savedChapter = localStorage.getItem('lastChapter');
             let initialChapterToSelect = null;
 
@@ -738,35 +936,20 @@
 
             updateChapterLists(defaultSubject, false, initialChapterToSelect);
 
-            // Sync interactions
-            landingSubjectSelect.addEventListener('change', () => {
-                updateChapterLists(landingSubjectSelect.value, true);
-            });
-
-            subjectSelect.addEventListener('change', () => {
-                localStorage.setItem('lastSubject', subjectSelect.value);
-                updateChapterLists(subjectSelect.value, false);
-                loadAndRenderMarkdown();
-            });
-
-            chapterSelect.addEventListener('change', () => {
-                localStorage.setItem('lastChapter', chapterSelect.value);
-                loadAndRenderMarkdown();
-            });
-
             startReadingBtn.addEventListener('click', () => {
-                // Save the chosen selections BEFORE rebuilding the lists
-                const chosenSubject = landingSubjectSelect.value;
-                const chosenChapter = landingChapterSelect.value;
+                const chosenSubject = document.getElementById('landingSubjectContainer').dataset.value;
+                const chosenChapter = document.getElementById('landingChapterContainer').dataset.value;
 
-                subjectSelect.value = chosenSubject;
                 localStorage.setItem('lastSubject', chosenSubject);
-                
-                // Rebuild but actively pass the chosen chapter so it doesn't wipe our choice
-                updateChapterLists(chosenSubject, false, chosenChapter);
-                
                 localStorage.setItem('lastChapter', chosenChapter);
                 
+                populateCustomDropdown('navSubjectContainer', 'navSubjectList', subjects, chosenSubject, (val) => {
+                    localStorage.setItem('lastSubject', val);
+                    updateChapterLists(val, false);
+                    loadAndRenderMarkdown();
+                });
+                updateChapterLists(chosenSubject, false, chosenChapter);
+
                 closeLandingPage();
                 loadAndRenderMarkdown();
             });
@@ -778,8 +961,16 @@
 
             homeBtn.addEventListener('click', () => {
                 openLandingPage();
-                if (chapterSelect.value) {
-                    resumeReadingBtn.textContent = `Resume: ${chapterSelect.value.split(' ').slice(1).join(' ')}`;
+                const currentSubject = document.getElementById('navSubjectContainer').dataset.value;
+                const currentChapter = document.getElementById('navChapterContainer').dataset.value;
+                
+                populateCustomDropdown('landingSubjectContainer', 'landingSubjectList', subjects, currentSubject, (val) => {
+                    updateChapterLists(val, true);
+                });
+                updateChapterLists(currentSubject, true, currentChapter);
+
+                if (currentChapter) {
+                    resumeReadingBtn.textContent = `Resume: ${currentChapter.split(' ').slice(1).join(' ')}`;
                     resumeReadingBtn.classList.remove('hidden');
                 }
             });
@@ -919,10 +1110,10 @@
         }
 
         function enhanceContentHeadings() {
-            const headings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h6');
+            const headings = document.querySelectorAll('#content h2, #content h3, #content h6');
             headings.forEach(heading => {
                 const toggleBtn = document.createElement('span');
-                toggleBtn.className = 'heading-toggle cursor-pointer mr-2 select-none text-slate-300 hover:text-obsidian-accent dark:text-slate-600 dark:hover:text-obsidian-darkAccent transition-all duration-200 inline-flex items-center transform rotate-90 text-sm align-middle';
+                toggleBtn.className = 'heading-toggle cursor-pointer mr-2 select-none text-slate-400 dark:text-slate-500 hover:text-obsidian-accent dark:hover:text-obsidian-darkAccent transition-all duration-200 inline-flex items-center transform rotate-90 text-sm align-middle';
                 toggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 1em; height: 1em;"><polyline points="9 18 15 12 9 6"></polyline></svg>';
                 heading.prepend(toggleBtn);
                 heading.style.cursor = 'pointer';
@@ -979,6 +1170,7 @@
                     titleDiv.innerHTML = getCalloutIcon(type) + `<span>${title}</span>`;
                     
                     if (['tip'].includes(type)) {
+                        bq.classList.add('is-collapsible');
                         titleDiv.classList.add('cursor-pointer', 'select-none');
                         const toggleArrow = document.createElement('span');
                         toggleArrow.className = 'callout-toggle-arrow ml-auto transition-transform duration-200 transform text-slate-400';
@@ -1015,8 +1207,8 @@
             const errorBox = document.getElementById('errorBox');
             const sidebarChapterTitle = document.getElementById('sidebarChapterTitle');
             
-            const subject = subjectSelect.value;
-            const chapter = chapterSelect.value;
+            const subject = document.getElementById('navSubjectContainer').dataset.value;
+            const chapter = document.getElementById('navChapterContainer').dataset.value;
             
             if(!chapter) {
                 contentDiv.innerHTML = `<p class="text-slate-500 italic">No chapters mapped for this subject yet.</p>`;
@@ -1107,7 +1299,7 @@ Here we test the nested Question and Solution blocks.
 
                 contentDiv.querySelectorAll('table').forEach(table => {
                     const wrapper = document.createElement('div');
-                    wrapper.className = 'overflow-x-auto w-full my-[1.8em] rounded-xl shadow-soft border border-slate-200 dark:border-obsidian-darkBorder bg-white dark:bg-obsidian-darkSurface'; 
+                    wrapper.className = 'overflow-x-auto w-full my-[1.8em] rounded-xl border border-white/50 dark:border-white/10 bg-white/40 dark:bg-slate-800/40 shadow-sm backdrop-blur-md'; 
                     table.parentNode.insertBefore(wrapper, table);
                     wrapper.appendChild(table);
                 });
