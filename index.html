@@ -61,7 +61,7 @@
     -->
         <script>
             const APP_CONFIG = {
-                ENABLE_GORIB: true, // Set to false to disable password
+                ENABLE_GORIB: false, // Set to false to disable password
                 APP_GORIB: "physicsisbest", // Your access key
                 DEFAULT_WIDTH: 0, // Page wideness on load. (0 = Narrow, 1 = Full Width)
                 DEFAULT_FONT_SIZE: 18, // Default reading font size in pixels
@@ -2232,54 +2232,57 @@
             // =========================================================================
             // ⚙️ CURRICULUM CONFIGURATION SECTION
             // =========================================================================
-            const CURRICULUM = {
-                "Chemistry-1st": [
-                    "C-1.02 Qualitative Chemistry",
-                    "C-1.03 Periodic Properties of Elements and Chemical Bonding",
-                    "C-1.04 Chemical Changes",
-                    "C-1.05 Vocational Chemistry",
-                ],
-                "Chemistry-2nd": [
-                    "C-2.01 Environmental Chemistry",
-                    "C-2.02 Organic Chemistry",
-                    "C-2.03 Stoichiometric Chemistry",
-                    "C-2.04 Electro Chemistry",
-                ],
-                "Math-1st": [
-                    "M-1.01 Matrix",
-                    "M-1.03 Straight Line",
-                    "M-1.04 Circle",
-                    "M-1.07 Trigonometry",
-                    "M-1.09 Differential Calculus",
-                    "M-1.10 Integral Calculus",
-                ],
-                "Math-2nd": [
-                    "M-2.03 Complex Number",
-                    "M-2.04 Polinomials and Polinomial Equation",
-                    "M-2.07 Inverse Trigonometry",
-                ],
-                "Physics-1st": [
-                    "P-1.02 Vector",
-                    "P-1.03 Kinematics",
-                    "P-1.04 Newtonian Mechanics",
-                    "P-1.05 Work-Power-Energy",
-                    "P-1.06 Gravitation and Gravity",
-                    "P-1.07 Structural Properties of Matter",
-                    "P-1.08 Periodic Motion",
-                    "P-1.10 Ideal Gas",
-                ],
-                "Physics-2nd": [
-                    "P-2.01 Thermodynamics",
-                    "P-2.02 Static Electricity",
-                    "P-2.03 Current Electricity",
-                    "P-2.04 Magnetic Effect of Current",
-                    "P-2.06 Geometrical Optics",
-                    "P-2.07 Physical Optics",
-                    "P-2.08 Modern Physics",
-                    "P-2.09 Nuclear Model",
-                    "P-2.10 Semiconductor",
-                ],
-            };
+        const CURRICULUM = {
+                        "Physics-1st": [
+                "P-1.02 Vector",
+                "P-1.03 Kinematics",
+                "P-1.04 Newtonian Mechanics",
+                "P-1.05 Work-Power-Energy",
+                "P-1.06 Gravitation and Gravity",
+                "P-1.07 Structural Properties of Matter",
+                "P-1.08 Periodic Motion",
+                "P-1.10 Ideal Gas",
+            ],
+            "Physics-2nd": [
+                "P-2.01 Thermodynamics",
+                "P-2.02 Static Electricity",
+                "P-2.03 Current Electricity",
+                "P-2.04 Magnetic Effect of Current",
+                "P-2.06 Geometrical Optics",
+                "P-2.07 Physical Optics",
+                "P-2.08 Modern Physics",
+                "P-2.09 Nuclear Model",
+                "P-2.10 Semiconductor",
+            ],
+
+            "Math-1st": [
+                "M-1.01 Matrix",
+                "M-1.03 Straight Line",
+                "M-1.04 Circle",
+                "M-1.07 Trigonometry",
+                "M-1.09 Differential Calculus",
+                "M-1.10 Integral Calculus",
+            ],
+            "Math-2nd": [
+                "M-2.03 Complex Number",
+                "M-2.04 Polinomials and Polinomial Equation",
+                "M-2.06 Conics",
+                "M-2.07 Inverse Trigonometry",
+                "M-2.10 Probability and Statistics",
+            ],
+                        "Chemistry-1st": [
+                "C-1.02 Qualitative Chemistry",
+                "C-1.03 Periodic Properties of Elements and Chemical Bonding",
+                "C-1.04 Chemical Changes",
+                "C-1.05 Vocational Chemistry",
+            ],
+            "Chemistry-2nd": [
+                "C-2.01 Environmental Chemistry",
+                "C-2.02 Organic Chemistry",
+                "C-2.03 Stoichiometric Chemistry",
+                "C-2.04 Electro Chemistry",
+            ],
+        };
 
             // Apply dynamic styling parameters from configuration immediately
             document.documentElement.style.setProperty(
