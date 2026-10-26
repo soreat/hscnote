@@ -61,7 +61,7 @@
     -->
         <script>
             const APP_CONFIG = {
-                ENABLE_GORIB: false, // Set to false to disable password
+                ENABLE_GORIB: true, // Set to false to disable password
                 APP_GORIB: "physicsisbest", // Your access key
                 DEFAULT_WIDTH: 0, // Page wideness on load. (0 = Narrow, 1 = Full Width)
                 DEFAULT_FONT_SIZE: 18, // Default reading font size in pixels
@@ -76,29 +76,27 @@
             // =========================================================================
             const ADVANCED_CONFIG = {
                 // --- Storage Keys ---
-                // Change these if you host multiple instances of this viewer on the same domain
-                // to prevent their saved settings/states from interfering with each other.
                 STORAGE_KEY_THEME: "theme",
                 STORAGE_KEY_SUBJECT: "lastSubject",
                 STORAGE_KEY_CHAPTER: "lastChapter",
                 STORAGE_KEY_WIDTH: "noteWidth",
                 STORAGE_KEY_FONT: "noteFontSize",
                 STORAGE_KEY_AUTH: "isGorib",
-                STORAGE_KEY_LANG: "appLanguage", // Key to save user's EN/BN preference
-                STORAGE_KEY_SCROLL_PREFIX: "scrollPos_", // Prefix to save reading scroll progress per chapter
+                STORAGE_KEY_LANG: "appLanguage",
+                STORAGE_KEY_SCROLL_PREFIX: "scrollPos_",
 
                 // --- UI & Animation Parameters ---
-                SIDEBAR_MOBILE_BREAKPOINT: 768, // Screen width (in px) where sidebar turns into a mobile drawer
-                SCROLL_TO_TOP_THRESHOLD: 400, // Pixels scrolled down before the "Back to Top" button appears
-                MODAL_FADE_SPEED: 300, // Animation speed for closing modals/menus (in milliseconds)
-                LANDING_PAGE_FADE_SPEED: 500, // Animation speed for closing the main landing page portal
+                SIDEBAR_MOBILE_BREAKPOINT: 768,
+                SCROLL_TO_TOP_THRESHOLD: 400,
+                MODAL_FADE_SPEED: 300,
+                LANDING_PAGE_FADE_SPEED: 300,
 
                 // --- Markdown & Performance Settings ---
-                ENABLE_MATH_MACROS: true, // Enable global math macros in KaTeX processing
-                ENABLE_CHAPTER_CACHE: true, // Cache fetched Markdown files in memory for 0ms repeat loads
-                LAZY_RENDER_COLLAPSED_MATH: true, // Defer KaTeX rendering inside collapsed callouts until expanded
-                ENABLE_SCROLL_MEMORY: true, // Remember and restore exact scroll position for each chapter
-                ENABLE_CLOZE_SPOILERS: true, // Parse ||spoiler text|| into click-to-reveal study flashcards
+                ENABLE_MATH_MACROS: true,
+                ENABLE_CHAPTER_CACHE: true,
+                LAZY_RENDER_COLLAPSED_MATH: true,
+                ENABLE_SCROLL_MEMORY: true,
+                ENABLE_CLOZE_SPOILERS: true,
             };
         </script>
 
@@ -119,29 +117,28 @@
                 --color-abstract: 6, 182, 212;
                 --color-tip: 16, 185, 129;
                 --color-important: 139, 92, 246;
-                /* Dynamic variables controlled by APP_CONFIG */
                 --math-spacing: 0.65em;
                 --text-line-height: 1.8;
             }
 
             /* ==========================================================
-           🧊 iOS LIQUID GLASSMORPHISM ENGINE
+           🧊 iOS LIQUID GLASSMORPHISM ENGINE (Mobile GPU Optimized)
            ========================================================== */
 
             /* Standard Glass (Navbar, Sidebar, Modals, Dropdown Lists) */
             .ios-glass {
-                background: rgba(255, 255, 255, 0.45);
-                backdrop-filter: blur(24px) saturate(150%);
-                -webkit-backdrop-filter: blur(24px) saturate(150%);
-                border: 1px solid rgba(255, 255, 255, 0.6);
-                border-bottom-color: rgba(255, 255, 255, 0.3);
-                border-right-color: rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.72);
+                backdrop-filter: blur(20px) saturate(140%);
+                -webkit-backdrop-filter: blur(20px) saturate(140%);
+                border: 1px solid rgba(255, 255, 255, 0.65);
+                border-bottom-color: rgba(255, 255, 255, 0.35);
+                border-right-color: rgba(255, 255, 255, 0.35);
                 box-shadow:
                     0 8px 32px rgba(0, 0, 0, 0.05),
                     inset 0 1px 0 rgba(255, 255, 255, 0.8);
             }
             .dark .ios-glass {
-                background: rgba(24, 27, 33, 0.55);
+                background: rgba(24, 27, 33, 0.78);
                 border: 1px solid rgba(255, 255, 255, 0.12);
                 border-bottom-color: rgba(255, 255, 255, 0.05);
                 border-right-color: rgba(255, 255, 255, 0.05);
@@ -150,108 +147,112 @@
                     inset 0 1px 0 rgba(255, 255, 255, 0.05);
             }
 
-            /* Heavy Glass (Main Note Content, Landing Page Card) */
+            /* Heavy Glass (Used for small floating modals only) */
             .ios-glass-heavy {
-                background: rgba(255, 255, 255, 0.65);
-                backdrop-filter: blur(32px) saturate(150%);
-                -webkit-backdrop-filter: blur(32px) saturate(150%);
-                border: 1px solid rgba(255, 255, 255, 0.7);
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(24px) saturate(140%);
+                -webkit-backdrop-filter: blur(24px) saturate(140%);
+                border: 1px solid rgba(255, 255, 255, 0.75);
                 box-shadow:
                     0 12px 40px rgba(0, 0, 0, 0.08),
                     inset 0 1px 0 rgba(255, 255, 255, 0.9);
             }
             .dark .ios-glass-heavy {
-                background: rgba(20, 23, 29, 0.75);
+                background: rgba(20, 23, 29, 0.88);
                 border: 1px solid rgba(255, 255, 255, 0.15);
                 box-shadow:
                     0 12px 40px rgba(0, 0, 0, 0.4),
                     inset 0 1px 0 rgba(255, 255, 255, 0.08);
             }
 
-            /* High-Performance Note Surface (Eliminates 20,000px real-time Gaussian blur lag on scroll) */
+            /* High-Performance Surface for Scrolling Containers (Library Cards & Note Body)
+           Avoids mobile GPU tile eviction / gray screen flicker during fast scrolling */
             .ios-note-surface {
-                background: rgba(255, 255, 255, 0.88);
-                border: 1px solid rgba(255, 255, 255, 0.85);
+                background: rgba(255, 255, 255, 0.86);
+                border: 1px solid rgba(255, 255, 255, 0.9);
                 box-shadow:
-                    0 12px 40px rgba(0, 0, 0, 0.06),
+                    0 10px 30px rgba(0, 0, 0, 0.05),
                     inset 0 1px 0 rgba(255, 255, 255, 0.95);
             }
             .dark .ios-note-surface {
-                background: rgba(20, 23, 29, 0.9);
-                border: 1px solid rgba(255, 255, 255, 0.12);
+                background: rgba(20, 23, 29, 0.88);
+                border: 1px solid rgba(255, 255, 255, 0.1);
                 box-shadow:
-                    0 12px 40px rgba(0, 0, 0, 0.4),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                    0 10px 30px rgba(0, 0, 0, 0.35),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.06);
             }
 
-            /* Zero-Cost GPU Ambient Background Gradients (Replaces heavy blur-[140px] + mix-blend layers) */
+            /* Zero-Cost GPU Ambient Background Gradients */
             #ambient-bg {
                 background:
                     radial-gradient(
                         circle at 15% 15%,
-                        rgba(96, 165, 250, 0.28) 0%,
+                        rgba(96, 165, 250, 0.25) 0%,
                         transparent 45%
                     ),
                     radial-gradient(
                         circle at 85% 40%,
-                        rgba(192, 132, 252, 0.26) 0%,
+                        rgba(192, 132, 252, 0.22) 0%,
                         transparent 50%
                     ),
                     radial-gradient(
                         circle at 45% 90%,
-                        rgba(34, 211, 238, 0.24) 0%,
+                        rgba(34, 211, 238, 0.2) 0%,
                         transparent 55%
                     );
-                transform: translateZ(0);
             }
             .dark #ambient-bg {
                 background:
                     radial-gradient(
                         circle at 15% 15%,
-                        rgba(37, 99, 235, 0.16) 0%,
+                        rgba(37, 99, 235, 0.15) 0%,
                         transparent 45%
                     ),
                     radial-gradient(
                         circle at 85% 40%,
-                        rgba(147, 51, 234, 0.16) 0%,
+                        rgba(147, 51, 234, 0.15) 0%,
                         transparent 50%
                     ),
                     radial-gradient(
                         circle at 45% 90%,
-                        rgba(8, 145, 178, 0.16) 0%,
+                        rgba(8, 145, 178, 0.14) 0%,
                         transparent 55%
                     );
             }
 
-            /* Glass Interactive Buttons & Inputs */
+            /* Interactive Glass Buttons & Chapter Cards (No redundant per-button backdrop-filter) */
             .ios-glass-button {
-                background: rgba(255, 255, 255, 0.3);
-                backdrop-filter: blur(12px) saturate(120%);
-                -webkit-backdrop-filter: blur(12px) saturate(120%);
-                border: 1px solid rgba(255, 255, 255, 0.5);
+                background: rgba(255, 255, 255, 0.65);
+                border: 1px solid rgba(226, 232, 240, 0.9);
                 box-shadow:
-                    0 2px 10px rgba(0, 0, 0, 0.02),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    0 2px 8px rgba(0, 0, 0, 0.03),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                transition:
+                    background-color 0.2s ease,
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    border-color 0.2s ease;
             }
             .ios-glass-button:hover {
-                background: rgba(255, 255, 255, 0.5);
+                background: rgba(255, 255, 255, 0.92);
+                border-color: rgba(99, 102, 241, 0.35);
                 transform: translateY(-1px);
                 box-shadow:
-                    0 4px 12px rgba(0, 0, 0, 0.05),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                    0 4px 12px rgba(0, 0, 0, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 1);
             }
             .dark .ios-glass-button {
-                background: rgba(255, 255, 255, 0.05);
+                background: rgba(30, 35, 45, 0.75);
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 box-shadow:
-                    0 2px 10px rgba(0, 0, 0, 0.1),
+                    0 2px 8px rgba(0, 0, 0, 0.2),
                     inset 0 1px 0 rgba(255, 255, 255, 0.05);
             }
             .dark .ios-glass-button:hover {
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(40, 46, 60, 0.9);
+                border-color: rgba(129, 140, 248, 0.4);
                 box-shadow:
-                    0 4px 12px rgba(0, 0, 0, 0.2),
+                    0 4px 12px rgba(0, 0, 0, 0.3),
                     inset 0 1px 0 rgba(255, 255, 255, 0.1);
             }
 
@@ -629,7 +630,6 @@
             }
             .markdown-body pre {
                 background: rgba(15, 23, 42, 0.9);
-                backdrop-filter: blur(8px);
                 color: #f8fafc;
                 padding: 1.25em;
                 border-radius: 0.75em;
@@ -972,10 +972,13 @@
                 #backToTopBtn,
                 #landingPage,
                 #studyToolbar,
-                #toastNotification {
+                #toastNotification,
+                #chapterPagination {
                     display: none !important;
                 }
-                /* Strip Glass Panels on Print */
+                #readerView {
+                    display: block !important;
+                }
                 .ios-glass,
                 .ios-glass-heavy,
                 .ios-note-surface,
@@ -990,7 +993,6 @@
                     display: none !important;
                 }
 
-                /* Remove padding from main layout containers */
                 main,
                 #noteContainer,
                 #content {
@@ -1012,8 +1014,6 @@
                     margin: 0 !important;
                     padding: 0 !important;
                 }
-
-                /* Strip default top margin from the very first element to sit flush with print margin */
                 .markdown-body > *:first-child,
                 .markdown-body h1:first-of-type {
                     margin-top: 0 !important;
@@ -1122,11 +1122,7 @@
                     border: none !important;
                     padding: 0 !important;
                 }
-                #chapterPagination {
-                    display: none !important;
-                }
 
-                /* Watermark specifically for printing */
                 #printWatermark {
                     display: flex !important;
                     position: fixed;
@@ -1138,14 +1134,9 @@
                     justify-content: center;
                     font-size: 80pt;
                     font-weight: 900;
-                    color: rgba(
-                        0,
-                        0,
-                        0,
-                        0.1
-                    ); /* Faded transparent gray overlay */
+                    color: rgba(0, 0, 0, 0.1);
                     transform: rotate(-45deg);
-                    z-index: 9999; /* Changed to sit above the white print background */
+                    z-index: 9999;
                     pointer-events: none;
                     white-space: nowrap;
                     user-select: none;
@@ -1163,21 +1154,24 @@
             class="fixed inset-0 pointer-events-none z-0"
         ></div>
 
+        <!-- ==========================================================
+         📚 STUDY LIBRARY VIEW (Uses native window scrolling for 0-lag mobile experience)
+         ========================================================== -->
         <div
             id="landingPage"
-            class="fixed inset-0 z-[60] ios-glass flex flex-col overflow-y-auto transition-all duration-500 rounded-none border-none"
+            class="relative z-20 flex-1 flex flex-col min-h-screen"
         >
             <div
                 class="w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 flex-1 flex flex-col"
             >
                 <!-- Library Top Header -->
                 <div
-                    class="ios-glass-heavy rounded-2xl sm:rounded-3xl p-4 sm:p-6 mb-4 sm:mb-6 flex flex-col gap-4"
+                    class="ios-note-surface rounded-2xl sm:rounded-3xl p-4 sm:p-6 mb-4 sm:mb-6 flex flex-col gap-4"
                 >
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3 sm:gap-4 min-w-0">
                             <div
-                                class="w-11 h-11 sm:w-14 sm:h-14 shrink-0 bg-white/60 dark:bg-indigo-500/20 text-obsidian-accent rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm border border-white/50 dark:border-indigo-500/30 backdrop-blur-md"
+                                class="w-11 h-11 sm:w-14 sm:h-14 shrink-0 bg-indigo-500/10 dark:bg-indigo-500/20 text-obsidian-accent rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm border border-indigo-500/20 dark:border-indigo-500/30"
                             >
                                 <svg
                                     class="w-6 h-6 sm:w-7 sm:h-7"
@@ -1331,11 +1325,607 @@
                 <!-- Categorized Subjects & Chapters Grid -->
                 <div
                     id="libraryGrid"
-                    class="space-y-6 sm:space-y-8 pb-10"
+                    class="space-y-5 sm:space-y-7 pb-10"
                 ></div>
             </div>
         </div>
 
+        <!-- ==========================================================
+         📖 READER VIEW (Hidden while on Study Library so mobile GPU only paints one view)
+         ========================================================== -->
+        <div
+            id="readerView"
+            class="hidden min-h-screen flex flex-col relative z-10"
+        >
+            <header
+                class="ios-glass glass-header sticky top-0 z-40 w-full flex-none transition-colors duration-300"
+            >
+                <div class="max-w-8xl mx-auto px-2 sm:px-6 lg:px-8">
+                    <div
+                        class="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-3"
+                    >
+                        <div
+                            class="flex items-center flex-1 space-x-1.5 sm:space-x-2 min-w-0"
+                        >
+                            <button
+                                id="menuBtn"
+                                class="p-2 sm:p-2.5 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl shrink-0"
+                                title="Toggle Sidebar"
+                            >
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                </svg>
+                            </button>
+
+                            <button
+                                id="homeBtn"
+                                class="p-2 sm:p-2.5 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl shrink-0"
+                                title="Back to Library"
+                            >
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                                    ></path>
+                                </svg>
+                            </button>
+
+                            <div
+                                id="navSubjectContainer"
+                                class="custom-select-container relative w-28 sm:w-auto shrink-0"
+                                data-value=""
+                            >
+                                <button
+                                    type="button"
+                                    data-list="navSubjectList"
+                                    class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-xs sm:text-sm rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center"
+                                >
+                                    <span
+                                        class="custom-select-text truncate"
+                                    ></span>
+                                    <svg
+                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 opacity-70 shrink-0 transform transition-transform duration-200"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 9l-7 7-7-7"
+                                        ></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div
+                                id="navChapterContainer"
+                                class="custom-select-container relative flex-1 min-w-0 max-w-[200px] sm:max-w-[350px]"
+                                data-value=""
+                            >
+                                <button
+                                    type="button"
+                                    data-list="navChapterList"
+                                    class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-xs sm:text-sm rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center"
+                                >
+                                    <span
+                                        class="custom-select-text truncate"
+                                    ></span>
+                                    <svg
+                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 opacity-70 shrink-0 transform transition-transform duration-200"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 9l-7 7-7-7"
+                                        ></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex items-center space-x-1.5 sm:space-x-3 shrink-0"
+                        >
+                            <!-- Language Toggle (Visible on Mobile & Desktop Navbar) -->
+                            <button
+                                id="langToggleDesktop"
+                                class="flex items-center justify-center px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
+                                title="Switch Language"
+                            >
+                                <svg
+                                    class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 opacity-70"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                                    ></path>
+                                </svg>
+                                <span id="langToggleTextDesktop">BN</span>
+                            </button>
+
+                            <button
+                                id="printBtnDesktop"
+                                class="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
+                                title="Save as PDF / Print"
+                            >
+                                <svg
+                                    class="w-4 h-4 mr-2 opacity-70"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"
+                                    ></path>
+                                </svg>
+                                <span>Export</span>
+                            </button>
+
+                            <div
+                                class="hidden lg:flex items-center space-x-2 text-slate-600 dark:text-slate-300 ios-glass-button px-3 py-1.5 rounded-xl"
+                                id="widthSliderWrapper"
+                                title="Width: 0"
+                            >
+                                <svg
+                                    class="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M4 14h6v6m10-10h-6V4m0 10l7 7M10 10L3 3"
+                                    ></path>
+                                </svg>
+                                <input
+                                    type="range"
+                                    id="widthSlider"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value="0"
+                                    class="w-20 h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent"
+                                />
+                                <svg
+                                    class="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                                    ></path>
+                                </svg>
+                            </div>
+
+                            <div
+                                class="hidden md:flex items-center space-x-2 text-slate-600 dark:text-slate-300 ios-glass-button px-3 py-1.5 rounded-xl"
+                                id="fontSizeSliderWrapper"
+                                title="Adjust Font Size"
+                            >
+                                <span class="text-xs font-bold">A</span>
+                                <input
+                                    type="range"
+                                    id="fontSizeSlider"
+                                    min="8"
+                                    max="24"
+                                    step="1"
+                                    value="18"
+                                    class="w-20 h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent"
+                                />
+                                <span class="text-lg font-bold">A</span>
+                            </div>
+
+                            <button
+                                id="themeToggleDesktop"
+                                class="hidden md:flex p-2.5 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl"
+                                title="Toggle Theme"
+                            >
+                                <svg
+                                    class="w-5 h-5 hidden dark:block"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                    ></path>
+                                </svg>
+                                <svg
+                                    class="w-5 h-5 block dark:hidden"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Glowing Reading Progress Bar -->
+                <div class="w-full h-[2.5px] bg-transparent overflow-hidden">
+                    <div
+                        id="readingProgressBar"
+                        class="h-full w-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 transition-[width] duration-150 ease-out shadow-[0_0_8px_rgba(99,102,241,0.6)]"
+                    ></div>
+                </div>
+            </header>
+
+            <div class="flex flex-1 max-w-8xl mx-auto w-full relative z-10">
+                <aside
+                    id="sidebar"
+                    class="ios-glass glass-sidebar fixed inset-y-0 left-0 pt-4 md:pt-6 w-72 sm:w-80 md:w-72 z-50 md:z-30 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:block shrink-0 overflow-y-auto overflow-x-hidden"
+                >
+                    <div class="p-5 sm:p-6">
+                        <!-- Mobile Drawer Header -->
+                        <div
+                            class="flex md:hidden items-center justify-between pb-4 mb-4 border-b border-black/10 dark:border-white/10"
+                        >
+                            <span
+                                class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400"
+                                >Navigation & Settings</span
+                            >
+                            <button
+                                id="closeSidebarMobileBtn"
+                                class="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white ios-glass-button rounded-lg"
+                            >
+                                <svg
+                                    class="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Mobile Actions -->
+                        <div class="md:hidden space-y-2.5 mb-6">
+                            <!-- Font Size Control in Mobile Sidebar -->
+                            <div
+                                class="p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl space-y-2"
+                            >
+                                <div
+                                    class="flex items-center justify-between text-xs font-semibold"
+                                >
+                                    <span>Reading Font Size</span>
+                                    <span
+                                        id="fontSizeValueMobile"
+                                        class="text-obsidian-accent font-bold"
+                                        >18px</span
+                                    >
+                                </div>
+                                <div class="flex items-center space-x-2.5">
+                                    <span class="text-xs font-bold opacity-70"
+                                        >A</span
+                                    >
+                                    <input
+                                        type="range"
+                                        id="fontSizeSliderMobile"
+                                        min="8"
+                                        max="24"
+                                        step="1"
+                                        value="18"
+                                        class="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent"
+                                    />
+                                    <span class="text-base font-bold opacity-70"
+                                        >A</span
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <!-- Language Toggle Mobile -->
+                                <button
+                                    id="langToggleMobile"
+                                    class="flex items-center justify-between p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
+                                >
+                                    <span class="text-xs font-medium"
+                                        >Language</span
+                                    >
+                                    <span
+                                        id="langToggleTextMobile"
+                                        class="text-xs font-bold text-obsidian-accent"
+                                        >BN</span
+                                    >
+                                </button>
+                                <button
+                                    id="themeToggleMobile"
+                                    class="flex items-center justify-between p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
+                                >
+                                    <span class="text-xs font-medium"
+                                        >Theme</span
+                                    >
+                                    <div>
+                                        <svg
+                                            class="w-4 h-4 hidden dark:block"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                            ></path>
+                                        </svg>
+                                        <svg
+                                            class="w-4 h-4 block dark:hidden"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                                            ></path>
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <button
+                                id="printBtnMobile"
+                                class="flex items-center justify-between w-full p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
+                            >
+                                <span class="text-xs font-medium"
+                                    >Export / Print PDF</span
+                                >
+                                <svg
+                                    class="w-4 h-4 opacity-70"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <h2
+                            id="sidebarChapterTitle"
+                            class="text-base sm:text-xl font-bold text-slate-800 dark:text-slate-100 mb-5 sm:mb-8 leading-snug"
+                        ></h2>
+
+                        <div
+                            class="flex items-center justify-between mb-3 sm:mb-4"
+                        >
+                            <h3
+                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest"
+                            >
+                                Contents
+                            </h3>
+                        </div>
+
+                        <div id="tocWrapper">
+                            <nav id="toc" class="space-y-1"></nav>
+                        </div>
+                    </div>
+                </aside>
+
+                <div
+                    id="sidebarOverlay"
+                    class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-40 hidden md:hidden"
+                ></div>
+
+                <main
+                    class="flex-1 min-w-0 focus:outline-none transition-all duration-300 ease-in-out relative z-10"
+                >
+                    <div
+                        id="noteContainer"
+                        class="w-full mx-auto px-2.5 sm:px-6 py-3 sm:py-8 lg:py-12 transition-all duration-300 ease-in-out"
+                        style="max-width: 48rem"
+                    >
+                        <div
+                            id="errorBox"
+                            class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl relative mb-4 sm:mb-6 shadow-sm"
+                            role="alert"
+                        >
+                            <span
+                                class="block sm:inline text-xs sm:text-sm font-medium"
+                                id="errorMessage"
+                            ></span>
+                        </div>
+
+                        <!-- Quick Revision & Solutions Toolbar -->
+                        <div
+                            id="studyToolbar"
+                            class="ios-note-surface rounded-2xl p-2 sm:p-3 mb-3 sm:mb-5 flex flex-wrap items-center justify-between gap-2"
+                        >
+                            <div
+                                class="flex items-center gap-1 sm:gap-1.5"
+                                role="group"
+                                aria-label="Study Mode Filter"
+                            >
+                                <button
+                                    type="button"
+                                    data-study-mode="all"
+                                    class="study-mode-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all bg-obsidian-accent text-white shadow-sm"
+                                >
+                                    All
+                                </button>
+                                <button
+                                    type="button"
+                                    data-study-mode="theory"
+                                    class="study-mode-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10"
+                                >
+                                    Theory Only
+                                </button>
+                                <button
+                                    type="button"
+                                    data-study-mode="questions"
+                                    class="study-mode-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10"
+                                >
+                                    Questions Only
+                                </button>
+                            </div>
+
+                            <div class="flex items-center gap-1.5">
+                                <button
+                                    type="button"
+                                    id="toggleAllSolutionsBtn"
+                                    data-expanded="false"
+                                    class="ios-glass-button px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"
+                                    title="Expand or Collapse all solutions and proofs"
+                                >
+                                    <svg
+                                        class="w-3.5 h-3.5 text-obsidian-accent"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                                        ></path>
+                                    </svg>
+                                    <span id="toggleAllSolutionsText"
+                                        >Expand Solutions</span
+                                    >
+                                </button>
+                            </div>
+                        </div>
+
+                        <article
+                            id="content"
+                            class="markdown-body ios-note-surface p-4 sm:p-10 lg:p-12 rounded-2xl sm:rounded-[2.5rem]"
+                        ></article>
+
+                        <!-- Previous / Next Chapter Pagination -->
+                        <div
+                            id="chapterPagination"
+                            class="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 hidden"
+                        >
+                            <button
+                                type="button"
+                                id="prevChapterBtn"
+                                class="ios-glass-button p-4 rounded-2xl text-left flex items-center gap-3 group"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-slate-400 group-hover:text-obsidian-accent group-hover:-translate-x-0.5 transition-all shrink-0"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 19l-7-7 7-7"
+                                    ></path>
+                                </svg>
+                                <div class="min-w-0">
+                                    <div
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                                    >
+                                        Previous Chapter
+                                    </div>
+                                    <div
+                                        id="prevChapterTitle"
+                                        class="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-obsidian-accent truncate"
+                                    >
+                                        —
+                                    </div>
+                                </div>
+                            </button>
+                            <button
+                                type="button"
+                                id="nextChapterBtn"
+                                class="ios-glass-button p-4 rounded-2xl text-right flex items-center justify-end gap-3 group"
+                            >
+                                <div class="min-w-0">
+                                    <div
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
+                                    >
+                                        Next Chapter
+                                    </div>
+                                    <div
+                                        id="nextChapterTitle"
+                                        class="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-obsidian-accent truncate"
+                                    >
+                                        —
+                                    </div>
+                                </div>
+                                <svg
+                                    class="w-5 h-5 text-slate-400 group-hover:text-obsidian-accent group-hover:translate-x-0.5 transition-all shrink-0"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5l7 7-7 7"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- ==========================================================
+         ✨ FLOATING MODALS, LIGHTBOX & PORTALS
+         ========================================================== -->
         <div
             id="lightbox"
             class="fixed inset-0 ios-glass z-[200] hidden flex-col items-center justify-center p-4 md:p-10 transition-opacity duration-300 opacity-0 cursor-zoom-out border-none rounded-none"
@@ -1395,7 +1985,7 @@
                 class="ios-glass-heavy relative p-8 md:p-10 rounded-[2.5rem] w-11/12 max-w-md text-center transform transition-all z-10"
             >
                 <div
-                    class="w-16 h-16 mx-auto bg-white/60 dark:bg-indigo-500/20 rounded-[1.25rem] flex items-center justify-center mb-6 shadow-sm border border-white/50 dark:border-indigo-500/30 backdrop-blur-md"
+                    class="w-16 h-16 mx-auto bg-indigo-500/10 dark:bg-indigo-500/20 rounded-[1.25rem] flex items-center justify-center mb-6 shadow-sm border border-indigo-500/20 dark:border-indigo-500/30"
                 >
                     <svg
                         class="w-8 h-8 text-obsidian-accent"
@@ -1437,7 +2027,7 @@
                     </div>
                     <button
                         type="submit"
-                        class="w-full py-3.5 bg-obsidian-accent/90 backdrop-blur-md hover:bg-obsidian-accent text-white font-semibold rounded-2xl transition-all shadow-[0_4px_15px_rgba(99,102,241,0.4)] border border-white/20 transform active:scale-[0.98]"
+                        class="w-full py-3.5 bg-obsidian-accent/90 hover:bg-obsidian-accent text-white font-semibold rounded-2xl transition-all shadow-[0_4px_15px_rgba(99,102,241,0.4)] border border-white/20 transform active:scale-[0.98]"
                     >
                         Unlock Document
                     </button>
@@ -1453,7 +2043,7 @@
                 class="ios-glass-heavy relative w-11/12 max-w-md overflow-hidden rounded-[2rem] z-10 transform transition-all"
             >
                 <div
-                    class="px-6 py-5 border-b border-white/20 dark:border-white/10 flex justify-between items-center bg-black/5 dark:bg-white/5"
+                    class="px-6 py-5 border-b border-black/10 dark:border-white/10 flex justify-between items-center bg-black/5 dark:bg-white/5"
                 >
                     <h3
                         class="text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center tracking-tight"
@@ -1608,7 +2198,7 @@
                     <div class="mt-8 flex justify-end">
                         <button
                             id="btn-execute-print"
-                            class="px-6 py-2.5 bg-obsidian-accent/90 backdrop-blur-md hover:bg-obsidian-accent text-white text-sm font-semibold rounded-xl shadow-[0_4px_15px_rgba(99,102,241,0.4)] border border-white/20 transition-all w-full sm:w-auto transform active:scale-95"
+                            class="px-6 py-2.5 bg-obsidian-accent/90 hover:bg-obsidian-accent text-white text-sm font-semibold rounded-xl shadow-[0_4px_15px_rgba(99,102,241,0.4)] border border-white/20 transition-all w-full sm:w-auto transform active:scale-95"
                         >
                             Generate PDF
                         </button>
@@ -1616,261 +2206,6 @@
                 </div>
             </div>
         </div>
-
-        <header
-            class="ios-glass glass-header sticky top-0 z-40 w-full flex-none transition-colors duration-300"
-        >
-            <div class="max-w-8xl mx-auto px-2 sm:px-6 lg:px-8">
-                <div
-                    class="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-3"
-                >
-                    <div
-                        class="flex items-center flex-1 space-x-1.5 sm:space-x-2 min-w-0"
-                    >
-                        <button
-                            id="menuBtn"
-                            class="p-2 sm:p-2.5 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl shrink-0"
-                            title="Toggle Sidebar"
-                        >
-                            <svg
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            </svg>
-                        </button>
-
-                        <button
-                            id="homeBtn"
-                            class="p-2 sm:p-2.5 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl shrink-0"
-                            title="Back to Library"
-                        >
-                            <svg
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                                ></path>
-                            </svg>
-                        </button>
-
-                        <div
-                            id="navSubjectContainer"
-                            class="custom-select-container relative w-28 sm:w-auto shrink-0"
-                            data-value=""
-                        >
-                            <button
-                                type="button"
-                                data-list="navSubjectList"
-                                class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-xs sm:text-sm rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center"
-                            >
-                                <span
-                                    class="custom-select-text truncate"
-                                ></span>
-                                <svg
-                                    class="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 opacity-70 shrink-0 transform transition-transform duration-200"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M19 9l-7 7-7-7"
-                                    ></path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div
-                            id="navChapterContainer"
-                            class="custom-select-container relative flex-1 min-w-0 max-w-[200px] sm:max-w-[350px]"
-                            data-value=""
-                        >
-                            <button
-                                type="button"
-                                data-list="navChapterList"
-                                class="custom-select-btn w-full ios-glass-button text-slate-800 dark:text-slate-100 text-xs sm:text-sm rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-obsidian-accent/50 font-medium flex justify-between items-center"
-                            >
-                                <span
-                                    class="custom-select-text truncate"
-                                ></span>
-                                <svg
-                                    class="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 opacity-70 shrink-0 transform transition-transform duration-200"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M19 9l-7 7-7-7"
-                                    ></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div
-                        class="flex items-center space-x-1.5 sm:space-x-3 shrink-0"
-                    >
-                        <!-- Language Toggle (Visible on Mobile & Desktop Navbar) -->
-                        <button
-                            id="langToggleDesktop"
-                            class="flex items-center justify-center px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
-                            title="Switch Language"
-                        >
-                            <svg
-                                class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 opacity-70"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                                ></path>
-                            </svg>
-                            <span id="langToggleTextDesktop">BN</span>
-                        </button>
-
-                        <button
-                            id="printBtnDesktop"
-                            class="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
-                            title="Save as PDF / Print"
-                        >
-                            <svg
-                                class="w-4 h-4 mr-2 opacity-70"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"
-                                ></path>
-                            </svg>
-                            <span>Export</span>
-                        </button>
-
-                        <div
-                            class="hidden lg:flex items-center space-x-2 text-slate-600 dark:text-slate-300 ios-glass-button px-3 py-1.5 rounded-xl"
-                            id="widthSliderWrapper"
-                            title="Width: 0"
-                        >
-                            <svg
-                                class="w-3.5 h-3.5"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    d="M4 14h6v6m10-10h-6V4m0 10l7 7M10 10L3 3"
-                                ></path>
-                            </svg>
-                            <input
-                                type="range"
-                                id="widthSlider"
-                                min="0"
-                                max="1"
-                                step="0.05"
-                                value="0"
-                                class="w-20 h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent"
-                            />
-                            <svg
-                                class="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                                ></path>
-                            </svg>
-                        </div>
-
-                        <div
-                            class="hidden md:flex items-center space-x-2 text-slate-600 dark:text-slate-300 ios-glass-button px-3 py-1.5 rounded-xl"
-                            id="fontSizeSliderWrapper"
-                            title="Adjust Font Size"
-                        >
-                            <span class="text-xs font-bold">A</span>
-                            <input
-                                type="range"
-                                id="fontSizeSlider"
-                                min="8"
-                                max="24"
-                                step="1"
-                                value="18"
-                                class="w-20 h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent"
-                            />
-                            <span class="text-lg font-bold">A</span>
-                        </div>
-
-                        <button
-                            id="themeToggleDesktop"
-                            class="hidden md:flex p-2.5 text-slate-600 dark:text-slate-300 ios-glass-button rounded-xl"
-                            title="Toggle Theme"
-                        >
-                            <svg
-                                class="w-5 h-5 hidden dark:block"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                                ></path>
-                            </svg>
-                            <svg
-                                class="w-5 h-5 block dark:hidden"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                                ></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <!-- Glowing Reading Progress Bar -->
-            <div class="w-full h-[2.5px] bg-transparent overflow-hidden">
-                <div
-                    id="readingProgressBar"
-                    class="h-full w-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 transition-[width] duration-150 ease-out shadow-[0_0_8px_rgba(99,102,241,0.6)]"
-                ></div>
-            </div>
-        </header>
 
         <!-- Floating Glass Toast Notification -->
         <div
@@ -1893,332 +2228,6 @@
             <span id="toastMessage">Copied!</span>
         </div>
 
-        <div class="flex flex-1 max-w-8xl mx-auto w-full relative z-10">
-            <aside
-                id="sidebar"
-                class="ios-glass glass-sidebar fixed inset-y-0 left-0 pt-4 md:pt-6 w-72 sm:w-80 md:w-72 z-50 md:z-30 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:block shrink-0 overflow-y-auto overflow-x-hidden"
-            >
-                <div class="p-5 sm:p-6">
-                    <!-- Mobile Drawer Header -->
-                    <div
-                        class="flex md:hidden items-center justify-between pb-4 mb-4 border-b border-black/10 dark:border-white/10"
-                    >
-                        <span
-                            class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400"
-                            >Navigation & Settings</span
-                        >
-                        <button
-                            id="closeSidebarMobileBtn"
-                            class="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white ios-glass-button rounded-lg"
-                        >
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                ></path>
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Mobile Actions -->
-                    <div class="md:hidden space-y-2.5 mb-6">
-                        <!-- Font Size Control in Mobile Sidebar -->
-                        <div
-                            class="p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl space-y-2"
-                        >
-                            <div
-                                class="flex items-center justify-between text-xs font-semibold"
-                            >
-                                <span>Reading Font Size</span>
-                                <span
-                                    id="fontSizeValueMobile"
-                                    class="text-obsidian-accent font-bold"
-                                    >18px</span
-                                >
-                            </div>
-                            <div class="flex items-center space-x-2.5">
-                                <span class="text-xs font-bold opacity-70"
-                                    >A</span
-                                >
-                                <input
-                                    type="range"
-                                    id="fontSizeSliderMobile"
-                                    min="8"
-                                    max="24"
-                                    step="1"
-                                    value="18"
-                                    class="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-obsidian-accent"
-                                />
-                                <span class="text-base font-bold opacity-70"
-                                    >A</span
-                                >
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <!-- Language Toggle Mobile -->
-                            <button
-                                id="langToggleMobile"
-                                class="flex items-center justify-between p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
-                            >
-                                <span class="text-xs font-medium"
-                                    >Language</span
-                                >
-                                <span
-                                    id="langToggleTextMobile"
-                                    class="text-xs font-bold text-obsidian-accent"
-                                    >BN</span
-                                >
-                            </button>
-                            <button
-                                id="themeToggleMobile"
-                                class="flex items-center justify-between p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
-                            >
-                                <span class="text-xs font-medium">Theme</span>
-                                <div>
-                                    <svg
-                                        class="w-4 h-4 hidden dark:block"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                                        ></path>
-                                    </svg>
-                                    <svg
-                                        class="w-4 h-4 block dark:hidden"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                            </button>
-                        </div>
-
-                        <button
-                            id="printBtnMobile"
-                            class="flex items-center justify-between w-full p-3 text-slate-700 dark:text-slate-200 ios-glass-button rounded-xl"
-                        >
-                            <span class="text-xs font-medium"
-                                >Export / Print PDF</span
-                            >
-                            <svg
-                                class="w-4 h-4 opacity-70"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"
-                                ></path>
-                            </svg>
-                        </button>
-                    </div>
-
-                    <h2
-                        id="sidebarChapterTitle"
-                        class="text-base sm:text-xl font-bold text-slate-800 dark:text-slate-100 mb-5 sm:mb-8 leading-snug"
-                    ></h2>
-
-                    <div class="flex items-center justify-between mb-3 sm:mb-4">
-                        <h3
-                            class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest"
-                        >
-                            Contents
-                        </h3>
-                    </div>
-
-                    <div id="tocWrapper">
-                        <nav id="toc" class="space-y-1"></nav>
-                    </div>
-                </div>
-            </aside>
-
-            <div
-                id="sidebarOverlay"
-                class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-40 hidden md:hidden"
-            ></div>
-
-            <main
-                class="flex-1 min-w-0 focus:outline-none transition-all duration-300 ease-in-out relative z-10"
-            >
-                <div
-                    id="noteContainer"
-                    class="w-full mx-auto px-2.5 sm:px-6 py-3 sm:py-8 lg:py-12 transition-all duration-300 ease-in-out"
-                    style="max-width: 48rem"
-                >
-                    <div
-                        id="errorBox"
-                        class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl relative mb-4 sm:mb-6 shadow-sm"
-                        role="alert"
-                    >
-                        <span
-                            class="block sm:inline text-xs sm:text-sm font-medium"
-                            id="errorMessage"
-                        ></span>
-                    </div>
-
-                    <!-- Quick Revision & Solutions Toolbar -->
-                    <div
-                        id="studyToolbar"
-                        class="ios-glass rounded-2xl p-2 sm:p-3 mb-3 sm:mb-5 flex flex-wrap items-center justify-between gap-2"
-                    >
-                        <div
-                            class="flex items-center gap-1 sm:gap-1.5"
-                            role="group"
-                            aria-label="Study Mode Filter"
-                        >
-                            <button
-                                type="button"
-                                data-study-mode="all"
-                                class="study-mode-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all bg-obsidian-accent text-white shadow-sm"
-                            >
-                                All
-                            </button>
-                            <button
-                                type="button"
-                                data-study-mode="theory"
-                                class="study-mode-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10"
-                            >
-                                Theory Only
-                            </button>
-                            <button
-                                type="button"
-                                data-study-mode="questions"
-                                class="study-mode-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10"
-                            >
-                                Questions Only
-                            </button>
-                        </div>
-
-                        <div class="flex items-center gap-1.5">
-                            <button
-                                type="button"
-                                id="toggleAllSolutionsBtn"
-                                data-expanded="false"
-                                class="ios-glass-button px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"
-                                title="Expand or Collapse all solutions and proofs"
-                            >
-                                <svg
-                                    class="w-3.5 h-3.5 text-obsidian-accent"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                                    ></path>
-                                </svg>
-                                <span id="toggleAllSolutionsText"
-                                    >Expand Solutions</span
-                                >
-                            </button>
-                        </div>
-                    </div>
-
-                    <article
-                        id="content"
-                        class="markdown-body ios-note-surface p-4 sm:p-10 lg:p-12 rounded-2xl sm:rounded-[2.5rem]"
-                    ></article>
-
-                    <!-- Previous / Next Chapter Pagination -->
-                    <div
-                        id="chapterPagination"
-                        class="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 hidden"
-                    >
-                        <button
-                            type="button"
-                            id="prevChapterBtn"
-                            class="ios-glass-button p-4 rounded-2xl text-left flex items-center gap-3 group"
-                        >
-                            <svg
-                                class="w-5 h-5 text-slate-400 group-hover:text-obsidian-accent group-hover:-translate-x-0.5 transition-all shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 19l-7-7 7-7"
-                                ></path>
-                            </svg>
-                            <div class="min-w-0">
-                                <div
-                                    class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
-                                >
-                                    Previous Chapter
-                                </div>
-                                <div
-                                    id="prevChapterTitle"
-                                    class="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-obsidian-accent truncate"
-                                >
-                                    —
-                                </div>
-                            </div>
-                        </button>
-                        <button
-                            type="button"
-                            id="nextChapterBtn"
-                            class="ios-glass-button p-4 rounded-2xl text-right flex items-center justify-end gap-3 group"
-                        >
-                            <div class="min-w-0">
-                                <div
-                                    class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500"
-                                >
-                                    Next Chapter
-                                </div>
-                                <div
-                                    id="nextChapterTitle"
-                                    class="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-obsidian-accent truncate"
-                                >
-                                    —
-                                </div>
-                            </div>
-                            <svg
-                                class="w-5 h-5 text-slate-400 group-hover:text-obsidian-accent group-hover:translate-x-0.5 transition-all shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 5l7 7-7 7"
-                                ></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </main>
-        </div>
-
         <ul
             id="navSubjectList"
             class="custom-select-list fixed z-[300] min-w-[150px] sm:min-w-[200px] hidden max-h-60 overflow-y-auto rounded-xl ios-glass py-1 shadow-2xl"
@@ -2232,57 +2241,57 @@
             // =========================================================================
             // ⚙️ CURRICULUM CONFIGURATION SECTION
             // =========================================================================
-        const CURRICULUM = {
-                        "Physics-1st": [
-                "P-1.02 Vector",
-                "P-1.03 Kinematics",
-                "P-1.04 Newtonian Mechanics",
-                "P-1.05 Work-Power-Energy",
-                "P-1.06 Gravitation and Gravity",
-                "P-1.07 Structural Properties of Matter",
-                "P-1.08 Periodic Motion",
-                "P-1.10 Ideal Gas",
-            ],
-            "Physics-2nd": [
-                "P-2.01 Thermodynamics",
-                "P-2.02 Static Electricity",
-                "P-2.03 Current Electricity",
-                "P-2.04 Magnetic Effect of Current",
-                "P-2.06 Geometrical Optics",
-                "P-2.07 Physical Optics",
-                "P-2.08 Modern Physics",
-                "P-2.09 Nuclear Model",
-                "P-2.10 Semiconductor",
-            ],
+            const CURRICULUM = {
+                "Physics-1st": [
+                    "P-1.02 Vector",
+                    "P-1.03 Kinematics",
+                    "P-1.04 Newtonian Mechanics",
+                    "P-1.05 Work-Power-Energy",
+                    "P-1.06 Gravitation and Gravity",
+                    "P-1.07 Structural Properties of Matter",
+                    "P-1.08 Periodic Motion",
+                    "P-1.10 Ideal Gas",
+                ],
+                "Physics-2nd": [
+                    "P-2.01 Thermodynamics",
+                    "P-2.02 Static Electricity",
+                    "P-2.03 Current Electricity",
+                    "P-2.04 Magnetic Effect of Current",
+                    "P-2.06 Geometrical Optics",
+                    "P-2.07 Physical Optics",
+                    "P-2.08 Modern Physics",
+                    "P-2.09 Nuclear Model",
+                    "P-2.10 Semiconductor",
+                ],
 
-            "Math-1st": [
-                "M-1.01 Matrix",
-                "M-1.03 Straight Line",
-                "M-1.04 Circle",
-                "M-1.07 Trigonometry",
-                "M-1.09 Differential Calculus",
-                "M-1.10 Integral Calculus",
-            ],
-            "Math-2nd": [
-                "M-2.03 Complex Number",
-                "M-2.04 Polinomials and Polinomial Equation",
-                "M-2.06 Conics",
-                "M-2.07 Inverse Trigonometry",
-                "M-2.10 Probability and Statistics",
-            ],
-                        "Chemistry-1st": [
-                "C-1.02 Qualitative Chemistry",
-                "C-1.03 Periodic Properties of Elements and Chemical Bonding",
-                "C-1.04 Chemical Changes",
-                "C-1.05 Vocational Chemistry",
-            ],
-            "Chemistry-2nd": [
-                "C-2.01 Environmental Chemistry",
-                "C-2.02 Organic Chemistry",
-                "C-2.03 Stoichiometric Chemistry",
-                "C-2.04 Electro Chemistry",
-            ],
-        };
+                "Math-1st": [
+                    "M-1.01 Matrix",
+                    "M-1.03 Straight Line",
+                    "M-1.04 Circle",
+                    "M-1.07 Trigonometry",
+                    "M-1.09 Differential Calculus",
+                    "M-1.10 Integral Calculus",
+                ],
+                "Math-2nd": [
+                    "M-2.03 Complex Number",
+                    "M-2.04 Polinomials and Polinomial Equation",
+                    "M-2.06 Conics",
+                    "M-2.07 Inverse Trigonometry",
+                    "M-2.10 Probability and Statistics",
+                ],
+                "Chemistry-1st": [
+                    "C-1.02 Qualitative Chemistry",
+                    "C-1.03 Periodic Properties of Elements and Chemical Bonding",
+                    "C-1.04 Chemical Changes",
+                    "C-1.05 Vocational Chemistry",
+                ],
+                "Chemistry-2nd": [
+                    "C-2.01 Environmental Chemistry",
+                    "C-2.02 Organic Chemistry",
+                    "C-2.03 Stoichiometric Chemistry",
+                    "C-2.04 Electro Chemistry",
+                ],
+            };
 
             // Apply dynamic styling parameters from configuration immediately
             document.documentElement.style.setProperty(
@@ -2320,8 +2329,9 @@
                 };
             }
 
-            // Landing Page & Library Selectors
+            // Landing Page & Reader View Selectors
             const landingPage = document.getElementById("landingPage");
+            const readerView = document.getElementById("readerView");
             const resumeReadingBtn =
                 document.getElementById("resumeReadingBtn");
             const resumeReadingText =
@@ -2418,12 +2428,6 @@
             }
             initFontSize();
 
-            // Minimum limit changed in HTML range element dynamically in DOM Ready
-            document.addEventListener("DOMContentLoaded", () => {
-                if (fontSizeSlider) fontSizeSlider.min = "8";
-                if (fontSizeSliderMobile) fontSizeSliderMobile.min = "8";
-            });
-
             function initWidth() {
                 const savedWidth =
                     localStorage.getItem(ADVANCED_CONFIG.STORAGE_KEY_WIDTH) ||
@@ -2479,17 +2483,15 @@
                 );
                 updateLangUI();
 
-                // Instantly reload document if one is open to show the new language
                 const chapterContainer = document.getElementById(
                     "navChapterContainer",
                 );
-                if (chapterContainer) {
+                if (
+                    chapterContainer &&
+                    !readerView.classList.contains("hidden")
+                ) {
                     const chapter = chapterContainer.dataset.value;
-                    if (
-                        chapter &&
-                        document.getElementById("content").innerHTML.trim() !==
-                            ""
-                    ) {
+                    if (chapter) {
                         loadAndRenderMarkdown();
                     }
                 }
@@ -2564,7 +2566,6 @@
                 const wasDark = htmlElement.classList.contains("dark");
                 if (wasDark) htmlElement.classList.remove("dark");
 
-                // Ensure any deferred math inside collapsed callouts is rendered before printing
                 if (window.renderMathInElement) {
                     document
                         .querySelectorAll("#content .callout-math-pending")
@@ -2635,7 +2636,6 @@
                     const svg = btn.querySelector("svg");
                     const isHidden = list.classList.contains("hidden");
 
-                    // Close all others
                     document
                         .querySelectorAll(".custom-select-list")
                         .forEach((l) => l.classList.add("hidden"));
@@ -2646,14 +2646,8 @@
                     if (isHidden) {
                         list.classList.remove("hidden");
                         const rect = btn.getBoundingClientRect();
-
                         list.style.top = `${rect.bottom + 8}px`;
-
-                        if (btn.closest("#landingPage")) {
-                            list.style.width = `${rect.width}px`;
-                        } else {
-                            list.style.width = "auto";
-                        }
+                        list.style.width = "auto";
 
                         if (rect.left + list.offsetWidth > window.innerWidth) {
                             list.style.right = `${window.innerWidth - rect.right}px`;
@@ -2674,7 +2668,6 @@
                     return;
                 }
 
-                // Close all if clicking outside
                 if (!e.target.closest(".custom-select-list")) {
                     document
                         .querySelectorAll(".custom-select-list")
@@ -2685,7 +2678,6 @@
                 }
             });
 
-            // Hide dropdowns on scroll or resize to keep them attached properly
             window.addEventListener(
                 "scroll",
                 () => {
@@ -2740,8 +2732,6 @@
                     const li = document.createElement("li");
                     const isSelected = item === currentValue;
                     li.dataset.selected = isSelected;
-
-                    // Clean glassy dropdown items WITHOUT internal backdrop-blur that breaks the engine
                     li.className = `px-4 py-2.5 mx-1 my-0.5 rounded-lg text-sm cursor-pointer transition-colors ${isSelected ? "bg-black/5 dark:bg-white/10 text-obsidian-accent font-bold" : "text-slate-700 dark:text-slate-200 hover:bg-black/5 dark:hover:bg-white/10"}`;
                     li.textContent = item;
 
@@ -2759,8 +2749,6 @@
                             });
 
                             if (onChange) onChange(item);
-
-                            // Close menu after selection
                             list.classList.add("hidden");
                             container
                                 .querySelector("svg")
@@ -2792,18 +2780,15 @@
             }
 
             function closeLandingPage() {
-                landingPage.classList.add("opacity-0", "pointer-events-none");
-                setTimeout(() => {
-                    landingPage.classList.add("hidden");
-                }, ADVANCED_CONFIG.LANDING_PAGE_FADE_SPEED);
+                landingPage.classList.add("hidden");
+                readerView.classList.remove("hidden");
             }
 
             function openLandingPage() {
+                readerView.classList.add("hidden");
                 renderLibrary();
-                landingPage.classList.remove("hidden", "pointer-events-none");
-                setTimeout(() => {
-                    landingPage.classList.remove("opacity-0");
-                }, 10);
+                landingPage.classList.remove("hidden");
+                window.scrollTo({ top: 0, behavior: "instant" });
             }
 
             function selectAndOpenChapter(subject, chapter) {
@@ -2876,7 +2861,6 @@
                     ADVANCED_CONFIG.STORAGE_KEY_CHAPTER,
                 );
 
-                // Update Resume Button
                 if (
                     savedSubject &&
                     savedChapter &&
@@ -2915,9 +2899,8 @@
 
                     const section = document.createElement("section");
                     section.className =
-                        "ios-glass-heavy rounded-2xl sm:rounded-3xl p-4 sm:p-6 transition-all";
+                        "ios-note-surface rounded-2xl sm:rounded-3xl p-4 sm:p-6";
 
-                    // Subject Header
                     const headerDiv = document.createElement("div");
                     headerDiv.className =
                         "flex items-center justify-between mb-3.5 sm:mb-4 pb-2.5 border-b border-black/5 dark:border-white/10";
@@ -2930,7 +2913,6 @@
                 `;
                     section.appendChild(headerDiv);
 
-                    // Chapters Grid
                     const gridDiv = document.createElement("div");
                     gridDiv.className =
                         "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3.5";
@@ -2974,7 +2956,7 @@
 
                 if (totalMatched === 0) {
                     libraryGrid.innerHTML = `
-                    <div class="ios-glass-heavy rounded-2xl p-8 text-center text-slate-500 dark:text-slate-400">
+                    <div class="ios-note-surface rounded-2xl p-8 text-center text-slate-500 dark:text-slate-400">
                         <p class="text-sm font-medium">No chapters found matching "${librarySearchInput?.value}".</p>
                     </div>
                 `;
@@ -2993,7 +2975,6 @@
                           ? "Physics-1st"
                           : subjects[0];
 
-                // Initial render of navbar subject dropdown
                 populateCustomDropdown(
                     "navSubjectContainer",
                     "navSubjectList",
@@ -3095,7 +3076,7 @@
                 let processed = text;
                 const codeBlocks = [];
 
-                // 0. Shield fenced code blocks and inline code so math/Obsidian regexes never corrupt code
+                // 0. Shield fenced code blocks and inline code
                 processed = processed.replace(
                     /```[\s\S]*?```|`[^`\n]+`/g,
                     (match) => {
@@ -3112,11 +3093,8 @@
 
                 mathBlocks = [];
 
-                // Helper to perfectly strip ANY number of nested blockquote arrows before math
                 const stripBlockquote = (str) =>
                     str.replace(/^[ \t]*(?:>[ \t]*)+/gm, "");
-
-                // Helper to HTML-escape &, <, > inside math so browser innerHTML never strips "< ... >" as tags
                 const escapeMathHtml = (str) =>
                     str
                         .replace(/&/g, "&amp;")
@@ -3233,7 +3211,6 @@
                     },
                 );
 
-                // Restore shielded code blocks before Marked.js parses the markdown
                 codeBlocks.forEach((block, i) => {
                     processed = processed
                         .split(`@@CODEBLOCK${i}@@`)
@@ -3318,7 +3295,6 @@
                     link.className = "toc-link truncate";
                     link.addEventListener("click", (e) => {
                         e.preventDefault();
-                        // Un-hide heading if it is currently collapsed inside a parent section
                         [
                             "hidden-by-h1",
                             "hidden-by-h2",
@@ -3403,17 +3379,16 @@
             function enhanceContentHeadings(
                 rootEl = document.getElementById("content"),
             ) {
-                // H4 and H5 are used as flowchart bullets inside sections, so rank them below H6 section headers
                 const getHeadingRank = (tagName) => {
                     const map = { H1: 1, H2: 2, H3: 3, H6: 4, H4: 5, H5: 6 };
-                    return map[tagName] ?? 99;
+                    return map[tagName] || 99;
                 };
 
+                const headings = rootEl.querySelectorAll("h2, h3, h6");
                 rootEl.querySelectorAll("h1, h2, h3, h6").forEach((h) => {
                     h.dataset.tocLabel = h.textContent.trim();
                 });
 
-                const headings = rootEl.querySelectorAll("h2, h3, h6");
                 headings.forEach((heading) => {
                     const toggleBtn = document.createElement("span");
                     toggleBtn.className =
@@ -3486,7 +3461,7 @@
                     );
                     if (match) {
                         const type = match[1].toLowerCase();
-                        const foldModifier = match[2]; // '+' (expanded), '-' (collapsed), or ''
+                        const foldModifier = match[2];
                         const title =
                             match[3].trim() ||
                             type.charAt(0).toUpperCase() + type.slice(1);
@@ -3550,7 +3525,6 @@
                                     toggleArrow.classList.remove("rotate-90");
                                 } else {
                                     toggleArrow.classList.add("rotate-90");
-                                    // Lazy-render KaTeX inside this callout on first expand
                                     if (
                                         contentWrapper.classList.contains(
                                             "callout-math-pending",
@@ -3595,14 +3569,12 @@
                     return;
                 }
 
-                // Abort any previous in-flight fetch to prevent race conditions
                 if (currentFetchController) {
                     currentFetchController.abort();
                 }
                 currentFetchController = new AbortController();
                 const { signal } = currentFetchController;
 
-                // Dynamically construct filename based on current language
                 let fileName = chapter.replace(/ /g, "_");
                 if (currentLang === "en") {
                     fileName += "_en";
@@ -3718,8 +3690,6 @@ g &= \\frac{GM}{R^2}
                             .join(block);
                     });
 
-                    // Build and process DOM nodes in a detached container to avoid triggering
-                    // Tailwind Play CDN's MutationObserver thousands of times during KaTeX rendering
                     const workDiv = document.createElement("div");
                     workDiv.innerHTML = htmlContent;
 
@@ -3738,7 +3708,6 @@ g &= \\frac{GM}{R^2}
                         renderMathInElement(workDiv, getMathOptions(true));
                     }
 
-                    // Initialize Image Lightbox functionality on detached nodes
                     workDiv.querySelectorAll("img").forEach((img) => {
                         img.classList.add(
                             "cursor-zoom-in",
@@ -3762,7 +3731,6 @@ g &= \\frac{GM}{R^2}
                         });
                     });
 
-                    // Interactive Cloze Spoilers
                     workDiv
                         .querySelectorAll(".obsidian-spoiler")
                         .forEach((spoiler) => {
@@ -3771,7 +3739,6 @@ g &= \\frac{GM}{R^2}
                             });
                         });
 
-                    // Interactive Internal Links ([[WikiLinks]])
                     workDiv
                         .querySelectorAll(".obsidian-internal-link")
                         .forEach((link) => {
@@ -3798,7 +3765,6 @@ g &= \\frac{GM}{R^2}
                             });
                         });
 
-                    // Double-click any display math block to copy its LaTeX source
                     workDiv
                         .querySelectorAll(".katex-display")
                         .forEach((mathEl) => {
@@ -3817,7 +3783,6 @@ g &= \\frac{GM}{R^2}
                             });
                         });
 
-                    // Reset Expand/Collapse All button state for new chapter
                     const toggleAllBtn = document.getElementById(
                         "toggleAllSolutionsBtn",
                     );
@@ -3829,10 +3794,8 @@ g &= \\frac{GM}{R^2}
                         toggleAllText.textContent = "Expand Solutions";
                     }
 
-                    // Single atomic DOM swap into live document
                     contentDiv.replaceChildren(...workDiv.childNodes);
 
-                    // Update Previous / Next Chapter Pagination Footer
                     updateChapterPagination(subject, chapter);
 
                     buildTableOfContents();
@@ -3843,7 +3806,6 @@ g &= \\frac{GM}{R^2}
                         );
                     }
 
-                    // Restore saved scroll position for this chapter if enabled
                     if (ADVANCED_CONFIG.ENABLE_SCROLL_MEMORY) {
                         const scrollKey = `${ADVANCED_CONFIG.STORAGE_KEY_SCROLL_PREFIX}${subject}_${chapter}`;
                         const savedRatio = parseFloat(
@@ -3930,7 +3892,6 @@ g &= \\frac{GM}{R^2}
             document.addEventListener("DOMContentLoaded", () => {
                 initGorib();
 
-                // --- Set Watermark Text ---
                 const watermarkEl = document.getElementById("printWatermark");
                 if (
                     APP_CONFIG.WATERMARK_TEXT &&
@@ -3941,7 +3902,6 @@ g &= \\frac{GM}{R^2}
                     watermarkEl.style.display = "none";
                 }
 
-                // --- Study Mode Filter Buttons ---
                 const studyModeBtns =
                     document.querySelectorAll(".study-mode-btn");
                 studyModeBtns.forEach((btn) => {
@@ -3966,7 +3926,6 @@ g &= \\frac{GM}{R^2}
                     });
                 });
 
-                // --- Expand / Collapse All Solutions Button ---
                 const toggleAllSolutionsBtn = document.getElementById(
                     "toggleAllSolutionsBtn",
                 );
@@ -4027,7 +3986,6 @@ g &= \\frac{GM}{R^2}
                         });
                 });
 
-                // --- Unified Scroll Engine (Back to Top, Progress Bar, Scroll-Spy & Scroll Memory) ---
                 const backToTopBtn = document.getElementById("backToTopBtn");
                 const progressBar =
                     document.getElementById("readingProgressBar");
@@ -4045,6 +4003,8 @@ g &= \\frac{GM}{R^2}
                                 const maxScroll =
                                     document.documentElement.scrollHeight -
                                     window.innerHeight;
+                                const isReadingNote =
+                                    landingPage.classList.contains("hidden");
 
                                 // 1. Back to Top visibility
                                 const shouldShow =
@@ -4073,8 +4033,8 @@ g &= \\frac{GM}{R^2}
                                     }
                                 }
 
-                                // 2. Reading Progress Bar & Scroll Memory
-                                if (maxScroll > 0) {
+                                // 2. Reading Progress Bar & Scroll Memory (Active only in Reader View)
+                                if (isReadingNote && maxScroll > 0) {
                                     const ratio = Math.min(
                                         1,
                                         Math.max(0, scrollY / maxScroll),
@@ -4082,15 +4042,7 @@ g &= \\frac{GM}{R^2}
                                     if (progressBar)
                                         progressBar.style.width = `${(ratio * 100).toFixed(1)}%`;
 
-                                    if (
-                                        ADVANCED_CONFIG.ENABLE_SCROLL_MEMORY &&
-                                        (landingPage.classList.contains(
-                                            "hidden",
-                                        ) ||
-                                            landingPage.classList.contains(
-                                                "pointer-events-none",
-                                            ))
-                                    ) {
+                                    if (ADVANCED_CONFIG.ENABLE_SCROLL_MEMORY) {
                                         clearTimeout(scrollSaveTimer);
                                         scrollSaveTimer = setTimeout(() => {
                                             const subj =
@@ -4114,7 +4066,7 @@ g &= \\frac{GM}{R^2}
                                 }
 
                                 // 3. Active ToC Scroll-Spy
-                                if (tocHeadings.length > 0) {
+                                if (isReadingNote && tocHeadings.length > 0) {
                                     let currentId = tocHeadings[0].id;
                                     for (
                                         let i = 0;
@@ -4122,7 +4074,7 @@ g &= \\frac{GM}{R^2}
                                         i++
                                     ) {
                                         const h = tocHeadings[i];
-                                        if (h.offsetParent === null) continue; // Skip hidden headings
+                                        if (h.offsetParent === null) continue;
                                         if (
                                             h.getBoundingClientRect().top <= 130
                                         ) {
@@ -4169,7 +4121,6 @@ g &= \\frac{GM}{R^2}
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 });
 
-                // --- Lightbox Close Logic ---
                 const lightbox = document.getElementById("lightbox");
                 const lightboxImg = document.getElementById("lightboxImg");
 
@@ -4187,7 +4138,6 @@ g &= \\frac{GM}{R^2}
                     if (e.target !== lightboxImg) closeLightbox();
                 });
 
-                // Close active modals/drawers on Escape key
                 document.addEventListener("keydown", (e) => {
                     if (e.key === "Escape") {
                         if (!lightbox.classList.contains("hidden"))
